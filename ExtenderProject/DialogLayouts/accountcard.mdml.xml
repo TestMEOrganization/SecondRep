@@ -34,7 +34,7 @@
   <Layout source="AccountCard">
     <FilterPane>
       <Define>
-        <Include fragment="GD_Dimensions " />
+        <Include fragment="GD_Dimensions asdasd" />
       </Define>
       <Filter name="Standard">
         <Compact>
