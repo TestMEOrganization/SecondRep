@@ -5,39 +5,29 @@
 <!-- CSK, 11/05/10: Missing views added (38485).-->
 <!-- CSK, 22/11/10: More missing views added (38485).-->
 <!-- CSK, 18/03/11: Renamed to AdvancedDimensions and restructured (39492).-->
-<!-- CSK, 10/10/11: Accounts assistant added (39492).-->
 <MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
   <Workspace name="AdvancedDimensions" title="Advanced Dimensions">
-    <Filter source="DimensionCombinations" view="Custom_RoleRestricted_Standard" title="Dimension Combinations">
+    <Filter source="DimensionCombinations" view="Standard" title="Dimension Combinations">
       <Expansions minimized="true">
         <With>
-          <Card view="Custom_RoleRestricted_Full" title="Dimension Combination">
+          <Card view="Full" title="Dimension Combination">
             <Expansions>
               <With>
-                <Table view="Custom_RoleRestricted_Full" />
+                <Table view="Full" />
               </With>
             </Expansions>
             <Assistants parentSize="huge">
-              <Bind foreignKey="AccountNumber_Account">
-                <Card source="AccountCard" view="ReadOnly" title="Account" />
-              </Bind>
               <Bind foreignKey="primary">
-                <Table source="ShowDimensionCombUsage" view="Custom_RoleRestricted_Full" title="Used By">
-                  <Expansions minimized="true">
-                    <Bind foreignKey="primary">
-                      <Workspace source="AccountUsage" />
-                    </Bind>
-                  </Expansions>
-                </Table>
+                <Table source="ShowDimensionCombUsage" view="Full" title="Used By" />
               </Bind>
             </Assistants>
           </Card>
         </With>
       </Expansions>
     </Filter>
-    <Card source="DimensionDerivations" view="Custom_RoleRestricted_Full">
+    <Card source="DimensionDerivations" view="Full">
       <With>
-        <Table view="Custom_RoleRestricted_Full" />
+        <Table view="Full" />
       </With>
     </Card>
     <Workspace source="Posting" />

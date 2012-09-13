@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- JSV, 02/06/10: Rename NameVar to EmployeeNameVar (38482).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="AbsenceCalendarLines">
+    <FilterPane>
+      <Filter name="Standard">
+        <Columns>
+          <Field source="EmployeeNumber" />
+          <Field source="FirstDayOfAbsence" />
+          <Field source="Duration" />
+          <Field source="LastDayOfAbsence" />
+          <Field source="AbsenceType" />
+          <Field source="Tentative" />
+          <Field source="Remark" />
+          <Field source="Submit" />
+          <Field source="Submitted" />
+          <Field source="SubmittedBy" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Employee Information">
+            <Reference foreignKey="EmployeeNumber_Employee" />
+          </Group>
+          <Group title="Absence">
+            <Field source="FirstDayOfAbsence" />
+            <Field source="Duration" />
+            <Field source="LastDayOfAbsence" />
+            <Field source="AbsenceType" />
+            <Boolean source="Tentative" />
+            <Field source="Remark" />
+            <If condition="maconomy:booleanSysPar('ApprovalOfAbsence')">
+              <Field source="Submitted" />
+              <Field source="SubmittedBy" />
+              <Field source="DateSubmitted" />
+              <Field source="Approved" />
+              <Field source="ApprovedBy" />
+              <Field source="ApprovalDate" />
+              <Field source="Rejected" />
+              <Field source="RejectedBy" />
+              <Field source="RejectionDate" />
+              <Field source="Reopened" />
+            </If>
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

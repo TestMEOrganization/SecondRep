@@ -1,202 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--141ab032915dd2241a4c7c1e5f6deb856c4152de-->
-<!--
-  Revision=191a890063347ac5105d387c300b16c33e205212
-  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
-  Layer=Custom
-  Deployer=admin
-  Time=19-04-12 12:05
-  StampVersion=1
--->
-<!--d0b5e3d4077fac45d52e633d43bad149b566db43-->
-<!--
-  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
-  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
-  Layer=Custom
-  Deployer=MartinKjeldsen
-  Time=02-03-12 01:16
-  StampVersion=1
--->
 <MMSL xmlns="http://www.deltek.com/ns/mmsl" version="0.6">
   <Menu>
-    <If condition="hasRole('Time and expenses ')">
-      <Group title="Time &amp; Expenses" icon="TimeAndExpense" name="RamTimeandexpense">
-        <Workspace title="Time &amp; Expenses" source="TimeAndExpenseRegistration" name="C_TMEReg" icon="transparent" />
-	    <If condition="hasRole('Time and expenses Approval') or hasRole('Superuser')">
-        <Workspace title="Time &amp; Expense Approval" source="C_SupervisorTimeAndExpenseApproval" name="C_SupervisorApproval" icon="transparent" />
-	    </If>
-    	<If condition="hasRole('Time Sheet Others')">
-	    <Workspace title="Time Sheet Others" source="C_TimeSheetManagement" icon="transparent" />
-	    </If>
-      </Group>
-    </If>
-    <If condition="hasRole('Projects - Project Manager') or hasRole('Project invoices') or hasRole('Projects - Controllers') or hasRole('Projects - Project Manager read only')">
-      <Group title="Jobs" icon="JobCost">
-        <Workspace title="Project - Project Manager" source="Jobs" name="C_Jobs" />
-        <!-- <If condition="hasRole('Workorders') or hasRole('Superuser')">
-          <Workspace title="Work Orders" source="PSOWorkOrders" name="RamWO" />
-        </If> -->
-        <If condition="hasRole('Projects - Controllers')" >
-        	<Workspace title="Project - Assistants &amp; Controllers" source="C_Jobs_PC" name="C_Jobs_PC" />
-	   		<Workspace title="Job Entries" source="JobEntries" name="C_JobEntries_PC" />
-	    	<Workspace title="Batch Invoicing" source="BatchJobInvoicing" name="C_BatchJobInvoicing_PC" />
-        </If>
-        <If condition="hasRole('Projects - Controllers') and not hasRole('Project Admin')">
-          <Workspace title="Job Setup" source="C_JobsSetup_PC" />
-        </If>
-        <If condition="hasRole('Project Admin')" >
-          <Workspace title="Job Setup" source="JobsSetup" />
-        </If>
-        <If condition="hasRole('Project invoices')">
-          <Workspace title="Job Invoices" source="JobInvoices" name="C_JobInvoices" />
-        </If>
-        <If condition="hasRole('Projects - Controllers') and not hasRole('Project Admin')">
-	   	  <Workspace title="Job Administration" source="C_JobAdministration_Simple" />
-        </If>
-        <If condition="hasRole('Project Admin')">
-	   	  <Workspace title="Job Administration" source="JobAdministration" name="C_JobAdministration" />
-        </If>
-        <If condition="envVar('user.employeeinfo.CompanyNumber') = '150' or envVar('user.employeeinfo.CompanyNumber') = '151' or envVar('user.employeeinfo.CompanyNumber') = '152' or envVar('user.employeeinfo.CompanyNumber') = '153' or envVar('user.employeeinfo.CompanyNumber') = '154' or envVar('user.employeeinfo.text7') = 'Finland'" >
-        	<Workspace title="QMS" source="C_QMS" />
-        </If>
-        <Workspace title="Project Follow-up Overview" source="C_ProjectOverview_Report" />
-        <Workspace title="Project Reporting" source="C_ProjectReports" />
-        <If condition="hasRole('Purchase')" >
-        	<Workspace title="Purchase Processes" source="PurchaseProcesses" name="PurchaseProcesses_Projects"/>
-        </If>
-      </Group>
-    </If>
-    <If condition="hasRole('Projects - Controllers') or hasRole('Reporting')">
-      <Group title="Reporting" icon="ReportLink.png">
-        <Workspace title="Manager Reporting" source="ManagerReporting" name="ManagerReportingDepartmentManager" />
-      </Group>
-    </If>
-    <If condition="hasRole('Projects - Controllers') or hasRole('Human resources') or hasRole('People')">
-      <Group title="People" icon="HumanResources">
-        <Workspace title="Employees" source="Employees" name="EmployeesDepartmentManager" />
-      </Group>
-    </If>
-    <If condition="hasRole('Customer Front Office')">
-      <Group title="Customers Front Office" icon="AccountsReceivable">
-        <Workspace source="C_Customers" title="Customers" name="C_Customers_Front" />
-      </Group>
-    </If>
-    <If condition="hasRole('Customer Back Office')">
-      <Group title="Customers Back Office" icon="AccountsReceivable">
-        <Workspace source="Customers" title="Customers" />
-        <Workspace source="CompanyCustomers" title="Company Customers" />
-        <Workspace source="CustomerPayments" title="Customer Payments" />
-        <Workspace source="Interest" title="Interest" />
-        <Workspace source="Reminder" title="Reminders" />
-        <Workspace source="DetailedCustomerEntries" title="Customer Entries" />
-        <Workspace source="ARReporting" title="Customer Reporting" />
-      </Group>
-    </If>
-    <If condition="hasRole('Vendor Front Office')">
-      <Group title="Vendor Front Office" icon="AccountsPayable">
-        <Workspace source="C_Vendors" title="Vendors" name="C_Vendors_Front" />
-      </Group>
-    </If>
-    <If condition="hasRole('Vendor Back Office')">
-      <Group title="Vendor Back Office" icon="AccountsPayable">
-        <Workspace source="Vendors" title="Vendors" />
-        <Workspace source="CompanyVendors" title="Company Vendors" />
-        <Workspace source="VendorInvoices" title="Vendor Invoices" />
-        <Workspace source="PurchaseProcesses" title="Purchase Processes" />
-        <Workspace source="APReporting" title="Vendor Reporting" />
-      </Group>
-    </If>
-    <If condition="hasRole('Commerce')">
-      <Group title="Commerce" icon="menu_sales-orders">
-          <Workspace title="Sales Orders" source="C_SalesOrders_Commerce" name="Commerce_SalesOrder" />
-          <Workspace title="Subscription Orders" source="C_SubscriptionHome_Commerce" name="Commerce_SubscriptionOrder" />
-          <Workspace title="Items" source="C_CommerceItem" />
-      </Group>
-    </If>      
-    <If condition="hasRole('Financial operations - GL') or hasRole('Finance Admin')">
-      <Group title="General Ledger" icon="GeneralLedger">
-        <Workspace title="Financial Analysis" source="FinancialAnalysis" name="FinancialAnalysiscontroller" />
-        <Workspace title="Financial Reporting" source="FinancialReporting" name="FinancialReportingcontroller" />
-        <Workspace title="Financial Operations" source="FinancialOperations" name="FinancialOperationscontroller" />
-        <Workspace title="Companies" source="CompanyHome" name="Companiescontroller" />
-        <Workspace title="Accounts" source="GlobalAccounts" name="Accountscontroller" />
-        <Workspace title="Dimensions" source="Dimensions" name="Dimensionscontroller" />
-      </Group>
-      <!-- <Group title="Finance Budgets" icon="FinanceBudgets">
-				<Workspace source="FinanceBudgets" title="Budget" name="FinanceBudgetsController"/>
-			</Group> -->
-	</If>      
-    <If condition="hasRole('Finance Lite')">
-      <Group title="General Ledger" icon="GeneralLedger">
-        <Workspace title="Financial Analysis" source="FinancialAnalysis" name="FinancialAnalysisFL" />
-        <Workspace title="Financial Operations" source="C_FinancialOperations_FL" name="FinancialOperationsLite" />
-      </Group>
-      <!-- <Group title="Finance Budgets" icon="FinanceBudgets">
-				<Workspace source="FinanceBudgets" title="Budget" name="FinanceBudgetsController"/>
-			</Group> -->
-	</If>
-	<If condition="hasRole('Assets')">
-      <Group title="Assets" icon="FixedAssets">
-        <Workspace title="Fixed Assets" source="FixedAssets" name="Fixedassetscontroller" />
-      </Group>
-    </If>
-    <If condition="hasRole('CRM')">
+    <If condition="hasRole('Account Manager')">
       <Group title="CRM" icon="ContactManagement">
         <Workspace title="Contact Companies" source="ContactCompanies" />
         <Workspace title="Contact Persons" source="ContactPersons" />
         <Workspace title="Opportunities" source="Opportunities" />
         <Workspace title="Events" source="Events" />
-	      <Workspace title="Campaigns" source="Campaigns" name="CRM_Campaigns" />
-	      <Workspace title="Update Responsible Employee" source="UpdateResponsibleEmployee" name="CRM_UpdateResponsibleEmployee" />
+        <Workspace title="Campaigns" source="Campaigns" />
+        <Workspace title="Update Responsible Employee" source="UpdateResponsibleEmployee" />
+        <If condition="isEnvVarDefined('analytix.server.host')">
+          <Workspace title="CRM Reporting" source="CRMReporting" />
+        </If>
       </Group>
     </If>
-    <If condition="hasRole('Time and expenses')">
-    	<Group title="GBA Websites" icon="menu_general-information" >
-    		<Workspace title="GBA Websites" source="C_GBA_Website" icon="transparent" />    	
-    	</Group>
-    </If>
-    <If condition="hasRole('Banking')">
-    	<Group title="Banking" icon="Banking">                           
-        	<Workspace title="Payments" source="BankPayments"/>
-            <Workspace title="Collections" source="Collections"/>
-            <Workspace title="Bank Reconciliations" source="BankReconciliations"/>                                              
-        </Group>
-    </If>
-    <!-- <If condition="hasRole('Project Administrator')">
+    <If condition="hasRole('Project Manager') or hasRole('Project Administrator')">
       <Group title="Jobs" icon="JobCost">
-        <Workspace title="Jobs" source="Jobs" />
-        <If condition="hasRole('Superuser')">
+        <If condition="hasRole('Project Manager')">
+          <Workspace title="Jobs" source="Jobs" />
           <Workspace title="Work Orders" source="PSOWorkOrders" />
         </If>
-        <If condition="hasRole('Project Administrator') or hasRole('Superuser')">
+        <If condition="hasRole('Project Administrator' )">
           <Workspace title="Job Administration" source="JobAdministration" />
           <Workspace title="Job Entries" source="JobEntries" />
           <Workspace title="Batch Invoicing" source="BatchJobInvoicing" />
-          <Workspace source="CustomerProvisions" title="Customer Provisions" />
           <Workspace title="Sales Orders" source="SalesOrders" />
           <Workspace title="Subscription Orders" source="SubscriptionHome" />
           <Workspace title="Batch Order Invoicing" source="BatchOrderInvoicing" />
         </If>
-        <If condition="hasRole('Superuser')">
+        <If condition="hasRole('Project Manager')">
+          <Workspace title="Job Invoices" source="JobInvoices" />
+        </If>
+        <If condition="hasRole('Project Administrator')">
           <Workspace title="Job Reporting" source="JobReporting" />
         </If>
       </Group>
-    </If> -->
-    <If condition="hasRole('Analyzer - Java client')">
-      <Group title="Analyzer" icon="ReportLink.png" >
-      	<Workspace source="C_AnalyzerLinkPage" title="Analyzer Link Page" />
+    </If>
+    <If condition="hasRole('Employee') or hasRole('Department Manager')">
+      <Group title="Time &amp; Expenses" icon="TimeAndExpense">
+        <If condition="hasRole('Employee')">
+          <Workspace title="Time &amp; Expenses" source="TimeAndExpenseRegistration" />
+        </If>
+        <If condition="hasRole('Department Manager')">
+          <Workspace title="Supervisor Time &amp; Expense Approval" source="SupervisorTimeAndExpenseApproval" />
+        </If>
+        <If condition="hasRole('Project Manager')">
+          <Workspace title="Project Manager Approval" source="ProjectManagerTimeAndExpenseApproval" />
+        </If>
       </Group>
     </If>
-    <If condition="hasRole('User Administration')">
-      <Group title="Service Desk" icon="HumanResources" >
-        <Workspace source="C_UserManagement_ServiceDesk" title="User Management" />
+    <If condition="hasRole('Department Manager')">
+      <Group title="Reporting" icon="Reporting.png">
+        <Workspace title="Reports" source="Reporting" />
+        <Workspace title="Manager Reporting" source="ManagerReporting" />
+        <Workspace title="Dashboards" source="Dashboards" />
       </Group>
     </If>
-    <If condition="hasRole('Portal Administrator')">
+    <If condition="hasRole('Department Manager') or hasRole('System Admin')">
+      <Group title="Human Resources" icon="HumanResources">
+        <Workspace title="Employees" source="Employees" />
+        <Workspace title="Courses" source="Courses" />
+        <Workspace title="Recruitment" source="Recruitment" />
+      </Group>
+    </If>
+    <If condition="hasRole('Controller')">
+      <Group title="General Ledger" icon="GeneralLedger">
+        <Workspace title="Financial Analysis" source="FinancialAnalysis" />
+        <Workspace title="Financial Reporting" source="FinancialReporting" />
+        <Workspace title="Financial Operations" source="FinancialOperations" />
+        <Workspace title="Companies" source="CompanyHome" />
+        <Workspace title="Accounts" source="GlobalAccounts" />
+        <Workspace title="Dimensions" source="Dimensions" />
+        <Workspace title="Approvals" source="Approvals" />
+      </Group>
+      <Group title="Finance Budgets" icon="FinanceBudgets">
+        <Workspace source="FinanceBudgets" title="Budget" />
+      </Group>
+      <Group title="Assets" icon="FixedAssets">
+        <Workspace title="Fixed Assets" source="FixedAssets" />
+      </Group>
+    </If>
+    <If condition="hasRole('Controller') or hasRole('Finance AR')">
+      <Group title="Accounts Receivable" icon="AccountsReceivable">
+        <Workspace source="ARReporting" title="Customer Reporting" />
+        <If condition="hasRole('Finance AR')">
+          <Workspace source="CompanyCustomers" title="Company Customers" />
+          <Workspace source="CustomerPayments" title="Customer Payments" />
+          <Workspace source="Interest" title="Interest" />
+          <Workspace source="Reminder" title="Reminders" />
+          <Workspace source="DetailedCustomerEntries" title="Customer Entries" />
+          <Workspace source="CustomerProvisions" title="Customer Provisions" />
+        </If>
+        <Workspace source="Customers" title="Customers" />
+      </Group>
+    </If>
+    <If condition="hasRole('Controller') or hasRole('Finance AP')">
+      <Group title="Accounts Payable" icon="AccountsPayable">
+        <Workspace source="APReporting" title="Vendor Reporting" />
+        <Workspace source="Vendors" title="Vendors" name="Vendorscontroller" />
+        <Workspace source="DetailedVendorEntries" title="Vendor Entries" />
+        <If condition="hasRole('Finance AP')">
+          <Workspace source="CompanyVendors" title="Company Vendors" />
+          <Workspace source="VendorInvoices" title="Vendor Invoices" />
+          <Workspace source="PurchaseProcesses" title="Purchase Processes" />
+        </If>
+      </Group>
+    </If>
+    <Group title="Banking" icon="Banking">
+      <Workspace title="Payments" source="BankPayments" />
+      <Workspace title="Collections" source="Collections" />
+      <Workspace title="Bank Reconciliations" source="BankReconciliations" />
+    </Group>
+    <If condition="hasRole('System Admin')">
       <Group title="Setup" icon="Setup">
-        <!-- <Workspace title="Jobs Setup" source="JobsSetup" /> -->
+        <Workspace title="Jobs Setup" source="JobsSetup" />
         <Workspace title="Finance Setup" source="GeneralLedgerSetup" />
+        <Workspace title="Banking Setup" source="BankingSetup" />
+        <Workspace title="Format Specification" source="FormatSpecification" />
         <Workspace title="System Setup" source="SystemSetup" />
+        <Workspace title="Subscription Setup" source="SubscriptionSetup" />
         <Workspace title="Users" source="UserManagement" />
         <Workspace title="Approval Hierarchies Setup" source="ApprovalHierarchies" />
         <Workspace title="Contact Management Setup" source="ContactManagementSetup" />
@@ -205,8 +127,6 @@
         <Workspace title="Layouts" source="Layouts" />
         <Workspace title="Documents and Notes" source="DocumentsAndNotes" />
         <Workspace title="Notifications" source="Notifications" />
-        <Workspace title="Banking Setup" source="BankingSetup" />           
-        <Workspace title="Format Specification" source="FormatSpecification" />
       </Group>
     </If>
     <If condition="hasRole('All Windows')">
@@ -231,9 +151,11 @@
             <Workspace title="Account Ledger" source="SD_AccountLedger" />
             <Workspace title="Dimension Card" source="SD_DimensionCard" />
             <Workspace title="Company Overview" source="SD_CompanyOverview" />
+            <Workspace title="Finance Entry Analysis" source="SD_FinanceEntryAnalysis" />
             <Workspace title="Show G/L Entries" source="SD_ShowFinanceEntry" />
             <Workspace title="Show Journals" source="SD_ShowJournals" />
             <Workspace title="Show General Journals" source="SD_ShowGeneralJournals" />
+            <Workspace title="Show General Journal Lines" source="SD_ShowGeneralJournalLines" />
             <Workspace title="Show Journal Foundation" source="SD_ShowJournalFoundation" />
             <Workspace title="Show Intercompany Invoice Details" source="SD_ShowIntercompanyInvoiceDetails" />
             <Workspace title="Show Intercompany Entries" source="SD_ShowIntercompanyEntries" />
@@ -355,7 +277,6 @@
           <Group title="Set-up">
             <Workspace title="Budget Models" source="SD_BudgetModels" />
             <Workspace title="Budget Groups" source="SD_BudgetGroups" />
-            <Workspace title="Create Budget Model" source="SD_CreateBudgetModel" />
             <Workspace title="Commitment Levels" source="SD_CommitmentLevels" />
             <Workspace title="Commitment Rules" source="SD_CommitmentRules" />
             <Workspace title="Allocation Keys" source="SD_AllocationKeys" />
@@ -401,6 +322,7 @@
           <Group title="Lookup">
             <Workspace title="Open Entry Customer Statement" source="SD_OpenEntryCustomerStatement" />
             <Workspace title="Periodic Customer Statement" source="SD_PeriodicCustomerStatement" />
+            <Workspace title="Customer Entry Analysis" source="SD_CustomerEntryAnalysis" />
             <Workspace title="Show Customer Reconciliation" source="SD_ShowCustomerReconciliations" />
             <Workspace title="Show Customer Accrual Journals" source="SD_ShowCustomerAccrualJournals" />
             <Workspace title="Show Reminders" source="SD_ShowReminders" />
@@ -452,6 +374,7 @@
           <Group title="Lookup">
             <Workspace title="Vendor Open Entry Statement" source="SD_VendorOpenEntryStatement" />
             <Workspace title="Periodic Vendor Statement" source="SD_PeriodicVendorStatement" />
+            <Workspace title="Vendor Entry Analysis" source="SD_VendorEntryAnalysis" />
             <Workspace title="Show Vendor Invoices" source="SD_ShowVendorInvoices" />
             <Workspace title="Show Invoice Allocation Lines" source="SD_ShowInvoiceAllocationLines" />
             <Workspace title="Show Vendor Reconciliation" source="SD_ShowVendorReconciliation" />
@@ -778,6 +701,7 @@
             <Workspace title="Show Job Transfers" source="SD_ShowJobTransfers" />
             <Workspace title="Job Search" source="SD_JobSearch" />
             <Workspace title="Job Entry Overview" source="SD_JobEntryOverview" />
+            <Workspace title="Job Entry Analysis" source="SD_JobEntryAnalysis" />
             <Workspace title="Job Invoice Overview" source="SD_JobInvoiceOverview" />
             <Workspace title="Show Job Invoice Reconciliations" source="SD_ShowJobInvoiceReconciliations" />
             <Workspace title="Show Invoice Foundation" source="SD_ShowInvoiceFoundation" />
@@ -883,6 +807,7 @@
             <Workspace title="Event Contact Persons" source="SD_EventContactPersons" />
             <Workspace title="Opportunities" source="SD_Opportunities" />
             <Workspace title="Opportunity Employees" source="SD_OpportunityEmployees" />
+            <Workspace title="Opportunity Partners" source="SD_OpportunityPartners" />
             <Workspace title="Opportunity Budgets" source="SD_OpportunityBudgets" />
             <Workspace title="Contact Person Relations" source="SD_ContactPersonRelations" />
             <Workspace title="Contact Company Relations" source="SD_ContactCompanyRelations" />
@@ -899,12 +824,16 @@
             <Workspace title="Contact Companies" source="SD_ContactCompanys" />
             <Workspace title="Contact Company Employees" source="SD_ContactCompanyEmployees" />
             <Workspace title="Contact Company Addresses" source="SD_ContactCompanyAddresses" />
+            <Workspace title="Contact Company Targeting Codes" source="SD_ContactCompanyTargetingCodes" />
             <Workspace title="Contact Persons" source="SD_ContactPersons" />
+            <Workspace title="Contact Person Targeting Codes" source="SD_ContactPersonTargetingCodes" />
             <Workspace title="Contact Group Types" source="SD_ContactGroupTypes" />
             <Workspace title="Contact Groups" source="SD_ContactGroups" />
             <Workspace title="Event Flow Types" source="SD_EventFlowTypes" />
             <Workspace title="Event Plans" source="SD_EventPlans" />
             <Workspace title="Opportunity Types" source="SD_OpportunityTypes" />
+            <Workspace title="Targeting Codes" source="SD_TargetingCodes" />
+            <Workspace title="Update Responsible Employee" source="SD_UpdateResponsibleEmployee" />
             <Workspace title="Contact Management Setup" source="SD_ContactManagementSetup" />
           </Group>
           <Group title="Delete">
@@ -1084,6 +1013,8 @@
               <Workspace title="Job Budgets API" source="SD_API_JobBudgets" />
               <Workspace title="Periodic Job Budgets API" source="SD_API_PeriodicJobBudgets" />
               <Workspace title="Job Budget Type Selection API" source="SD_API_JobBudgetTypeSelection" />
+              <Workspace title="Job Budgets Card API" source="SD_API_JobBudgetsCard" />
+              <Workspace title="Job Budgets Table API" source="SD_API_JobBudgetsTable" />
             </Group>
             <Group title="Registration">
               <Workspace title="Time Sheet Lines" source="SD_TimeSheetLines" />
@@ -1112,6 +1043,7 @@
           <Group title="Contact Management">
             <Workspace title="Contact Group Members" source="SD_ContactGroupMembers" />
             <Workspace title="Contact Companies API" source="SD_API_ContactCompanies" />
+            <Workspace title="Opportunity Partners API" source="SD_API_OpportunityPartners" />
             <Group title="Registration">
               <Workspace title="Opportunity Budgets API" source="SD_API_OpportunityBudgets" />
             </Group>
@@ -1126,14 +1058,14 @@
   </Menu>
   <Auto>
     <Workspace title="ToDo's" source="NotificationsView" icon="notification" pluginId="com.maconomy.client.workspace.viewbased" />
-    <!-- <If condition="hasRole('Project Manager') or hasRole('Superuser') or hasRole('Department Manager') or hasRole('Employee')">
+    <If condition="hasRole('Project Manager')">
       <Workspace source="Jobs" title="Jobs" />
-    </If> -->
-    <If condition="hasRole('Time and expenses') and not hasRole('Projects - Project Manager')">
-      <Workspace title="Time &amp; Expenses" ref="C_TMEReg" />
     </If>
-    <If condition="hasRole('Projects - Project Manager') or hasRole('Superuser')">
-      <Workspace title="Projects - Project Manager" ref="C_Jobs" />
+    <If condition="hasRole('Employee')">
+      <Workspace title="Time &amp; Expenses" source="TimeAndExpenseRegistration" />
+    </If>
+    <If condition="hasRole('Account Manager')">
+      <Workspace title="Opportunities" source="Opportunities" />
     </If>
   </Auto>
 </MMSL>
