@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- MJA, 14/05/09: First version of layout (37703).-->
+<!-- MJA, 23/05/09: Layout for Subscription module added (37733).-->
+<!-- MJA, 25/05/09: Layout for G/L module added (37734).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 08/07/09: TransactionNumberSeries filter view added (37665).-->
+<!-- MJA, 08/07/09: Group added, filters updated and autoconversion improved (37828).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- SBA, 03/02/10: Introduce dynamic column headings in mdml (38258).-->
+<!-- SJK, 20/05/10: Filter button restrictions converted to common expression language (38492).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- PSZ, 14/07/10: Added JobCost filter (38659).-->
+<!-- MJA, 15/07/10: Dynamic layout in table part (37828).-->
+<!-- PSZ, 23/11/10: Using UserChangedColumns instead of UserUpdateColumns for filters (39135).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- SBA, 16/03/11: Add compact filter definition (39418). -->
+<!-- PSZ, 30/03/11: Currency workspace (39512).-->
+<!-- CSK, 05/04/11: Compact filters added to GeneralLedger and TransactionNumberSeries (39498).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- SJK, 18/05/11: Contact management filter (39657).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- SJK, 23/06/11: Layout for sales orders (39731).-->
+<!-- CSK, 27/07/11: New FixedAssets filter (39789).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<!-- PSZ, 17/11/11: Remove unused layouts (40178).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="PopupFields">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1, ^2" arguments="Description;TheGroup" />
+        </Compact>
+        <Columns>
+          <Field source="Description" />
+          <Field source="TheGroup" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="GeneralLedger">
+        <ControlBar>
+          <Selection default="GeneralLedger">
+            <Option name="GeneralLedger" title="General Ledger" restriction="TheGroup = 'General Ledger'" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1" arguments="Description" />
+        </Compact>
+        <Columns>
+          <Field source="Description" />
+        </Columns>
+      </Filter>
+      <Filter name="Subscription">
+        <ControlBar>
+          <Selection default="Subscription">
+            <Option name="Subscription" title="Subscription" restriction="TheGroup = 'Subscription'" />
+          </Selection>
+        </ControlBar>
+        <Columns>
+          <Field source="Description" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="TransactionNumberSeries">
+        <ControlBar>
+          <Selection default="TransactionNumberSeries">
+            <Option name="TransactionNumberSeries" title="Transaction Number Series" restriction="PopupTypeName = 'TransactionNumberSeriesType'" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Description;TheGroup" />
+        </Compact>
+        <Columns>
+          <Field source="Description" />
+          <Field source="TheGroup" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="Currency">
+        <ControlBar>
+          <Selection default="Currency">
+            <Option name="Currency" title="Currency" restriction="PopupTypeName = 'CurrencyType'" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1, ^2" arguments="Description;TheGroup" />
+        </Compact>
+        <Columns>
+          <Field source="Description" />
+          <Field source="TheGroup" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="JobCost">
+        <ControlBar>
+          <Selection default="JobCost">
+            <Option name="JobCost" title="Job Cost" restriction="TheGroup = 'Job Cost'" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Description;TheGroup" />
+        </Compact>
+        <Columns>
+          <Field source="Description" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="ContactManagement">
+        <ControlBar>
+          <Selection default="ContactManagement">
+            <Option name="Event" title="Event" restriction="TheGroup = 'Contact Management' and (PopupTypeName = 'EventtypeType' or PopupTypeName = 'ContactModeType')" />
+            <!-- ContactCompanyPopup1Type-ContactCompanyPopup20Type in alphabetic order have ContactCompanyPopup10Type first and ContactCompanyPopup9Type last -->
+            <Option name="ContactCompany" title="Contact Company" restriction="TheGroup = 'Contact Management' and PopupTypeName ge 'ContactCompanyPopup10Type' and PopupTypeName le 'ContactCompanyPopup9Type'" />
+            <Option name="ContactPerson" title="Contact Person" restriction="TheGroup = 'Contact Management' and PopupTypeName ge 'ContactPersonPopup10Type' and PopupTypeName le 'ContactPersonPopup9Type'" />
+            <Option name="Opportunity" title="Opportunity" restriction="TheGroup = 'Contact Management' and PopupTypeName ge 'OpportunityPopupType1' and PopupTypeName le 'OpportunityPopupType9'" />
+            <Option name="ContactManagement" title="All Contact Management" restriction="TheGroup = 'Contact Management'" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Description;TheGroup" />
+        </Compact>
+        <Columns>
+          <Field source="Description" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="SalesOrders">
+        <ControlBar>
+          <Selection default="SalesOrders">
+            <Option name="SalesOrders" title="Sales Orders" restriction="TheGroup = 'Sales Orders'" />
+            <Option name="Item" title="Item" restriction="TheGroup = 'Item'" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Description;TheGroup" />
+        </Compact>
+        <Columns>
+          <Field source="Description" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="FixedAssets">
+        <ControlBar>
+          <Selection default="FixedAssets">
+            <Option name="FixedAssets" title="FixedAssets" restriction="TheGroup = 'Fixed Assets'" />
+          </Selection>
+        </ControlBar>
+        <Columns>
+          <Field source="Description" />
+          <Columns ref="UserChangedColumns" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Popup Field">
+              <Field source="Description" />
+              <Field source="TheGroup" />
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Function name="isAccount" parameters="FieldPar" value="FieldPar=Parent.Parent.DimensionCombNumber" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="Name" />
+          <If condition="parent.FixedTextS1Var != ''">
+            <Field source="String1" titleValue="parent.FixedTextS1Var" />
+          </If>
+          <If condition="parent.FixedTextS2Var != ''">
+            <Field source="String2" titleValue="parent.FixedTextS2Var" />
+          </If>
+          <If condition="parent.FixedTextS3Var != ''">
+            <Field source="String3" titleValue="parent.FixedTextS3Var" />
+          </If>
+          <If condition="parent.FixedTextS4Var != ''">
+            <Field source="String4" titleValue="parent.FixedTextS4Var" />
+          </If>
+          <If condition="parent.FixedTextA1Var != ''">
+            <Field source="Amount1" titleValue="parent.FixedTextA1Var" />
+          </If>
+          <If condition="parent.FixedTextA2Var != ''">
+            <Field source="Amount2" titleValue="parent.FixedTextA2Var" />
+          </If>
+          <If condition="parent.FixedTextR1Var != ''">
+            <Field source="Real1" titleValue="parent.FixedTextR1Var" />
+          </If>
+          <If condition="parent.FixedTextR2Var != ''">
+            <Field source="Real2" titleValue="parent.FixedTextR2Var" />
+          </If>
+          <If condition="parent.FixedTextR3Var != ''">
+            <Field source="Real3" titleValue="parent.FixedTextR3Var" />
+          </If>
+          <If condition="parent.FixedTextI1Var != ''">
+            <Field source="Integer1" titleValue="parent.FixedTextI1Var" />
+          </If>
+          <If condition="parent.FixedTextI2Var != ''">
+            <Field source="Integer2" titleValue="parent.FixedTextI2Var" />
+          </If>
+          <If condition="parent.FixedTextI3Var != ''">
+            <Field source="Integer3" titleValue="parent.FixedTextI3Var" />
+          </If>
+          <If condition="parent.FixedTextB1Var != ''">
+            <Field source="Boolean1" titleValue="parent.FixedTextB1Var" />
+          </If>
+          <If condition="parent.FixedTextB2Var != ''">
+            <Field source="Boolean2" titleValue="parent.FixedTextB2Var" />
+          </If>
+          <If condition="parent.FixedTextB3Var != ''">
+            <Field source="Boolean3" titleValue="parent.FixedTextB3Var" />
+          </If>
+          <If condition="parent.FixedTextB4Var != ''">
+            <Field source="Boolean4" titleValue="parent.FixedTextB4Var" />
+          </If>
+        </Columns>
+      </Table>
+      <Table name="Custom_RoleRestricted_DimensionOrigin">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+        <If condition="hasRole('Finance Admin')" >
+          <Field source="Name" open="false" />
+          <If condition="parent.FixedTextS1Var != ''">
+            <Field source="String1" titleValue="parent.FixedTextS1Var" open="isAccount(String1)">
+              <Style ref="highlightRow" condition="isAccount(String1)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS2Var != ''">
+            <Field source="String2" titleValue="parent.FixedTextS2Var" open="isAccount(String2)">
+              <Style ref="highlightRow" condition="isAccount(String2)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS3Var != ''">
+            <Field source="String3" titleValue="parent.FixedTextS3Var" open="isAccount(String3)">
+              <Style ref="highlightRow" condition="isAccount(String3)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS4Var != ''">
+            <Field source="String4" titleValue="parent.FixedTextS4Var" open="isAccount(String4)">
+              <Style ref="highlightRow" condition="isAccount(String4)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextA1Var != ''">
+            <Field source="Amount1" titleValue="parent.FixedTextA1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextA2Var != ''">
+            <Field source="Amount2" titleValue="parent.FixedTextA2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR1Var != ''">
+            <Field source="Real1" titleValue="parent.FixedTextR1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR2Var != ''">
+            <Field source="Real2" titleValue="parent.FixedTextR2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR3Var != ''">
+            <Field source="Real3" titleValue="parent.FixedTextR3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI1Var != ''">
+            <Field source="Integer1" titleValue="parent.FixedTextI1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI2Var != ''">
+            <Field source="Integer2" titleValue="parent.FixedTextI2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI3Var != ''">
+            <Field source="Integer3" titleValue="parent.FixedTextI3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB1Var != ''">
+            <Field source="Boolean1" titleValue="parent.FixedTextB1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB2Var != ''">
+            <Field source="Boolean2" titleValue="parent.FixedTextB2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB3Var != ''">
+            <Field source="Boolean3" titleValue="parent.FixedTextB3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB4Var != ''">
+            <Field source="Boolean4" titleValue="parent.FixedTextB4Var" open="false" />
+          </If>
+          </If>
+          <Else>
+          <Field source="Name" open="false" />
+          <If condition="parent.FixedTextS1Var != ''">
+            <Field source="String1" titleValue="parent.FixedTextS1Var" open="false">
+              <Style ref="highlightRow" condition="isAccount(String1)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS2Var != ''">
+            <Field source="String2" titleValue="parent.FixedTextS2Var" open="false">
+              <Style ref="highlightRow" condition="isAccount(String2)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS3Var != ''">
+            <Field source="String3" titleValue="parent.FixedTextS3Var" open="false">
+              <Style ref="highlightRow" condition="isAccount(String3)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS4Var != ''">
+            <Field source="String4" titleValue="parent.FixedTextS4Var" open="false">
+              <Style ref="highlightRow" condition="isAccount(String4)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextA1Var != ''">
+            <Field source="Amount1" titleValue="parent.FixedTextA1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextA2Var != ''">
+            <Field source="Amount2" titleValue="parent.FixedTextA2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR1Var != ''">
+            <Field source="Real1" titleValue="parent.FixedTextR1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR2Var != ''">
+            <Field source="Real2" titleValue="parent.FixedTextR2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR3Var != ''">
+            <Field source="Real3" titleValue="parent.FixedTextR3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI1Var != ''">
+            <Field source="Integer1" titleValue="parent.FixedTextI1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI2Var != ''">
+            <Field source="Integer2" titleValue="parent.FixedTextI2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI3Var != ''">
+            <Field source="Integer3" titleValue="parent.FixedTextI3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB1Var != ''">
+            <Field source="Boolean1" titleValue="parent.FixedTextB1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB2Var != ''">
+            <Field source="Boolean2" titleValue="parent.FixedTextB2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB3Var != ''">
+            <Field source="Boolean3" titleValue="parent.FixedTextB3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB4Var != ''">
+            <Field source="Boolean4" titleValue="parent.FixedTextB4Var" open="false" />
+          </If>
+          </Else>
+        </Columns>
+      </Table>
+      <Table name="DimensionOrigin">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+          <Field source="Name" open="false" />
+          <If condition="parent.FixedTextS1Var != ''">
+            <Field source="String1" titleValue="parent.FixedTextS1Var" open="isAccount(String1)">
+              <Style ref="highlightRow" condition="isAccount(String1)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS2Var != ''">
+            <Field source="String2" titleValue="parent.FixedTextS2Var" open="isAccount(String2)">
+              <Style ref="highlightRow" condition="isAccount(String2)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS3Var != ''">
+            <Field source="String3" titleValue="parent.FixedTextS3Var" open="isAccount(String3)">
+              <Style ref="highlightRow" condition="isAccount(String3)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextS4Var != ''">
+            <Field source="String4" titleValue="parent.FixedTextS4Var" open="isAccount(String4)">
+              <Style ref="highlightRow" condition="isAccount(String4)" />
+            </Field>
+          </If>
+          <If condition="parent.FixedTextA1Var != ''">
+            <Field source="Amount1" titleValue="parent.FixedTextA1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextA2Var != ''">
+            <Field source="Amount2" titleValue="parent.FixedTextA2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR1Var != ''">
+            <Field source="Real1" titleValue="parent.FixedTextR1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR2Var != ''">
+            <Field source="Real2" titleValue="parent.FixedTextR2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextR3Var != ''">
+            <Field source="Real3" titleValue="parent.FixedTextR3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI1Var != ''">
+            <Field source="Integer1" titleValue="parent.FixedTextI1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI2Var != ''">
+            <Field source="Integer2" titleValue="parent.FixedTextI2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextI3Var != ''">
+            <Field source="Integer3" titleValue="parent.FixedTextI3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB1Var != ''">
+            <Field source="Boolean1" titleValue="parent.FixedTextB1Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB2Var != ''">
+            <Field source="Boolean2" titleValue="parent.FixedTextB2Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB3Var != ''">
+            <Field source="Boolean3" titleValue="parent.FixedTextB3Var" open="false" />
+          </If>
+          <If condition="parent.FixedTextB4Var != ''">
+            <Field source="Boolean4" titleValue="parent.FixedTextB4Var" open="false" />
+          </If>
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

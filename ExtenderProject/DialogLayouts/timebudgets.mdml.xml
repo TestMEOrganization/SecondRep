@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SJK, 10/06/09: First version (37767).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 08/07/09: Remove temporary "Standard" views and update autoconverted "Original"(37816).-->
+<!-- SJK, 14/07/09: Error correction (37767).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- SBA, 03/02/10: Introduce dynamic column headings in mdml (38258).-->
+<!-- SJK, 08/03/10: Add variable JobIsClosedVar (38201).-->
+<!-- SJK, 11/05/10: Conditional on DetailedTimeBudgetVar (38469).-->
+<!-- SJK, 02/07/10: Zero suppression and hide unused columns (38574).-->
+<!-- SJK, 22/09/10: External description added (38887).-->
+<!-- SBA, 27/09/10: Summary lines in tree-structure should be bold face (38908).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- JSV, 07/02/11: Wrong hat in template for compact filter (39385).-->
+<!-- PSZ, 11/07/11: PSO Jobs workspace changes (39759).-->
+<!-- PSZ, 17/08/11: Added missing task, billing price and cost fields (39850).-->
+<!-- SBA, 20/09/11: Close cells conditionally (39955). -->
+<!-- SJK, 09/11/11: Table is only editable if budget has been created (40131).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="TimeBudgets">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Job No. ^1, ^2" arguments="JobNumber;BudgetType" />
+        </Compact>
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="JobGroup" />
+          <Field source="BudgetType" />
+          <Field source="Responsible" />
+          <Field source="SubmittedBy" />
+          <Field source="DateSubmitted" />
+          <Field source="ApprovedBy" />
+          <Field source="ApprovalDate" />
+          <Field source="ReopenedBy" />
+          <Field source="DateReopened" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Job">
+              <Field source="JobNumber" />
+              <Field source="JobIsClosedVar" />
+            </Group>
+            <Group title="Status">
+              <Pair firstSource="SubmittedBy" secondSource="DateSubmitted" title="Submitted" />
+              <Pair firstSource="ApprovedBy" secondSource="ApprovalDate" title="Approved" />
+              <Pair firstSource="ReopenedBy" secondSource="DateReopened" title="Reopened" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Budget">
+              <Field source="BudgetType" />
+              <Field source="RevisionNumber" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Function name="NotZero" value="NumberOf1Var != 0" />
+        <Function name="sumLine" value="LineType=JobBudgetLineTypeType'\Sum/Text\ and NumberOfSubordinateLines gt 0" />
+        <Function name="canReadCostPriceForTime" value="booleanEnvVar('user.info.CanReadCostPriceForTime')" />
+        <Function name="canChangeCostPriceForTime" value="booleanEnvVar('user.info.CanChangeCostPriceForTime')" />
+        <Style name="AlertNotZero" ref="trafficlightRed" condition="NotZero()" />
+        <Trigger name="CreateLinePostInitTrigger">
+			<Assign source="NumberOf" value="1.0" />
+		</Trigger>
+		<Trigger name="CreateLinePreTrigger">
+	      <Assign source="NumberOf" value="if LineType=JobBudgetLineTypeType'\Milestone\ or LineType=JobBudgetLineTypeType'\Sum/Text\ or LineType=JobBudgetLineTypeType'nil and TaskName = '' and Activitynumber = '' then 0.0 else 1.0" />
+		</Trigger>
+      </Define>
+     
+      <Table name="Full">
+        <Actions all="true">
+        <Create preTrigger="CreateLinePreTrigger" initPostTrigger="CreateLinePostInit"/>
+        </Actions>
+        <Columns>
+          <Style ref="treeStructureSummaryLine" condition="NumberOfSubordinateLines gt 0" />
+          <Field source="Text" />
+          <Field source="ExternalDescription" />
+          <Field source="LineTypeVar" open="not sumLine()" />
+          <Field source="Remark" />
+          <Field source="TaskName" open="not sumLine()" />
+          <Field source="ActivityNumber" open="not sumLine()" />
+          <If condition="parent.DetailedTimeBudgetVar">
+            <Field source="TotalNumberOfVar" title="Total" />
+            <Scope style="zeroSuppression">
+              <Field source="NumberOf1Var" titleValue="parent.Heading1Var" style="AlertNotZero" open="not sumLine()" />
+              <If condition="not (parent.Heading2Var = '')">
+                <Field source="NumberOf2Var" titleValue="parent.Heading2Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading3Var = '')">
+                <Field source="NumberOf3Var" titleValue="parent.Heading3Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading4Var = '')">
+                <Field source="NumberOf4Var" titleValue="parent.Heading4Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading5Var = '')">
+                <Field source="NumberOf5Var" titleValue="parent.Heading5Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading6Var = '')">
+                <Field source="NumberOf6Var" titleValue="parent.Heading6Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading7Var = '')">
+                <Field source="NumberOf7Var" titleValue="parent.Heading7Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading8Var = '')">
+                <Field source="NumberOf8Var" titleValue="parent.Heading8Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading9Var = '')">
+                <Field source="NumberOf9Var" titleValue="parent.Heading9Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading10Var = '')">
+                <Field source="NumberOf10Var" titleValue="parent.Heading10Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading11Var = '')">
+                <Field source="NumberOf11Var" titleValue="parent.Heading11Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading12Var = '')">
+                <Field source="NumberOf12Var" titleValue="parent.Heading12Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading13Var = '')">
+                <Field source="NumberOf13Var" titleValue="parent.Heading13Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading14Var = '')">
+                <Field source="NumberOf14Var" titleValue="parent.Heading14Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading15Var = '')">
+                <Field source="NumberOf15Var" titleValue="parent.Heading15Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading16Var = '')">
+                <Field source="NumberOf16Var" titleValue="parent.Heading16Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading17Var = '')">
+                <Field source="NumberOf17Var" titleValue="parent.Heading17Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading18Var = '')">
+                <Field source="NumberOf18Var" titleValue="parent.Heading18Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading19Var = '')">
+                <Field source="NumberOf19Var" titleValue="parent.Heading19Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading20Var = '')">
+                <Field source="NumberOf20Var" titleValue="parent.Heading20Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading21Var = '')">
+                <Field source="NumberOf21Var" titleValue="parent.Heading21Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading22Var = '')">
+                <Field source="NumberOf22Var" titleValue="parent.Heading22Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading23Var = '')">
+                <Field source="NumberOf23Var" titleValue="parent.Heading23Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading24Var = '')">
+                <Field source="NumberOf24Var" titleValue="parent.Heading24Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading25Var = '')">
+                <Field source="NumberOf25Var" titleValue="parent.Heading25Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading26Var = '')">
+                <Field source="NumberOf26Var" titleValue="parent.Heading26Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading27Var = '')">
+                <Field source="NumberOf27Var" titleValue="parent.Heading27Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading28Var = '')">
+                <Field source="NumberOf28Var" titleValue="parent.Heading28Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading29Var = '')">
+                <Field source="NumberOf29Var" titleValue="parent.Heading29Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading30Var = '')">
+                <Field source="NumberOf30Var" titleValue="parent.Heading30Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading31Var = '')">
+                <Field source="NumberOf31Var" titleValue="parent.Heading31Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading32Var = '')">
+                <Field source="NumberOf32Var" titleValue="parent.Heading32Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading33Var = '')">
+                <Field source="NumberOf33Var" titleValue="parent.Heading33Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading34Var = '')">
+                <Field source="NumberOf34Var" titleValue="parent.Heading34Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading35Var = '')">
+                <Field source="NumberOf35Var" titleValue="parent.Heading35Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading36Var = '')">
+                <Field source="NumberOf36Var" titleValue="parent.Heading36Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading37Var = '')">
+                <Field source="NumberOf37Var" titleValue="parent.Heading37Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading38Var = '')">
+                <Field source="NumberOf38Var" titleValue="parent.Heading38Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading39Var = '')">
+                <Field source="NumberOf39Var" titleValue="parent.Heading39Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading40Var = '')">
+                <Field source="NumberOf40Var" titleValue="parent.Heading40Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading41Var = '')">
+                <Field source="NumberOf41Var" titleValue="parent.Heading41Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading42Var = '')">
+                <Field source="NumberOf42Var" titleValue="parent.Heading42Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading43Var = '')">
+                <Field source="NumberOf43Var" titleValue="parent.Heading43Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading44Var = '')">
+                <Field source="NumberOf44Var" titleValue="parent.Heading44Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading45Var = '')">
+                <Field source="NumberOf45Var" titleValue="parent.Heading45Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading46Var = '')">
+                <Field source="NumberOf46Var" titleValue="parent.Heading46Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading47Var = '')">
+                <Field source="NumberOf47Var" titleValue="parent.Heading47Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading48Var = '')">
+                <Field source="NumberOf48Var" titleValue="parent.Heading48Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading49Var = '')">
+                <Field source="NumberOf49Var" titleValue="parent.Heading49Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading50Var = '')">
+                <Field source="NumberOf50Var" titleValue="parent.Heading50Var" open="not sumLine()" />
+              </If>
+            </Scope>
+          </If>
+          <Else>
+            <Field source="EmployeeCategoryNumber" open="not sumLine()" />
+            <Field source="EmployeeNumber" open="not sumLine()" />
+            <Field source="NumberOf" open="not sumLine()" />
+            <Field source="NumberOfManDays" open="not sumLine()" />
+          </Else>
+        </Columns>
+      </Table>
+      <Table name="Standard">
+       <!--<Actions all="not hasWorkspace('OpportunityBudgeting') or parent.parent.BudgetCreatedVar" >  -->
+       <Actions all="true" > 
+        <Create preTrigger="CreateLinePreTrigger" initPostTrigger="CreateLinePostInit"/>
+        </Actions>
+        
+        <Columns>
+          <Style ref="treeStructureSummaryLine" condition="NumberOfSubordinateLines gt 0" />
+          <Field source="Text" />
+          <Field source="LineTypeVar" open="not sumLine()" />
+          <If condition="parent.DetailedTimeBudgetVar">
+            <Field source="TaskName" open="not sumLine()" />
+            <Scope style="zeroSuppression">
+              <Style size="small" />
+              <Field source="NumberOf1Var" titleValue="parent.Heading1Var" style="AlertNotZero" open="not sumLine()" />
+              <If condition="not (parent.Heading2Var = '')">
+                <Field source="NumberOf2Var" titleValue="parent.Heading2Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading3Var = '')">
+                <Field source="NumberOf3Var" titleValue="parent.Heading3Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading4Var = '')">
+                <Field source="NumberOf4Var" titleValue="parent.Heading4Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading5Var = '')">
+                <Field source="NumberOf5Var" titleValue="parent.Heading5Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading6Var = '')">
+                <Field source="NumberOf6Var" titleValue="parent.Heading6Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading7Var = '')">
+                <Field source="NumberOf7Var" titleValue="parent.Heading7Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading8Var = '')">
+                <Field source="NumberOf8Var" titleValue="parent.Heading8Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading9Var = '')">
+                <Field source="NumberOf9Var" titleValue="parent.Heading9Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading10Var = '')">
+                <Field source="NumberOf10Var" titleValue="parent.Heading10Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading11Var = '')">
+                <Field source="NumberOf11Var" titleValue="parent.Heading11Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading12Var = '')">
+                <Field source="NumberOf12Var" titleValue="parent.Heading12Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading13Var = '')">
+                <Field source="NumberOf13Var" titleValue="parent.Heading13Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading14Var = '')">
+                <Field source="NumberOf14Var" titleValue="parent.Heading14Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading15Var = '')">
+                <Field source="NumberOf15Var" titleValue="parent.Heading15Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading16Var = '')">
+                <Field source="NumberOf16Var" titleValue="parent.Heading16Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading17Var = '')">
+                <Field source="NumberOf17Var" titleValue="parent.Heading17Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading18Var = '')">
+                <Field source="NumberOf18Var" titleValue="parent.Heading18Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading19Var = '')">
+                <Field source="NumberOf19Var" titleValue="parent.Heading19Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading20Var = '')">
+                <Field source="NumberOf20Var" titleValue="parent.Heading20Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading21Var = '')">
+                <Field source="NumberOf21Var" titleValue="parent.Heading21Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading22Var = '')">
+                <Field source="NumberOf22Var" titleValue="parent.Heading22Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading23Var = '')">
+                <Field source="NumberOf23Var" titleValue="parent.Heading23Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading24Var = '')">
+                <Field source="NumberOf24Var" titleValue="parent.Heading24Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading25Var = '')">
+                <Field source="NumberOf25Var" titleValue="parent.Heading25Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading26Var = '')">
+                <Field source="NumberOf26Var" titleValue="parent.Heading26Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading27Var = '')">
+                <Field source="NumberOf27Var" titleValue="parent.Heading27Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading28Var = '')">
+                <Field source="NumberOf28Var" titleValue="parent.Heading28Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading29Var = '')">
+                <Field source="NumberOf29Var" titleValue="parent.Heading29Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading30Var = '')">
+                <Field source="NumberOf30Var" titleValue="parent.Heading30Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading31Var = '')">
+                <Field source="NumberOf31Var" titleValue="parent.Heading31Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading32Var = '')">
+                <Field source="NumberOf32Var" titleValue="parent.Heading32Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading33Var = '')">
+                <Field source="NumberOf33Var" titleValue="parent.Heading33Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading34Var = '')">
+                <Field source="NumberOf34Var" titleValue="parent.Heading34Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading35Var = '')">
+                <Field source="NumberOf35Var" titleValue="parent.Heading35Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading36Var = '')">
+                <Field source="NumberOf36Var" titleValue="parent.Heading36Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading37Var = '')">
+                <Field source="NumberOf37Var" titleValue="parent.Heading37Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading38Var = '')">
+                <Field source="NumberOf38Var" titleValue="parent.Heading38Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading39Var = '')">
+                <Field source="NumberOf39Var" titleValue="parent.Heading39Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading40Var = '')">
+                <Field source="NumberOf40Var" titleValue="parent.Heading40Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading41Var = '')">
+                <Field source="NumberOf41Var" titleValue="parent.Heading41Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading42Var = '')">
+                <Field source="NumberOf42Var" titleValue="parent.Heading42Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading43Var = '')">
+                <Field source="NumberOf43Var" titleValue="parent.Heading43Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading44Var = '')">
+                <Field source="NumberOf44Var" titleValue="parent.Heading44Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading45Var = '')">
+                <Field source="NumberOf45Var" titleValue="parent.Heading45Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading46Var = '')">
+                <Field source="NumberOf46Var" titleValue="parent.Heading46Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading47Var = '')">
+                <Field source="NumberOf47Var" titleValue="parent.Heading47Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading48Var = '')">
+                <Field source="NumberOf48Var" titleValue="parent.Heading48Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading49Var = '')">
+                <Field source="NumberOf49Var" titleValue="parent.Heading49Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading50Var = '')">
+                <Field source="NumberOf50Var" titleValue="parent.Heading50Var" open="not sumLine()" />
+              </If>
+            </Scope>
+            <Field source="TotalNumberOfVar" title="Total" size="small" />
+            <Field source="BillingPriceCurrency" size="small" open="not sumLine()" />
+            <If condition="canReadCostPriceForTime()">
+              <Field source="ShownCostPriceVar" size="small" open="not sumLine() and canChangeCostPriceForTime()" />
+            </If>
+            <Field source="BillingPriceTotalCurrency" open="not sumLine()" />
+            <If condition="canReadCostPriceForTime()">
+              <Field source="ShownCostPriceTotalVar" open="not sumLine() and canChangeCostPriceForTime()" />
+              <Field source="ShownMarkupBaseVar" />
+            </If>
+            <Field source="Remark" title="Comments" />
+          </If>
+          <Else>
+            <Field source="EmployeeCategoryNumber" open="not sumLine()" />
+            <Field source="EmployeeNumber" open="not sumLine()" />
+            <Field source="TaskName" open="not sumLine()" />
+            <Field source="NumberOf" size="tiny" open="not sumLine()" />
+            <Field source="BillingPriceCurrency" size="small" open="not sumLine()" />
+            <If condition="canReadCostPriceForTime()">
+              <Field source="ShownCostPriceVar" size="small" open="not sumLine() and canChangeCostPriceForTime()" />
+            </If>
+            <Field source="BillingPriceTotalCurrency" />
+            <If condition="canReadCostPriceForTime()">
+              <Field source="ShownCostPriceTotalVar" open="not sumLine() and canChangeCostPriceForTime()" />
+              <Field source="ShownMarkupBaseVar" />
+            </If>
+          </Else>
+        </Columns>
+      </Table>
+      <Table name="Work_Cont" >
+        <Actions all="not hasWorkspace('OpportunityBudgeting') or parent.parent.BudgetCreatedVar" >
+        <Create preTrigger="CreateLinePreTrigger" initPostTrigger="CreateLinePostInit"/>
+        </Actions>
+        <Columns>
+          <Style ref="treeStructureSummaryLine" condition="NumberOfSubordinateLines gt 0" />          
+          <Field source="Text" title="Budget Line Description" />
+          <!-- <Field source="TaskDescriptionVar" open="false" /> -->
+          <If condition="parent.DetailedTimeBudgetVar">
+          <Field source="TaskDescriptionVar" open="false" />
+          <Field source="TaskName" size="small" open="not sumLine()" searchView="CustomNonBlocked" searchOption="taskNonBlocked" />
+            <Scope style="zeroSuppression">
+              <Style size="small" />
+              <Field source="NumberOf1Var" titleValue="parent.Heading1Var" style="AlertNotZero" open="not sumLine()" />
+              <If condition="not (parent.Heading2Var = '')">
+                <Field source="NumberOf2Var" titleValue="parent.Heading2Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading3Var = '')">
+                <Field source="NumberOf3Var" titleValue="parent.Heading3Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading4Var = '')">
+                <Field source="NumberOf4Var" titleValue="parent.Heading4Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading5Var = '')">
+                <Field source="NumberOf5Var" titleValue="parent.Heading5Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading6Var = '')">
+                <Field source="NumberOf6Var" titleValue="parent.Heading6Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading7Var = '')">
+                <Field source="NumberOf7Var" titleValue="parent.Heading7Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading8Var = '')">
+                <Field source="NumberOf8Var" titleValue="parent.Heading8Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading9Var = '')">
+                <Field source="NumberOf9Var" titleValue="parent.Heading9Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading10Var = '')">
+                <Field source="NumberOf10Var" titleValue="parent.Heading10Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading11Var = '')">
+                <Field source="NumberOf11Var" titleValue="parent.Heading11Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading12Var = '')">
+                <Field source="NumberOf12Var" titleValue="parent.Heading12Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading13Var = '')">
+                <Field source="NumberOf13Var" titleValue="parent.Heading13Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading14Var = '')">
+                <Field source="NumberOf14Var" titleValue="parent.Heading14Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading15Var = '')">
+                <Field source="NumberOf15Var" titleValue="parent.Heading15Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading16Var = '')">
+                <Field source="NumberOf16Var" titleValue="parent.Heading16Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading17Var = '')">
+                <Field source="NumberOf17Var" titleValue="parent.Heading17Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading18Var = '')">
+                <Field source="NumberOf18Var" titleValue="parent.Heading18Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading19Var = '')">
+                <Field source="NumberOf19Var" titleValue="parent.Heading19Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading20Var = '')">
+                <Field source="NumberOf20Var" titleValue="parent.Heading20Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading21Var = '')">
+                <Field source="NumberOf21Var" titleValue="parent.Heading21Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading22Var = '')">
+                <Field source="NumberOf22Var" titleValue="parent.Heading22Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading23Var = '')">
+                <Field source="NumberOf23Var" titleValue="parent.Heading23Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading24Var = '')">
+                <Field source="NumberOf24Var" titleValue="parent.Heading24Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading25Var = '')">
+                <Field source="NumberOf25Var" titleValue="parent.Heading25Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading26Var = '')">
+                <Field source="NumberOf26Var" titleValue="parent.Heading26Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading27Var = '')">
+                <Field source="NumberOf27Var" titleValue="parent.Heading27Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading28Var = '')">
+                <Field source="NumberOf28Var" titleValue="parent.Heading28Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading29Var = '')">
+                <Field source="NumberOf29Var" titleValue="parent.Heading29Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading30Var = '')">
+                <Field source="NumberOf30Var" titleValue="parent.Heading30Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading31Var = '')">
+                <Field source="NumberOf31Var" titleValue="parent.Heading31Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading32Var = '')">
+                <Field source="NumberOf32Var" titleValue="parent.Heading32Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading33Var = '')">
+                <Field source="NumberOf33Var" titleValue="parent.Heading33Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading34Var = '')">
+                <Field source="NumberOf34Var" titleValue="parent.Heading34Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading35Var = '')">
+                <Field source="NumberOf35Var" titleValue="parent.Heading35Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading36Var = '')">
+                <Field source="NumberOf36Var" titleValue="parent.Heading36Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading37Var = '')">
+                <Field source="NumberOf37Var" titleValue="parent.Heading37Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading38Var = '')">
+                <Field source="NumberOf38Var" titleValue="parent.Heading38Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading39Var = '')">
+                <Field source="NumberOf39Var" titleValue="parent.Heading39Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading40Var = '')">
+                <Field source="NumberOf40Var" titleValue="parent.Heading40Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading41Var = '')">
+                <Field source="NumberOf41Var" titleValue="parent.Heading41Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading42Var = '')">
+                <Field source="NumberOf42Var" titleValue="parent.Heading42Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading43Var = '')">
+                <Field source="NumberOf43Var" titleValue="parent.Heading43Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading44Var = '')">
+                <Field source="NumberOf44Var" titleValue="parent.Heading44Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading45Var = '')">
+                <Field source="NumberOf45Var" titleValue="parent.Heading45Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading46Var = '')">
+                <Field source="NumberOf46Var" titleValue="parent.Heading46Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading47Var = '')">
+                <Field source="NumberOf47Var" titleValue="parent.Heading47Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading48Var = '')">
+                <Field source="NumberOf48Var" titleValue="parent.Heading48Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading49Var = '')">
+                <Field source="NumberOf49Var" titleValue="parent.Heading49Var" open="not sumLine()" />
+              </If>
+              <If condition="not (parent.Heading50Var = '')">
+                <Field source="NumberOf50Var" titleValue="parent.Heading50Var" open="not sumLine()" />
+              </If>
+            </Scope>
+            <Field source="TotalNumberOfVar" title="Total" size="small" />
+          <Field source="ShownCostPriceVar" title="Cost, Base" open="true" />
+          <Field source="ShownCostPriceTotalVar" title="Total Cost, Base" open="true" />
+          <If condition="parent.parent.ShowBudgetTypeVar=jobbudgettypetype'\contract budget\">
+            <Field source="BillingPriceCurrency" open="true" />
+            <Field source="BillingPriceTotalCurrency" />
+          </If>
+          <!-- <Field source="PurchasingCurrency" />
+          <Field source="CostPricePurchasingCurrency" />
+          <Field source="CostPriceTotalPurchasingCurrency" /> -->
+          <If condition="parent.parent.ShowBudgetTypeVar=jobbudgettypetype'\contract budget\">
+          	<Field source="BillingPriceTotalPurchasingCurrency" />
+          </If>
+          </If>
+          <Else>
+          <Field source="TaskName" size="small" open="not sumLine()" />
+          <Field source="NumberOf" />
+          <Field source="ShownCostPriceVar" title="Cost, Base" open="true" />
+          <Field source="ShownCostPriceTotalVar" title="Total Cost, Base" open="true" />
+          <If condition="parent.parent.ShowBudgetTypeVar=jobbudgettypetype'\contract budget\">
+            <Field source="BillingPriceCurrency" open="true" />
+            <Field source="BillingPriceTotalCurrency" />
+          </If>
+          <!-- <Field source="PurchasingCurrency" />
+          <Field source="CostPricePurchasingCurrency" />
+          <Field source="CostPriceTotalPurchasingCurrency" /> -->
+          <If condition="parent.parent.ShowBudgetTypeVar=jobbudgettypetype'\contract budget\">
+          	<Field source="BillingPriceTotalPurchasingCurrency" />
+          </If>
+          </Else>
+          <Field source="ActivityNumber" />
+          <Field source="LineTypeVar" mandatory="true" open="not sumLine()" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

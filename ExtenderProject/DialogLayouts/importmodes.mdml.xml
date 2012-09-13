@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ImportModes">
+    <FilterPane>
+      <Filter name="Standard">
+        <Columns>
+          <Field source="ImportModeName" />
+          <Field source="Description" />
+          <Field source="DataAgent" />
+          <Field source="ImportForm" />
+          <Field source="StandardText" />
+          <Field source="CreateErrorEntries" />
+          <Field source="ErrorAccount" />
+          <Field source="CheckEntryDate" />
+          <Field source="ImportField1" />
+          <Field source="ImportField2" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Import Mode">
+              <Field source="ImportModeName" />
+              <Field source="Description" />
+              <Field source="YourContactPerson" title="Contact Person" />
+              <Field source="YourTelephone" title="Phone" />
+              <Field source="DataAgent" />
+              <Field source="ImportForm" />
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Posting">
+            <Field source="StandardText" title="Standard Text" />
+            <Field source="ErrorAccount" title="Posting Ref., Error Entries" />
+            <Boolean source="CreateErrorEntries" />
+            <Boolean source="CheckEntryDate" title="Verify Posting Date" />
+            <Boolean source="ErrorDateOnErrorAccount" title="Post on Error Account" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Import Control">
+            <Grid>
+              <Header cells="|Description{0}|;|Popup|;|Value|" />
+              <Row cells="Field1FixedTextVar;ImportField1;Field1" />
+              <Row cells="Field2FixedTextVar;ImportField2;Field2" />
+              <Row cells="Field3FixedTextVar;ImportField3;Field3" />
+              <Row cells="Field4FixedTextVar;ImportField4;Field4" />
+              <Row cells="Field5FixedTextVar;ImportField5;Field5" />
+              <Row cells="Field6FixedTextVar;ImportField6;Field6" />
+              <Row cells="Field7FixedTextVar;ImportField7;Field7" />
+              <Row cells="Field8FixedTextVar;ImportField8;Field8" />
+              <Row cells="Field9FixedTextVar;ImportField9;Field9" />
+              <Row cells="Field10FixedTextVar;ImportField10;Field10" />
+            </Grid>
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Row>
+          <Column style="fullWidth">
+            <Group title="Import Mode">
+              <Field source="ImportModeName" />
+              <Field source="Description" />
+              <Field source="YourContactPerson" title="Contact Person" />
+              <Field source="YourTelephone" title="Phone" />
+              <Field source="DataAgent" />
+              <Field source="ImportForm" />
+            </Group>
+            <Group title="Posting">
+              <Field source="StandardText" title="Standard Text" />
+              <Field source="ErrorAccount" title="Posting Ref., Error Entries" style="highlightRow" open="hasRole('Finance Admin')" />
+              <Field source="CreateErrorEntries" />
+              <Field source="CheckEntryDate" title="Verify Posting Date" />
+              <Field source="ErrorDateOnErrorAccount" title="Post on Error Account" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column>
+            <Group title="Import Control">
+              <Grid>
+                <Header cells="|Description{0}|;|Popup|;|Value|" />
+                <Row cells="-Field1FixedTextVar;-ImportField1;-Field1" />
+                <Row cells="-Field2FixedTextVar;-ImportField2;-Field2" />
+                <Row cells="-Field3FixedTextVar;-ImportField3;-Field3" />
+                <Row cells="-Field4FixedTextVar;-ImportField4;-Field4" />
+                <Row cells="-Field5FixedTextVar;-ImportField5;-Field5" />
+                <Row cells="-Field6FixedTextVar;-ImportField6;-Field6" />
+                <Row cells="-Field7FixedTextVar;-ImportField7;-Field7" />
+                <Row cells="-Field8FixedTextVar;-ImportField8;-Field8" />
+                <Row cells="-Field9FixedTextVar;-ImportField9;-Field9" />
+                <Row cells="-Field10FixedTextVar;-ImportField10;-Field10" />
+              </Grid>
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Row>
+          <Column style="fullWidth">
+            <Group title="Import Mode">
+              <Field source="ImportModeName" />
+              <Field source="Description" />
+              <Field source="YourContactPerson" title="Contact Person" />
+              <Field source="YourTelephone" title="Phone" />
+              <Field source="DataAgent" />
+              <Field source="ImportForm" />
+            </Group>
+            <Group title="Posting">
+              <Field source="StandardText" title="Standard Text" />
+              <Field source="ErrorAccount" title="Posting Ref., Error Entries" style="highlightRow" open="true" />
+              <Field source="CreateErrorEntries" />
+              <Field source="CheckEntryDate" title="Verify Posting Date" />
+              <Field source="ErrorDateOnErrorAccount" title="Post on Error Account" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column>
+            <Group title="Import Control">
+              <Grid>
+                <Header cells="|Description{0}|;|Popup|;|Value|" />
+                <Row cells="-Field1FixedTextVar;-ImportField1;-Field1" />
+                <Row cells="-Field2FixedTextVar;-ImportField2;-Field2" />
+                <Row cells="-Field3FixedTextVar;-ImportField3;-Field3" />
+                <Row cells="-Field4FixedTextVar;-ImportField4;-Field4" />
+                <Row cells="-Field5FixedTextVar;-ImportField5;-Field5" />
+                <Row cells="-Field6FixedTextVar;-ImportField6;-Field6" />
+                <Row cells="-Field7FixedTextVar;-ImportField7;-Field7" />
+                <Row cells="-Field8FixedTextVar;-ImportField8;-Field8" />
+                <Row cells="-Field9FixedTextVar;-ImportField9;-Field9" />
+                <Row cells="-Field10FixedTextVar;-ImportField10;-Field10" />
+              </Grid>
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--bcd662738e22f8f9fa6a37d4ff143eedb0b722b8-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!-- MKJ, 19/04/12: New custom workspace for the RFI Quality Management System.-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_QMS" title="Quality Management System">
+	<Filter name="Jobs_Filter" source="Jobs" title="Job List" view="JobHome">
+      <Formation>
+        <Section title="Project Quality Card">
+          <Bind foreignKey="primary">
+            <Card source="Jobs" view="QMSOverview" />
+          </Bind>
+          <Bind foreignKey="primary">
+          	<Card source="Jobs" view="QMSQualityManagement" />
+          </Bind>
+          <Bind foreignKey="primary">
+          	<Card source="Jobs" view="QMSDiary" />
+          </Bind>
+          <Bind foreignKey="primary">
+          	<Card source="Jobs" view="QMSOrderInformation" />
+          </Bind>
+          <Bind foreignKey="primary">
+          	<Card source="Jobs" view="QMSQualityReport" />
+          </Bind>
+        </Section>
+      </Formation>
+    </Filter>
+  </Workspace>
+</MWSL>
+

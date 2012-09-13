@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 28/08/09: New views added for the Financial Analysis workspace (38033).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 13/11/09: New filter and card views for Financial Analysis workspace (38033).-->
+<!-- CSK, 23/11/09: Minor filter changes (38033).-->
+<!-- SJK, 21/05/10: Filter button restrictions converted to common expression language (38492).-->
+<!-- CSK, 14/06/10: New Demo_StatementAnalysis and Demo_Empty views for Financial Analysis (38538).-->
+<!-- CSK, 01/07/10: Transaction related changes (38541).-->
+<!-- CSK, 20/07/10: Demo_StatementAnalysis view renamed to StatementAnalysis and finalized (38678).-->
+<!-- CSK, 26/07/10: Analysis views restructured (38541).-->
+<!-- CSK, 05/08/10: Amounts group in Analysis view restructured (38711).-->
+<!-- CSK, 13/08/10: Transaction in intercompany journals (38727).-->
+<!-- CSK, 08/09/10: New AnalysisWithOrigin view for testing the origin of finance entries (38804).-->
+<!-- BPE, 08/09/10: Renaming foreign keys (38808).-->
+<!-- CSK, 14/09/10: Highlight investigated entry in the Transaction view (38541).-->
+<!-- BPE, 17/09/10: Changed layout to use global definition dimensions (38744). -->
+<!-- PBO, 22/09/10: Implement conditional layout (38843).-->
+<!-- CSK, 27/09/10: OriginObjectAndLine view added, Demo_Empty view deleted (38909).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- CSK, 06/12/10: Add amount to the compacted top filter on entries (39019).-->
+<!-- CSK, 13/12/10: New TransactionInJournal filter view added (39091).-->
+<!-- CSK, 15/12/10: Use Transaction workspace instead of JournalTransaction (39091).-->
+<!-- CSK, 20/12/10: Control Account group updated in Original view (38691).-->
+<!-- CSK, 20/12/10: Case sensitivity for pane() (39091).-->
+<!-- KUN, 21/12/10: We must show all entries with the origin object in the vendor invoice workspace (39094).-->
+<!-- CSK, 22/12/10: Use OriginObject in Transaction filter (39091).-->
+<!-- CSK, 19/01/11: Improved predefined filters in Transaction view (39342).-->
+<!-- CSK, 19/01/11: New indices for Financial Analysis workspace (39340).-->
+<!-- CSK, 19/01/11: Account name added to filters (39339).-->
+<!-- CSK, 20/01/11: Account group and statistics allowed in financial statement drilling (39358).-->
+<!-- CSK, 24/02/11: Use unit fields for amounts in filters (39379).-->
+<!-- KUN, 22/03/11: Improved tax settlement (39491).-->
+<!-- CSK, 29/03/11: Performance issues when navigating in top filter (39408).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 28/06/11: New syntax for links (39747).-->
+<!-- CSK, 22/07/11: Alignment adjustments (39781).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- CSK, 06/09/11: Remove spaces from grid labels (39792).-->
+<!-- PSZ, 07/09/11: Remove onDemand suggestions as they are placed in ODL/DDL (39258).-->
+<!-- CSK, 19/09/11: Minor layout improvements (39918).-->
+<!-- KUN, 03/10/11: New transaction sub workspace (39991). -->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 11/10/11: Transaction filter updated with intercompany entries (39452).-->
+<!-- CSK, 02/11/11: Replace date'Today with CurrentDate() (40126).-->
+<!-- PSZ, 17/11/11: Remove unused layouts (40180).-->
+<!-- KUN, 22/11/11: Improved hiding of hidden panes (40167).-->
+<!-- KUN, 22/11/11: Change order of options (40167).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ShowFinanceEntry">
+    <FilterPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Trans. No. ^1, Account No. ^2, ^3" arguments="TransactionNumber;AccountNumber;EntryText" />
+        </Compact>
+        <Columns>
+          <Field source="AccountNumber" />
+          <Field source="AccountText" />
+          <Field source="TransactionNumber" />
+          <Field source="EntryDate" />
+          <Field source="EntryText" />
+          <Field source="AutomaticTransfer" />
+          <Field source="PostEntryPeriod" />
+          <Field source="OpenClosed" />
+          <Field source="ReferenceDate" />
+          <UnitField source="DebitBase" unitSource="CompanyCurrency" title="Debit, Base" />
+          <UnitField source="CreditBase" unitSource="CompanyCurrency" title="Credit, Base" />
+        </Columns>
+      </Filter>
+      <Filter name="FullAnalysis">
+        <ControlBar>
+          <Selection default="TodaysEntries">
+            <Option title="Today's Entries" name="TodaysEntries" restriction="EntryDate=CurrentDate()" />
+            <Option title="Open Entries" name="OpenEntries" restriction="OpenClosed=OpenClosedType'Open_" />
+            <Option title="All Entries" name="AllEntries" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^5 ^6)     Account no. ^2, Transaction no. ^3 , Journal no. ^4" arguments="TransactionType;AccountNumber;TransactionNumber;JournalNumber;OriginalAmount;OriginalCurrency" />
+        </Compact>
+        <Columns>
+          <Field source="AccountNumber" style="indexedField" />
+          <Field source="AccountText" />
+          <Field source="TransactionNumber" style="indexedField" />
+          <Field source="TransactionType" style="indexedField" size="large" />
+          <Field source="JournalNumber" style="indexedField" />
+          <Field source="JournalType" size="large" />
+          <Field source="LineNumber" />
+          <Field source="CompanyNumber" />
+          <Field source="EntryDate" style="indexedField" />
+          <Field source="EntryText" />
+          <Field source="AutomaticTransfer" />
+          <Field source="OpenClosed" style="indexedField" />
+          <Field source="ReferenceDate" />
+          <Field source="PostingDate" />
+          <Field source="PostingTime" />
+          <UnitField source="DebitBase" unitSource="CompanyCurrency" title="Debit, Base" />
+          <UnitField source="CreditBase" unitSource="CompanyCurrency" title="Credit, Base" />
+          <Field source="DebitEnterprise" />
+          <Field source="CreditEnterprise" />
+          <UnitField source="DebitCurrency" unitSource="AccountCurrency" title="Debit, Currency" />
+          <UnitField source="CreditCurrency" unitSource="AccountCurrency" title="Credit, Currency" />
+          <UnitField source="OriginalAmount" unitSource="OriginalCurrency" title="Amount, Original" />
+          <Columns ref="DimensionColumns" />
+          <Field source="JobNumber" style="indexedField" />
+          <Field source="ActivityNumber" />
+          <Field source="TaskName" title="Task" />
+          <Field source="EmployeeNumber" />
+          <Field source="CustomerNumber" />
+          <Field source="VendorNumber" />
+          <Field source="ItemNumber" />
+          <Field source="AssetNumber" />
+          <Field source="IntercompanyCompany" />
+          <Field source="IntercompanyJournalNumber" style="indexedField" />
+          <Field source="IntercompanyLineNumber" />
+        </Columns>
+      </Filter>
+      <Filter name="StatementAnalysis">
+        <Actions />
+        <ControlBar>
+          <Selection default="Filtered">
+            <Option title="Filtered" name="Filtered">
+              <Restriction><![CDATA[Parent.ColumnBase = ColumnBaseType'Actual
+        				and (PostingDate < Parent.Parent.Parent.Parent.GeneratedDate
+        						 or PostingDate = Parent.Parent.Parent.Parent.GeneratedDate	
+        						 		and PostingTime <= Parent.Parent.Parent.Parent.GeneratedTime)
+        				and EntryDate >= Parent.FromDate
+        				and EntryDate <= Parent.ToDate
+        				and (AccountNumber >= Parent.FromAccountNumber or Parent.FromAccountNumber = '') 
+        				and (AccountNumber <= Parent.ToAccountNumber or Parent.ToAccountNumber = '')
+        				and (AccountGroup = Parent.Parent.AccountGroup or Parent.Parent.AccountGroup = AccountGroupType'nil)
+        				and (Statistic1 >= Parent.Parent.FromStatistic1 or Parent.Parent.FromStatistic1 ='')
+        				and (Statistic1 <= Parent.Parent.ToStatistic1 or Parent.Parent.ToStatistic1 ='')
+        				and (Statistic2 >= Parent.Parent.FromStatistic2 or Parent.Parent.FromStatistic2 ='')
+        				and (Statistic2 <= Parent.Parent.ToStatistic2 or Parent.Parent.ToStatistic2 ='')
+        				and (Statistic3 >= Parent.Parent.FromStatistic3 or Parent.Parent.FromStatistic3 ='')
+        				and (Statistic3 <= Parent.Parent.ToStatistic3 or Parent.Parent.ToStatistic3 ='')
+        				and (Statistic4 >= Parent.Parent.FromStatistic4 or Parent.Parent.FromStatistic4 ='')
+        				and (Statistic4 <= Parent.Parent.ToStatistic4 or Parent.Parent.ToStatistic4 ='')        				
+        				and (CompanyNumber >= Parent.FromCompanyNumber or Parent.FromCompanyNumber = '')
+        				and (CompanyNumber <= Parent.ToCompanyNumber or Parent.ToCompanyNumber = '')
+        				and (LocationName >= Parent.FromLocationName or Parent.FromLocationName = '')
+        				and (LocationName <= Parent.ToLocationName or Parent.ToLocationName = '')
+        				and (EntityName >= Parent.FromEntityName or Parent.FromEntityName = '')
+        				and (EntityName <= Parent.ToEntityName or Parent.ToEntityName = '')
+        				and (ProjectName >= Parent.FromProjectName or Parent.FromProjectName = '')
+        				and (ProjectName <= Parent.ToProjectName or Parent.ToProjectName = '')
+        				and (PurposeName >= Parent.FromPurposeName or Parent.FromPurposeName = '')
+        				and (PurposeName <= Parent.ToPurposeName or Parent.ToPurposeName = '')
+        				and (Specification1Name >= Parent.FromSpecification1Name or Parent.FromSpecification1Name = '')
+        				and (Specification1Name <= Parent.ToSpecification1Name or Parent.ToSpecification1Name = '')
+        				and (Specification2Name >= Parent.FromSpecification2Name or Parent.FromSpecification2Name = '')
+        				and (Specification2Name <= Parent.ToSpecification2Name or Parent.ToSpecification2Name = '')
+        				and (Specification3Name >= Parent.FromSpecification3Name or Parent.FromSpecification3Name = '')
+        				and (Specification3Name <= Parent.ToSpecification3Name or Parent.ToSpecification3Name = '')
+        				and (LocalSpec1Name >= Parent.FromLocalSpec1Name or Parent.FromLocalSpec1Name = '')
+        				and (LocalSpec1Name <= Parent.ToLocalSpec1Name or Parent.ToLocalSpec1Name = '')
+        				and (LocalSpec2Name >= Parent.FromLocalSpec2Name or Parent.FromLocalSpec2Name = '')
+        				and (LocalSpec2Name <= Parent.ToLocalSpec2Name or Parent.ToLocalSpec2Name = '')
+        				and (LocalSpec3Name >= Parent.FromLocalSpec3Name or Parent.FromLocalSpec3Name = '')
+        				and (LocalSpec3Name <= Parent.ToLocalSpec3Name or Parent.ToLocalSpec3Name = '')        				        				
+        				and (CustomerNumber >= Parent.FromCustomerNumber or Parent.FromCustomerNumber = '')
+        				and (CustomerNumber <= Parent.ToCustomerNumber or Parent.ToCustomerNumber = '')
+        				and (VendorNumber >= Parent.FromVendorNumber or Parent.FromVendorNumber = '')
+        				and (VendorNumber <= Parent.ToVendorNumber or Parent.ToVendorNumber = '')
+        				and (JobNumber >= Parent.FromJobNumber or Parent.FromJobNumber = '')
+        				and (JobNumber <= Parent.ToJobNumber or Parent.ToJobNumber = '')
+        				and (ActivityNumber >= Parent.FromActivityNumber or Parent.FromActivityNumber = '')
+        				and (ActivityNumber <= Parent.ToActivityNumber or Parent.ToActivityNumber = '')
+        				and (TaskName >= Parent.FromTaskName or Parent.FromTaskName = '')
+        				and (TaskName <= Parent.ToTaskName or Parent.ToTaskName = '')
+        				and (EmployeeNumber >= Parent.FromEmployeeNumber or Parent.FromEmployeeNumber = '')
+        				and (EmployeeNumber <= Parent.ToEmployeeNumber or Parent.ToEmployeeNumber = '')
+        				and (AssetNumber >= Parent.FromAssetNumber or Parent.FromAssetNumber = '')
+        				and (AssetNumber <= Parent.ToAssetNumber or Parent.ToAssetNumber = '')
+        				and (ItemNumber >= Parent.FromItemNumber or Parent.FromItemNumber = '')
+        				and (ItemNumber <= Parent.ToItemNumber or Parent.ToItemNumber = '')
+        				and (IntercompanyCompany >= Parent.FromIntercompanyCompany or Parent.FromIntercompanyCompany = '')
+        				and (IntercompanyCompany <= Parent.ToIntercompanyCompany or Parent.ToIntercompanyCompany = '')]]></Restriction>
+            </Option>
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Finance Entry: Transaction no. ^1 (^2), Journal no. ^3 (^4), Account no. ^5(^6)" arguments="TransactionNumber;TransactionType;JournalNumber;JournalType;AccountNumber;AccountText" />
+        </Compact>
+        <Columns>
+          <Field source="TransactionNumber" />
+          <Field source="TransactionType" />
+          <Field source="JournalNumber" />
+          <Field source="JournalType" />
+          <Field source="LineNumber" />
+          <Field source="EntryText" />
+          <Field source="EntryDate" />
+          <Field source="PostingDate" />
+          <Field source="PostingTime" />
+          <UnitField source="DebitBase" unitSource="CompanyCurrency" title="Debit, Base" />
+          <UnitField source="CreditBase" unitSource="CompanyCurrency" title="Credit, Base" />
+          <Field source="DebitEnterprise" />
+          <Field source="CreditEnterprise" />
+          <UnitField source="DebitCurrency" unitSource="AccountCurrency" title="Debit, Currency" />
+          <UnitField source="CreditCurrency" unitSource="AccountCurrency" title="Credit, Currency" />
+          <UnitField source="OriginalAmount" unitSource="OriginalCurrency" title="Amount, Original" />
+          <Field source="AccountNumber" />
+          <Field source="AccountText" />
+          <Field source="CompanyNumber" />
+          <Columns ref="DimensionColumns" />
+          <Field source="JobNumber" />
+          <Field source="ActivityNumber" />
+          <Field source="TaskName" title="Task" />
+          <Field source="EmployeeNumber" />
+          <Field source="CustomerNumber" />
+          <Field source="VendorNumber" />
+          <Field source="ItemNumber" />
+          <Field source="AssetNumber" />
+        </Columns>
+      </Filter>
+      <Filter name="Transaction">
+        <Actions />
+        <ControlBar>
+          <Selection>
+            <If condition="hasWorkspace('DetailedFinanceEntry')                    or hasWorkspace('FinanceEntry')                   or hasWorkspace('CustomerEntry')                   or hasWorkspace('VendorEntry')                   or hasWorkspace('JobEntry')                   or hasWorkspace('IntercompanyEntry')                   or hasWorkspace('VendorInvoices')">
+              <Option title="Journal" name="SameTransaction_Journal" restriction="TransactionNumber=Parent.TransactionNumber                        and JournalNumber=Parent.JournalNumber" />
+              <Option title="All" name="SameTransaction" restriction="TransactionNumber=Parent.TransactionNumber" />
+              <If condition="Parent.OriginObject!=RelationNameType'nil and Parent.OriginObjectInstanceKey!=''">
+                <Option title="Origin" name="SameTransaction_OriginObject" restriction="TransactionNumber=Parent.TransactionNumber                        and OriginObject=Parent.OriginObject                         and OriginObjectInstanceKey=Parent.OriginObjectInstanceKey " />
+                <Option title="Origin and Journal" name="SameTransaction_OriginObject_Journal" restriction="TransactionNumber=Parent.TransactionNumber                        and OriginObject=Parent.OriginObject                         and OriginObjectInstanceKey=Parent.OriginObjectInstanceKey                         and JournalNumber=Parent.JournalNumber " />
+                <If condition="Parent.OriginLine!=RelationNameType'nil and Parent.OriginLineInstanceKey!=''">
+                  <Option title="Origin Line" name="SameTransaction_OriginObject_OriginLine" restriction="TransactionNumber=Parent.TransactionNumber                          and OriginObject=Parent.OriginObject                          and OriginObjectInstanceKey=Parent.OriginObjectInstanceKey                          and OriginLine=Parent.OriginLine                          and OriginLineInstanceKey=Parent.OriginLineInstanceKey " />
+                </If>
+              </If>
+            </If>
+          </Selection>
+        </ControlBar>
+        <Columns>
+          <Style ref="highlightRow" condition="(hasWorkspace('DetailedFinanceEntry')                      or hasWorkspace('FinanceEntry'))                     and InstanceKey=Parent.InstanceKey" />
+          <Field source="EntryDate" title="Date" />
+          <Field source="EntryText" title="Description" />
+          <Field source="JournalNumber" />
+          <Field source="AccountNumber" />
+          <Field source="AccountText" />
+          <Field source="CompanyNumber" />
+          <UnitField source="DebitBase" unitSource="CompanyCurrency" title="Debit, Base" />
+          <UnitField source="CreditBase" unitSource="CompanyCurrency" title="Credit, Base" />
+        </Columns>
+      </Filter>
+      <Filter name="TransactionCompacted">
+        <Actions />
+        <ControlBar>
+          <Selection>
+            <If condition="Parent.OriginObject!=RelationNameType'nil and Parent.OriginObjectInstanceKey!=''">
+              <Option title="Origin" name="SameTransaction_OriginObject" restriction="TransactionNumber=Parent.TransactionNumber                       and OriginObject=Parent.OriginObject                        and OriginObjectInstanceKey=Parent.OriginObjectInstanceKey " />
+            </If>
+            <Option title="All" name="SameTransaction" restriction="TransactionNumber=Parent.TransactionNumber" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Finance Entry: Transaction no. ^1 (^2), Journal no. ^3 (^4), Account no. ^5(^6)" arguments="TransactionNumber;TransactionType;JournalNumber;JournalType;AccountNumber;AccountText" />
+        </Compact>
+        <Columns>
+          <Field source="EntryDate" title="Date" />
+          <Field source="EntryText" title="Description" />
+          <Field source="JournalNumber" />
+          <Field source="AccountNumber" />
+          <Field source="AccountText" />
+          <Field source="CompanyNumber" />
+          <UnitField source="DebitBase" unitSource="CompanyCurrency" title="Debit, Base" />
+          <UnitField source="CreditBase" unitSource="CompanyCurrency" title="Credit, Base" />
+        </Columns>
+      </Filter>
+      <Filter name="VATSettlement">
+        <Columns>
+          <Field source="AccountNumber" />
+          <Field source="AccountText" />
+          <Field source="TransactionNumber" />
+          <UnitField source="DebitBase" unitSource="CompanyCurrency" title="Debit, Base" />
+          <UnitField source="CreditBase" unitSource="CompanyCurrency" title="Credit, Base" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Entry Information{3}">
+              <Field source="TransactionNumber" />
+              <Field source="TransactionType" title="Trans. Type" />
+              <Field source="EntryDate" />
+              <Field source="EntryText" />
+              <Field source="PostEntryPeriod" />
+              <Field source="OpenClosed" title="Open/Closed{1}" />
+              <Field source="ReferenceDate" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="CompanyCurrency" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Entry{Posting}">
+              <Field source="DebitBase" />
+              <Field source="CreditBase" />
+              <Field source="DebitEnterprise" />
+              <Field source="CreditEnterprise" />
+              <Field source="DebitCurrency" />
+              <Field source="CreditCurrency" />
+              <Field source="AccountCurrency" title="Currency" />
+              <Field source="OriginalAmount" title="Amount, Original" />
+              <Field source="OriginalCurrency" />
+              <Field source="QuantityA" title="Quantity{Amount}" />
+              <Field source="QuantityB" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Account">
+            <Reference foreignKey="AccountNumber_Account" />
+          </Group>
+        </Row>
+        <Row>
+          <Group ref="DimensionGroup" />
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Control Account{Rescontro}">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Reference foreignKey="ActivityNumber_Activity" />
+              <Reference foreignKey="TaskName_TaskListLine" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+              <Reference foreignKey="CustomerNumber_Customer" />
+              <Reference foreignKey="VendorNumber_Vendor" />
+              <Reference foreignKey="ItemNumber_ItemInformation" />
+              <Reference foreignKey="AssetNumber_Asset" />
+              <Field source="SubledgerEntryNumber" />
+            </Group>
+            <Group title="Posting">
+              <Field source="PostingDate" />
+              <Field source="PostingTime" />
+              <Field source="JournalNumber" />
+              <Field source="LineNumber" />
+              <Field source="JournalType" />
+              <Field source="AutomaticTransfer" />
+            </Group>
+            <Group title="Intercompany Posting">
+              <Reference foreignKey="IntercompanyCompany_CompanyInformation" />
+              <Field source="IntercompanyJournalNumber" title="Journal No." />
+              <Field source="IntercompanyLineNumber" title="Journal Line No." />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Tax{VAT}">
+              <Field source="EntryType" />
+              <Field source="VATDate" />
+              <Field source="EUVAT" />
+              <Field source="VATNature" />
+              <Field source="VATType" />
+              <Field source="DebitVAT" />
+              <Field source="CreditVAT" />
+              <Field source="DebitRatioVAT" />
+              <Field source="CreditRatioVAT" />
+            </Group>
+            <Group title="Import Information">
+              <Field source="InputDataModeNumber" title="Run No." />
+              <Field source="InputDataLineNumber" title="Line No." />
+              <Field source="DeliveryNumberVar" title="Delivery No." />
+              <Field source="DataSenderVar" title="Data Sender" />
+              <Field source="ExternalTransactionNumber" title="External Trans. No." />
+            </Group>
+            <Group title="Export Information">
+              <Field source="ExportModeNumber" title="Run No." />
+              <Field source="ExportModeGroupNumber" title="Group No." />
+              <Field source="ExportModeLineNumber" title="Line No." />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Analysis">
+        <Actions>
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Entry Information">
+              <Style justify="left" />
+              <Field source="EntryDate" />
+              <Field source="EntryText" size="huge" />
+              <Reference keySource="TransactionType" descriptionSource="TransactionNumber" title="Transaction" />
+              <Reference keySource="JournalType" descriptionSource="JournalNumber" title="Journal" />
+              <Field source="LineNumber" />
+              <Field source="OpenClosed" title="Open/Closed" />
+              <Field source="ReferenceDate" />
+              <Description template="^1  ^2" arguments="PostingDate;PostingTime" title="Posted" />
+              <Field source="PostEntryPeriod" />
+              <Field source="QuantityA" title="Quantity" />
+              <Field source="QuantityB" />
+              <Field source="AutomaticTransfer" />
+            </Group>
+            <Group title="Amounts">
+              <Grid style="grid_compact">
+                <Header cells="|Debit|;|Credit|;|Currency|" style="grid_header" />
+                <Row cells="DebitBase;CreditBase;CompanyCurrency" title="Base" style="justifyRight" />
+                <Row cells="DebitCurrency;CreditCurrency;AccountCurrency" title="Account" style="justifyRight" />
+                <Row cells="DebitEnterprise;CreditEnterprise;EnterpriseCurrencyVar" title="Enterprise" style="justifyRight" />
+                <Row cells="DebitOriginalVar;CreditOriginalVar;OriginalCurrency" title="Original" style="justifyRight" />
+              </Grid>
+            </Group>
+            <Group title="Tax" style="textAlignment">
+              <Field source="EntryType" />
+              <Field source="EUVAT" />
+              <Field source="VATNature" />
+              <Field source="VATType" />
+              <Field source="VATDate" />
+              <Field source="CompanyCurrency" title="Currency" />
+              <Field source="DebitVAT" title="Debit Tax" />
+              <Field source="CreditVAT" title="Credit Tax" />
+              <Field source="DebitRatioVAT" title="Debit Ratio Tax" />
+              <Field source="CreditRatioVAT" title="Credit Ratio Tax" />
+            </Group>
+            <If condition="pane() like 'Transaction*'">
+              <Group>
+                <Link workspace="FinanceEntries" template="More details..." tooltip="Detailed analysis of the finance entry" appearance="maximized" icon="AnalyzeEntry">
+                  <Target pane="FinanceEntriesFilter">
+                    <Restriction template="Selected Finance Entry" expression="InstanceKey=target.InstanceKey" />
+                    <Focus>
+                      <Match field="InstanceKey" value="InstanceKey" />
+                    </Focus>
+                  </Target>
+                </Link>
+              </Group>
+            </If>
+          </Column>
+          <Column>
+            <Group title="Account">
+              <Reference foreignKey="AccountNumber_Account" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group ref="DimensionGroup" />
+            <Group title="Module Dimensions">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Reference foreignKey="ActivityNumber_Activity" />
+              <Reference foreignKey="TaskName_TaskListLine" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+              <Reference foreignKey="CustomerNumber_Customer" title="Ship to Customer" />
+              <Reference foreignKey="PaymentCustomer_Customer" title="Payment Customer" />
+              <Reference foreignKey="VendorNumber_Vendor" />
+              <Reference foreignKey="ItemNumber_ItemInformation" />
+              <Reference foreignKey="AssetNumber_Asset" />
+            </Group>
+            <Group title="Intercompany Posting">
+              <Reference foreignKey="IntercompanyCompany_CompanyInformation" />
+              <Reference descriptionSource="IntercompanyJournalNumber" descriptionSize="large" keySource="IntercompanyLineNumber" title="Journal No.(Line No.)" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="ImportExport">
+        <Column>
+          <Group title="Import Information">
+            <Field source="InputDataModeNumber" title="Run No." />
+            <Field source="InputDataLineNumber" title="Line No." />
+            <Field source="DeliveryNumberVar" title="Delivery No." />
+            <Field source="DataSenderVar" title="Data Sender" />
+            <Field source="ExternalTransactionNumber" title="External Trans. No." />
+          </Group>
+          <Group title="Export Information">
+            <Field source="ExportModeNumber" title="Run No." />
+            <Field source="ExportModeGroupNumber" title="Group No." />
+            <Field source="ExportModeLineNumber" title="Line No." />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="VATSettlement">
+        <Row>
+          <Column>
+            <Group title="Entry Information">
+              <Style justify="left" />
+              <Field source="EntryDate" />
+              <Field source="EntryText" size="huge" />
+              <Reference keySource="TransactionType" descriptionSource="TransactionNumber" title="Transaction" />
+              <Reference keySource="JournalType" descriptionSource="JournalNumber" title="Journal" />
+              <Field source="LineNumber" />
+              <Description template="^1  ^2" arguments="PostingDate;PostingTime" title="Posted" />
+            </Group>
+            <Group title="Account">
+              <Reference foreignKey="AccountNumber_Account" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Amounts">
+              <Grid>
+                <Style size="small" />
+                <Header cells="|Debit|;|Credit|;|Currency|" style="grid_header" />
+                <Row cells="DebitBase;CreditBase;CompanyCurrency" title="Base" style="justifyRight" />
+                <Row cells="DebitCurrency;CreditCurrency;AccountCurrency" title="Account" style="justifyRight" />
+                <Row cells="DebitEnterprise;CreditEnterprise;EnterpriseCurrencyVar" title="Enterprise" style="justifyRight" />
+                <Row cells="DebitOriginalVar;CreditOriginalVar;OriginalCurrency" title="Original" style="justifyRight" />
+              </Grid>
+            </Group>
+            <Group>
+              <Link workspace="FinanceEntries" template="More details..." tooltip="Detailed analysis of the finance entry" appearance="maximized" icon="AnalyzeEntry">
+                <Target pane="FinanceEntriesFilter">
+                  <Restriction template="Selected Finance Entry" expression="InstanceKey=target.InstanceKey" />
+                  <Focus>
+                    <Match field="InstanceKey" value="InstanceKey" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="DimensionGroup" />
+            <Group title="Module Dimensions">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Reference foreignKey="ActivityNumber_Activity" />
+              <Reference foreignKey="TaskName_TaskListLine" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+              <Reference foreignKey="CustomerNumber_Customer" title="Ship to Customer" />
+              <Reference foreignKey="PaymentCustomer_Customer" title="Payment Customer" />
+              <Reference foreignKey="VendorNumber_Vendor" />
+              <Reference foreignKey="ItemNumber_ItemInformation" />
+              <Reference foreignKey="AssetNumber_Asset" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_VATSettlement" open="hasRole('Finance Admin')">
+        <Row>
+          <Column>
+            <Group title="Entry Information">
+              <Style justify="left" />
+              <Field source="EntryDate" />
+              <Field source="EntryText" size="huge" />
+              <Reference keySource="TransactionType" descriptionSource="TransactionNumber" title="Transaction" />
+              <Reference keySource="JournalType" descriptionSource="JournalNumber" title="Journal" />
+              <Field source="LineNumber" />
+              <Description template="^1  ^2" arguments="PostingDate;PostingTime" title="Posted" />
+            </Group>
+            <Group title="Account">
+              <Reference foreignKey="AccountNumber_Account" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Amounts">
+              <Grid>
+                <Style size="small" />
+                <Header cells="|Debit|;|Credit|;|Currency|" style="grid_header" />
+                <Row cells="DebitBase;CreditBase;CompanyCurrency" title="Base" style="justifyRight" />
+                <Row cells="DebitCurrency;CreditCurrency;AccountCurrency" title="Account" style="justifyRight" />
+                <Row cells="DebitEnterprise;CreditEnterprise;EnterpriseCurrencyVar" title="Enterprise" style="justifyRight" />
+                <Row cells="DebitOriginalVar;CreditOriginalVar;OriginalCurrency" title="Original" style="justifyRight" />
+              </Grid>
+            </Group>
+            <Group>
+              <Link workspace="FinanceEntries" template="More details..." tooltip="Detailed analysis of the finance entry" appearance="maximized" icon="AnalyzeEntry">
+                <Target pane="FinanceEntriesFilter">
+                  <Restriction template="Selected Finance Entry" expression="InstanceKey=target.InstanceKey" />
+                  <Focus>
+                    <Match field="InstanceKey" value="InstanceKey" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="DimensionGroup" />
+            <Group title="Module Dimensions">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Reference foreignKey="ActivityNumber_Activity" />
+              <Reference foreignKey="TaskName_TaskListLine" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+              <Reference foreignKey="CustomerNumber_Customer" title="Ship to Customer" />
+              <Reference foreignKey="PaymentCustomer_Customer" title="Payment Customer" />
+              <Reference foreignKey="VendorNumber_Vendor" />
+              <Reference foreignKey="ItemNumber_ItemInformation" />
+              <Reference foreignKey="AssetNumber_Asset" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="VATReportingUnit" />
+          <Field source="VATSettlementNumber" />
+          <Field source="VATSettlementType" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATLevel" />
+          </If>
+          <Field source="VATCode" />
+          <Field source="VATRate" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="CalculateVATOfVAT" />
+          </If>
+          <Field source="VATAccountDimensionCombNumber" />
+          <Field source="CompanyNumber" title="Tax Settlement Company" />
+          <Field source="OriginalCurrency" />
+          <Field source="DebitVATCurrency" />
+          <Field source="CreditVATCurrency" />
+          <Field source="CompanyCurrency" />
+          <Field source="DebitVATBase" />
+          <Field source="CreditVATBase" />
+          <Field source="DebitVATEnterprise" />
+          <Field source="CreditVATEnterprise" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

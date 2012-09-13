@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 29/01/10: OriginalWithoutCreateDelete view added for Companies workspace (37818).-->
+<!-- SBA, 03/02/10: Introduce dynamic column headings in mdml (38258).-->
+<!-- CSK, 12/02/10: OriginalWithoutCreateDelete view deleted (38278).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- CSK, 19/11/10: Original layouts improved (39092).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- CSK, 16/12/10: Improve layout look and feel (39214).-->
+<!-- BPE, 18/01/11: Moving create action from card to filter (39334).-->
+<!-- CSK, 04/04/11: New Dimension view (39492).-->
+<!-- CSK, 12/04/11: Improvements for Accounts workspace (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- CSK, 08/09/11: Title added to creation wizard (39494).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 10/10/11: Type removed from Full form, in Dimensions workspace (39492).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ReportingHierarchies">
+    <FilterPane>
+      <Filter name="Standard">
+        <Actions>
+          <If condition="hasWorkspace('FinancialReporting')">
+            <Action source="with.Create" wizard="CreateReportingHierarchy" title="New Reporting Hierarchy" />
+          </If>
+        </Actions>
+        <Compact>
+          <Description template="^1" arguments="ReportingHierarchyNumber" />
+        </Compact>
+        <Columns>
+          <Field source="ReportingHierarchyNumber" />
+          <Field source="Description" />
+          <Field source="RepHierarchyType" />
+          <Field source="Standard" />
+        </Columns>
+      </Filter>
+      <Filter name="Dimension">
+        <Parameters>
+          <Parameter name="DimensionPar" type="string" />
+        </Parameters>
+        <ControlBar>
+          <Selection>
+            <If condition="DimensionPar='Account'">
+              <Option title="Account" restriction="RepHierarchyType=ReportingHierarchyTypeType'Account" />
+            </If>
+            <If condition="DimensionPar='Location'">
+              <Option title="Location" restriction="RepHierarchyType=ReportingHierarchyTypeType'Location" />
+            </If>
+            <If condition="DimensionPar='Entity'">
+              <Option title="Entity" restriction="RepHierarchyType=ReportingHierarchyTypeType'Entity" />
+            </If>
+            <If condition="DimensionPar='Project'">
+              <Option title="Project" restriction="RepHierarchyType=ReportingHierarchyTypeType'Project" />
+            </If>
+            <If condition="DimensionPar='Purpose'">
+              <Option title="Purpose" restriction="RepHierarchyType=ReportingHierarchyTypeType'Purpose" />
+            </If>
+            <If condition="DimensionPar='Specification1'">
+              <Option title="Specification1" restriction="RepHierarchyType=ReportingHierarchyTypeType'Specification_1" />
+            </If>
+            <If condition="DimensionPar='Specification2'">
+              <Option title="Specification2" restriction="RepHierarchyType=ReportingHierarchyTypeType'Specification_2" />
+            </If>
+            <If condition="DimensionPar='Specification3'">
+              <Option title="Specification3" restriction="RepHierarchyType=ReportingHierarchyTypeType'Specification_3" />
+            </If>
+            <If condition="DimensionPar='LocalSpecification1'">
+              <Option title="LocalSpecification1" restriction="RepHierarchyType=ReportingHierarchyTypeType'Local_Specification_1" />
+            </If>
+            <If condition="DimensionPar='LocalSpecification2'">
+              <Option title="LocalSpecification2" restriction="RepHierarchyType=ReportingHierarchyTypeType'Local_Specification_2" />
+            </If>
+            <If condition="DimensionPar='LocalSpecification3'">
+              <Option title="LocalSpecification3" restriction="RepHierarchyType=ReportingHierarchyTypeType'Local_Specification_3" />
+            </If>
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1" arguments="ReportingHierarchyNumber" />
+        </Compact>
+        <Columns>
+          <Field source="ReportingHierarchyNumber" />
+          <Field source="Description" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Wizard name="CreateReportingHierarchy" title="Create Reporting Hierarchy">
+        <Page form="CreateReportingHierarchy1" title="Reporting Hierarchy" description="Please enter the reporting hierarchy number and type" />
+      </Wizard>
+      <Form name="Custom_RoleRestricted_Full" open="hasRole('Finance Admin')" style="fullWidth">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('FinancialReporting')">
+              <Create />
+            </If>
+            <If condition="hasWorkspace('GlobalDimensions') or hasWorkspace('LocalDimensions') or hasWorkspace('GlobalAccounts')">
+              <Create />
+              <Delete />
+            </If>
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Reporting Hierarchy">
+              <Field source="ReportingHierarchyNumber" />
+              <Field source="Description" />
+              <If condition="not hasWorkspace('GlobalDimensions') and not hasWorkspace('LocalDimensions')">
+                <Field source="RepHierarchyType" />
+              </If>
+              <Boolean source="Standard" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Selection Criteria">
+              <Interval firstSource="FromNodeNumberVar" lastSource="ToNodeNumberVar" title="Node Number" />
+              <Interval firstSource="FromDescriptionVar" lastSource="ToDescriptionVar" title="Description{0}" />
+              <Interval firstSource="FromParentNodeNumberVar" lastSource="ToParentNodeNumberVar" title="Parent Node Number" />
+              <Interval firstSource="FromLevelVar" lastSource="ToLevelVar" title="Level" />
+              <Interval firstSource="FromSortingKeyVar" lastSource="ToSortingKeyVar" title="Sorting Key" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Full" style="fullWidth">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('FinancialReporting')">
+              <Create />
+            </If>
+            <If condition="hasWorkspace('GlobalDimensions') or hasWorkspace('LocalDimensions') or hasWorkspace('GlobalAccounts')">
+              <Create />
+              <Delete />
+            </If>
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Reporting Hierarchy">
+              <Field source="ReportingHierarchyNumber" />
+              <Field source="Description" />
+              <If condition="not hasWorkspace('GlobalDimensions') and not hasWorkspace('LocalDimensions')">
+                <Field source="RepHierarchyType" />
+              </If>
+              <Boolean source="Standard" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Selection Criteria">
+              <Interval firstSource="FromNodeNumberVar" lastSource="ToNodeNumberVar" title="Node Number" />
+              <Interval firstSource="FromDescriptionVar" lastSource="ToDescriptionVar" title="Description{0}" />
+              <Interval firstSource="FromParentNodeNumberVar" lastSource="ToParentNodeNumberVar" title="Parent Node Number" />
+              <Interval firstSource="FromLevelVar" lastSource="ToLevelVar" title="Level" />
+              <Interval firstSource="FromSortingKeyVar" lastSource="ToSortingKeyVar" title="Sorting Key" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CreateReportingHierarchy1">
+        <Actions all="true" />
+        <Row>
+          <Group title="" style="fullWidth">
+            <Field source="ReportingHierarchyNumber" />
+            <Field source="RepHierarchyType" />
+            <Field source="Description" />
+          </Group>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Custom_RoleRestricted_Full" open="hasRole('Finance Admin')" >
+        <Actions all="true" />
+        <Columns>
+          <Field source="NodeNumber" />
+          <Field source="Description" />
+          <Field source="ParentNodeNumber" />
+          <Field source="ParentDescriptionVar" title="Parent, Description" />
+          <Field source="TheLevel" />
+          <Field source="DetailLevel" />
+          <Field source="SortingKey" title="Sort by" />
+          <Field source="StringKey1" titleValue="parent.StringKey1FixedTextVar" />
+          <Field source="StringKey2" titleValue="parent.StringKey2FixedTextVar" />
+          <Field source="IntegerKey1" titleValue="parent.IntegerKey1FixedTextVar" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="NodeNumber" />
+          <Field source="Description" />
+          <Field source="ParentNodeNumber" />
+          <Field source="ParentDescriptionVar" title="Parent, Description" />
+          <Field source="TheLevel" />
+          <Field source="DetailLevel" />
+          <Field source="SortingKey" title="Sort by" />
+          <Field source="StringKey1" titleValue="parent.StringKey1FixedTextVar" />
+          <Field source="StringKey2" titleValue="parent.StringKey2FixedTextVar" />
+          <Field source="IntegerKey1" titleValue="parent.IntegerKey1FixedTextVar" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

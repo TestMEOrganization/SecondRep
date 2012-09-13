@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 04/03/11: New view OnlyPeriodOpen (39379).-->
+<!-- KUN, 22/03/11: Removed view OnlyPeriodOpen (39379).-->
+<!-- KUN, 22/03/11: Improved tax settlement (39491).-->
+<!-- KUN, 11/04/11: Added create wizard (39545). -->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- KUN, 09/08/11: New layouts to support the Tax setup workspace (39545). -->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 10/10/11: Minor changes to DimensionOrigin form (39547).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<!-- CSK, 19/10/11: New removed from creation wizard title (40064).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="VATReporingUnits">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Tax Reporting Unit: ^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+          <Field source="RegistrationNumber" />
+          <Field source="TaxOffice1" />
+          <Field source="TaxOffice2" />
+          <Field source="TaxOffice3" />
+          <Field source="TaxOffice4" />
+          <Field source="FromMonth" />
+          <Field source="FromYear" />
+          <Field source="ToMonth" />
+          <Field source="ToYear" />
+        </Columns>
+      </Filter>
+      <Filter name="VATSetup">
+        <Actions>
+          <Action source="with.Create" wizard="CreateWizard" />
+        </Actions>
+        <Compact>
+          <Description template="Tax Reporting Unit: ^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+          <Field source="RegistrationNumber" />
+          <Field source="TaxOffice1" />
+          <Field source="TaxOffice2" />
+          <Field source="TaxOffice3" />
+          <Field source="TaxOffice4" />
+          <Field source="FromMonth" />
+          <Field source="FromYear" />
+          <Field source="ToMonth" />
+          <Field source="ToYear" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Function name="isAccount" parameters="FieldPar" value="FieldPar=Parent.DimensionCombNumber" />
+      </Define>
+      <Wizard name="CreateWizard" title="Create Tax Reporting Unit">
+        <Page form="CreateVATReportingUnitPage1" title="Tax Reporting Unit" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Boolean source="VATSettlementByVATType" />
+            </Group>
+            <Group title="Posting References">
+              <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" />
+              <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" titleSource="AccessLevelName" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Period">
+              <PeriodYearInterval firstPeriodSource="FromMonth" firstYearSource="FromYear" lastPeriodSource="ToMonth" lastYearSource="ToYear" title="Mth/Yr" />
+            </Group>
+            <Group title="Address">
+              <Field source="TaxOffice1" appearance="maximized" />
+              <Field source="TaxOffice2" appearance="maximized" />
+              <Field source="TaxOffice3" appearance="maximized" />
+              <Field source="TaxOffice4" appearance="maximized" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="VATSetup">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Boolean source="VATSettlementByVATType" />
+            </Group>
+            <Group title="Posting References">
+              <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" />
+              <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" titleSource="AccessLevelName" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Period">
+              <PeriodYearInterval firstPeriodSource="FromMonth" firstYearSource="FromYear" lastPeriodSource="ToMonth" lastYearSource="ToYear" title="Mth/Yr" />
+            </Group>
+            <Group title="Address">
+              <Field source="TaxOffice1" appearance="maximized" />
+              <Field source="TaxOffice2" appearance="maximized" />
+              <Field source="TaxOffice3" appearance="maximized" />
+              <Field source="TaxOffice4" appearance="maximized" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CreateVATReportingUnitPage1">
+        <Actions>
+          <Create />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Boolean source="VATSettlementByVATType" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Posting References">
+              <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" />
+              <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" />
+            </Group>
+            <Group title="Period">
+              <PeriodYearInterval firstPeriodSource="FromMonth" firstYearSource="FromYear" lastPeriodSource="ToMonth" lastYearSource="ToYear" title="Mth/Yr" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="VATSettlement">
+        <Row>
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Field source="VATSettlementByVATType" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Address">
+              <Field source="TaxOffice1" appearance="maximized" />
+              <Field source="TaxOffice2" appearance="maximized" />
+              <Field source="TaxOffice3" appearance="maximized" />
+              <Field source="TaxOffice4" appearance="maximized" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_VATSettlement" open="hasRole('Finance Admin')">
+        <Row>
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Field source="VATSettlementByVATType" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Address">
+              <Field source="TaxOffice1" appearance="maximized" />
+              <Field source="TaxOffice2" appearance="maximized" />
+              <Field source="TaxOffice3" appearance="maximized" />
+              <Field source="TaxOffice4" appearance="maximized" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+        <If condition="hasRole('Finance Admin')" >
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Field source="VATSettlementByVATType" />
+            </Group>
+            <Group title="Posting References">
+              <If condition="isAccount(FinanceAccountVATSettlement)">
+                <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" />
+              </Else>
+              <If condition="isAccount(FinanceAccountBase)">
+                <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" titleSource="AccessLevelName" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Address">
+              <Field source="TaxOffice1" appearance="maximized" />
+              <Field source="TaxOffice2" appearance="maximized" />
+              <Field source="TaxOffice3" appearance="maximized" />
+              <Field source="TaxOffice4" appearance="maximized" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          </If>
+          <Else>
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Field source="VATSettlementByVATType" />
+            </Group>
+            <Group title="Posting References">
+              <If condition="isAccount(FinanceAccountVATSettlement)">
+                <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" />
+              </Else>
+              <If condition="isAccount(FinanceAccountBase)">
+                <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" titleSource="AccessLevelName" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Address">
+              <Field source="TaxOffice1" appearance="maximized" />
+              <Field source="TaxOffice2" appearance="maximized" />
+              <Field source="TaxOffice3" appearance="maximized" />
+              <Field source="TaxOffice4" appearance="maximized" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          </Else>
+        </Row>
+      </Form>
+      <Form name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Reporting Unit">
+              <Field source="Name" />
+              <Field source="RegistrationNumber" />
+              <Field source="VATDateMethod" />
+              <Field source="Currency" />
+              <Field source="VATTypeEUAcquisitionVAT" />
+              <Field source="VATSettlementByVATType" />
+            </Group>
+            <Group title="Posting References">
+              <If condition="isAccount(FinanceAccountVATSettlement)">
+                <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountVATSettlement_DimensionCombHeader" titleSource="FinanceAccountVATSettlement" />
+              </Else>
+              <If condition="isAccount(FinanceAccountBase)">
+                <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountBase_DimensionCombHeader" titleSource="FinanceAccountBase" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" titleSource="AccessLevelName" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Address">
+              <Field source="TaxOffice1" appearance="maximized" />
+              <Field source="TaxOffice2" appearance="maximized" />
+              <Field source="TaxOffice3" appearance="maximized" />
+              <Field source="TaxOffice4" appearance="maximized" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="VATAccountReferenceName" title="Name" />
+          <Field source="FinanceAccount" title="Posting Reference" />
+          <Field source="DescriptionVar" title="Description{0}" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

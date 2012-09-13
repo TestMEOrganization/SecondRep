@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 19/02/10: CompanyHome view added for Companies workspace (37818).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- BPE, 07/09/10: Changed layout to use global definition dimensions (38744). -->
+<!-- PBO, 22/09/10: Implement conditional layout (38843).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 02/12/10: CompanySpecific filter added for Companies workspace (39093).-->
+<!-- CSK, 16/12/10: Improve layout look and feel (39214).-->
+<!-- CSK, 05/04/11: Original layouts improved (39492).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- CSK, 19/10/11: Wizard title improved (40064).-->
+<!-- CSK, 21/10/11: CompanyNumber made mandatory in creation wizard (40064).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="CompanyAllocationCombinations">
+    <FilterPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Filter name="Standard">
+        <Actions>
+          <If condition="hasWorkspace('AdvancedDimensions')">
+            <Action source="with.Create" wizard="CreateCompanyAllocationCombination" title="New Company Allocation Combination" />
+          </If>
+        </Actions>
+        <Compact>
+          <Description template="^1" arguments="CompanyNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CompanyNumber" />
+          <Field source="AccountNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="CompanySpecific">
+        <Actions>
+          <Action source="parent.CreateCompanyAllocationCombination" />
+        </Actions>
+        <Columns>
+          <Field source="CreatedBy" />
+          <Field source="CreatedDate" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Wizard name="CreateCompanyAllocationCombination" title="Create Company Allocation Combination">
+        <Page form="CreateCompanyAllocationCombination" title="Company Allocation Combination" description="Please enter the company number" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('AdvancedDimensions')">
+              <Create />
+            </If>
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column>
+            <Group title="Selection Criteria">
+              <Field source="AccountNumber" />
+              <Field source="EmployeeNumber" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="FinanceVATCode" />
+                <Field source="FinanceVATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="FinanceVATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="FinanceVATCode" title="Tax Code" />
+              </Else>
+              <Boolean source="ShowFinance" />
+              <Boolean source="ShowJob" />
+              <Boolean source="ShowLinesVar" title="Show Lines" />
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="DimensionGroup" title="Selection Criteria, Dimensions" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CreateCompanyAllocationCombination">
+        <Actions all="true" />
+        <Row>
+          <Group title="">
+            <Field source="CompanyNumber" mandatory="true" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_CompanyHome" open="hasRole('Finance Admin')" >
+        <Actions all="true">
+          <Exclude>
+            <Create />
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Field source="AccountNumber" />
+              <Field source="EmployeeNumber" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="FinanceVATCode" />
+                <Field source="FinanceVATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="FinanceVATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="FinanceVATCode" title="Tax Code" />
+              </Else>
+              <BooleanGroup title="Show">
+                <Boolean source="ShowFinance" title="Lines Applying to G/L" />
+                <Boolean source="ShowJob" title="Lines Applying to Jobs" />
+                <Boolean source="ShowLinesVar" title="Lines" />
+              </BooleanGroup>
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="DimensionGroup" title="Selection Criteria, Dimensions" />
+          </Column>
+          <Column>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CompanyHome">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Field source="AccountNumber" />
+              <Field source="EmployeeNumber" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="FinanceVATCode" />
+                <Field source="FinanceVATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="FinanceVATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="FinanceVATCode" title="Tax Code" />
+              </Else>
+              <BooleanGroup title="Show">
+                <Boolean source="ShowFinance" title="Lines Applying to G/L" />
+                <Boolean source="ShowJob" title="Lines Applying to Jobs" />
+                <Boolean source="ShowLinesVar" title="Lines" />
+              </BooleanGroup>
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="DimensionGroup" title="Selection Criteria, Dimensions" />
+          </Column>
+          <Column>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Custom_RoleRestricted_Full" open="hasRole('Finance Admin')" >
+        <Actions all="true" />
+        <Columns>
+          <Field source="FromAccountNumber" />
+          <Field source="ToAccountNumber" />
+          <Columns ref="TargetGroupColumnsShort" />
+          <Field source="AccessLevelName" />
+          <Field source="Remark" />
+          <Field source="FromEmployeeNumber" />
+          <Field source="ToEmployeeNumber" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="FinanceVATCodeFrom" />
+            <Field source="FinanceVATCodeTo" />
+            <Field source="FinanceVATCode2From" />
+            <Field source="FinanceVATCode2To" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="FinanceVATCode3From" />
+              <Field source="FinanceVATCode3To" />
+            </If>
+          </If>
+          <Else>
+            <Field source="FinanceVATCodeFrom" title="Tax Code From" />
+            <Field source="FinanceVATCodeTo" title="Tax Code To" />
+          </Else>
+          <Field source="TransactionTypeGroupNumber" />
+          <Field source="AppliesToFinance" title="Applies to G/L" />
+          <Field source="AppliesToJob" title="Applies to jobs" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="FromAccountNumber" />
+          <Field source="ToAccountNumber" />
+          <Columns ref="TargetGroupColumnsShort" />
+          <Field source="AccessLevelName" />
+          <Field source="Remark" />
+          <Field source="FromEmployeeNumber" />
+          <Field source="ToEmployeeNumber" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="FinanceVATCodeFrom" />
+            <Field source="FinanceVATCodeTo" />
+            <Field source="FinanceVATCode2From" />
+            <Field source="FinanceVATCode2To" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="FinanceVATCode3From" />
+              <Field source="FinanceVATCode3To" />
+            </If>
+          </If>
+          <Else>
+            <Field source="FinanceVATCodeFrom" title="Tax Code From" />
+            <Field source="FinanceVATCodeTo" title="Tax Code To" />
+          </Else>
+          <Field source="TransactionTypeGroupNumber" />
+          <Field source="AppliesToFinance" title="Applies to G/L" />
+          <Field source="AppliesToJob" title="Applies to jobs" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

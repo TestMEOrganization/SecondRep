@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--2e124e36881c540ab87d7ea83a45c369a0e8d57c-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--71b6ee5aced28119a661f2e171d1b1c13d587dd5-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 627d9be3d1575ce3ed16046f92136fd6   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:40
+  TAC*MaconomyHQ: yes
+-->
+<!-- RMA, 02/07/09: Create empty workspace for every dialog (37794).-->
+<!-- PBO, 15/12/10: Auto-populate workspace's title by the one defined in the GlobalMenu (39149).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="SD_BatchJobReallocation" title="Batch Job Reallocation">
+    <Card source="BatchJobReallocation" view="Full">
+      <Expansions>
+        <With>
+          <Table />
+        </With>
+      </Expansions>
+    </Card>
+  </Workspace>
+</MWSL>
+

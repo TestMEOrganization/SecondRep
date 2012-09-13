@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--d9c93c48222a129f88d4be0360957862930a139c-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--47722a045554ddf0db62035eddd562cb6eeb2ed8-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest fb5f4518ada7dfea9bb7f48e64e4f451   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:14
+  TAC*MaconomyHQ: yes
+-->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- JAM, 20/10/09: Removing variables from card part (38034).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 13/01/10: New demo views (37948).-->
+<!-- JSV, 27/04/10: Use the calendar widget (37948).-->
+<!-- JSV, 25/06/10: Use new attributes for Calendar: inputField and autoSelection (38594).-->
+<!-- JSV, 28/06/10: Show existence of rejected lines in TimeSheetStatusVar (38596).-->
+<!-- JSV, 29/06/10: Highlight lines rejected by project manager (38602).-->
+<!-- JSV, 01/07/10: Show overtime in demo layout (38614).-->
+<!-- JSV, 13/09/10: Zero-suppression on number of hours and shorter action titles in demo form (37948).-->
+<!-- JSV, 13/09/10: Traffic-light on LineDetailsVar. Style trafficlightYellow on rejected lines (37948).-->
+<!-- JSV, 14/09/10: Styles moved to GlobalDefinitions (38848).-->
+<!-- JSV, 07/10/10: Change weekday abbreviations to three characters (38931).-->
+<!-- JSV, 20/10/10: Use FullCalendar and promote Demo to Original (37948).-->
+<!-- JSV, 21/10/10: Show invoiceable hours (38997).-->
+<!-- JSV, 17/11/10: Split out calendar group into GD files (38848).-->
+<!-- JSV, 24/11/10: Set size="large" on the field Favorite and medium on TaskTextVar (39087).-->
+<!-- JSV, 01/12/10: Conditional style on job number, task and quantity (39162).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- JSV, 16/12/10: Move hours and details in Demo table (39233).-->
+<!-- SBA, 17/12/10: Show days outside split-week as closed (39235).-->
+<!-- PSZ, 23/02/11: New actions Expense and Mileage in the Original layout (39419).-->
+<!-- PSZ, 30/05/11: PSO changes (39683).-->
+<!-- PSZ, 19/09/11: Added a browser pane for People Planner My Plan (39953).-->
+<!-- PSZ, 22/09/11: Remove JobNumber from table part in PSO (39962).-->
+<!-- SBA, 21/11/11: Use of disabled for actions (40193). -->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.62">
+  <Layout source="TimeRegistration">
+    <UpperPane>
+      <Define>
+        <Style name="hours" size="tiny" anchor="right" />
+        <Include fragment="GD_Calendar" />
+        <!-- Function for extracting a percentage from two values. -->
+        <Function name="Pct" value="x / y * 100" parameters="x y" />
+      </Define>
+      <Form name="Full">
+        <!-- <Style linkForegroundColor="green"/> -->
+        <Actions>
+          <!-- <Action source="MDK_SubmitTimeSheet" title="MDK Submit" /> -->
+          <Action source="SubmitTimeSheet" title="Submit" />
+          	<Action source="ReopenTimeSheet" title="Reopen" disabled="ApprovedVar" />
+          <Create />
+          <Update />
+          <Delete />
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Column>
+          <Group ref="Calendar" />
+        </Column>
+        <Column>
+          <Row>
+            <Group>
+              <Description title="Week No." arguments="WeekNumberVar;PartVar" template="^1 ^2" size="small" style="applyBold" />
+            </Group>
+            <Group>
+              <!-- ****** Rambøll værdi for BILLING HOURS % - Fakturerbar tid / Norm tid ****** -->
+              <Description title="Employee Name" template="^1 (^2)" arguments="EmployeeNameVar;EmployeeNumber" style="applyBold" />
+              <Description title="Billing Hours %" template="^1 %" arguments="Pct(InvoiceableTimeDayWeekVar,TotalNumberOfWeekVar)" />
+            </Group>
+          </Row>
+          <Row>
+            <Group title="Legend">
+              <Grid>
+                <Row title="     " cells="|      |;|Not Submitted|" style="calendarTimeDueLegend" />
+                <Row title="     " cells="|      |;|Submitted|" style="calendarTimeSubmittedLegend" />
+                <Row title="     " cells="|      |;|Approved|" style="calendarTimeFullyApprovedLegend" />
+                <!-- RAMBØLL Cust. - Using FullyApproved style -->
+                <!-- <Row title="     " cells="|      |;|Rejected|" style="calendarTimeRejectedLegend" />  Rambøll Cust. -->
+              </Grid>
+            </Group>
+            <Group title="Time Information">
+              <Grid style="hours">
+                <Define>
+                  <Style name="valueWarning" ref="trafficlightForegroundRed" condition="fieldValue() lt 0" />
+                  <Style name="valueOk" ref="trafficlightForegroundGreen" condition="fieldValue() ge 0" />
+                </Define>
+                <Header cells="|Mon|;|Tue|;|Wed|;|Thu|;|Fri|;|Sat|;|Sun|;|Week|" style="grid_header" />
+                <Row title="Total" cells="TotalNumberDay1Var;TotalNumberDay2Var;TotalNumberDay3Var;TotalNumberDay4Var;TotalNumberDay5Var;TotalNumberDay6Var;TotalNumberDay7Var;TotalNumberOfWeekVar" />
+                <Row title="Fixed" cells="FixedNumberDay1Var;FixedNumberDay2Var;FixedNumberDay3Var;FixedNumberDay4Var;FixedNumberDay5Var;FixedNumberDay6Var;FixedNumberDay7Var;FixedNumberWeekVar" />
+                <Row title="Balance" cells="OvertimeNumberDay1Var;OvertimeNumberDay2Var;OvertimeNumberDay3Var;OvertimeNumberDay4Var;OvertimeNumberDay5Var;OvertimeNumberDay6Var;OvertimeNumberDay7Var;OvertimeNumberWeekVar" style="valueWarning,valueOk" />
+                <Row title="Invoiceable" cells="InvoiceableTimeDay1Var;InvoiceableTimeDay2Var;InvoiceableTimeDay3Var;InvoiceableTimeDay4Var;InvoiceableTimeDay5Var;InvoiceableTimeDay6Var;InvoiceableTimeDay7Var;InvoiceableTimeDayWeekVar" />
+              </Grid>
+            </Group>
+          </Row>
+        </Column>
+      </Form>
+      <!-- *** RAMBØLL customization - FAQ Assistant added to Timesheet Card Panel *** -->
+      <Form name="FAQ">
+        <Group>
+          <Link title="" template="Tutorial Video" url="urlOpenMacWebsite() + '/test.wmv'" icon="Questionmark" />
+          <Link title="" template="Guideline" url="'http://viewer.zmags.com/publication/843fc27c#/843fc27c/1'" icon="Questionmark" />
+        </Group>
+      </Form>
+      <Browser name="POB">
+        <ControlBar progress="true" address="false" navigation="false" />
+        <!-- <Url value="'http://grpcpherp02d:82/cgi-bin/Maconomy/MaconomyPortal.test20.W_MCS.exe/Custom/POB/pob.ms'"> -->
+        <Url value="urlOpenMacPortal() + '/Custom/POB/pob.ms'">
+          <Query field="NameOfUser" value="^1" arguments="username()" />
+        </Url>
+      </Browser>
+      
+      <!-- *********** VIM and TEM interface ************* -->
+      
+      <Browser name="TEM" title="TEM" >
+      <ControlBar progress="true" address="false" navigation="false" />
+        <If condition="envVar('user.employeeinfo.text7')='Denmark'">
+          <Url value="urlOpenTEM_DKServer()">
+            <Query field="NameOfUser" value="^1" arguments="username()" />
+          </Url>
+        </If>
+        <If condition="envVar('user.employeeinfo.text7')='Finland'">
+          <Url value="urlOpenTEM_FIServer()">
+            <Query field="NameOfUser" value="^1" arguments="username()" />
+          </Url>
+        </If>
+        <!-- <Else>
+          <Description template="No Interface defined for your specific Origin" />
+        </Else> -->
+      </Browser>
+            
+      <!-- <Browser name="VIM" title="VIM" >
+        <ControlBar progress="true" address="false" navigation="false" />
+          <Url value="urlOpenVIMServer()">
+            <Query field="NameOfUser" value="^1" arguments="username()" />
+          </Url>
+      </Browser> -->
+      <Form name="VIM" title="VIM" >
+      	<Group>      
+	      <Link template="Vendor Invoice Handling" icon="WorkspaceLink" appearance="maximized" >
+	          <Url value="urlOpenVIMServer()">
+	            <Query field="NameOfUser" value="^1" arguments="username()" />
+	          </Url>
+	      </Link>
+      	</Group>
+      </Form>
+            
+      <Browser name="PayRoll" title="Pay Roll" >
+      <If condition="envVar('user.employeeinfo.text7')='Denmark'">
+        <ControlBar progress="true" address="false" navigation="false" />
+          <Url value="'http://web_payroll_info.ramboll.dk/index.asp'">
+          </Url>
+      </If>
+      </Browser>
+           
+      
+      <!-- ******************** GBA Websites ********************* -->            
+      
+      <Browser name="GBA_Denmark" title="GBA Denmark" >
+        <ControlBar progress="true" address="false" navigation="true" />
+          <Url value="'http://intranet.rambollgrp.com/rgrGBArdk'">
+          </Url>
+      </Browser>
+      
+      <Browser name="GBA_Finland" title="GBA Finland" >
+        <ControlBar progress="true" address="false" navigation="true" />
+          <Url value="'http://intranet.rambollgrp.com/rgrGBArfi'">
+          </Url>
+      </Browser>
+      
+      <!-- ***************************************************** -->
+      <Browser name="POB">
+        <ControlBar progress="true" address="false" navigation="false" />
+        <!-- <Url value="'http://grpcpherp02d:82/cgi-bin/Maconomy/MaconomyPortal.test20.W_MCS.exe/Custom/POB/pob.ms'"> -->
+        <Url value="urlOpenMacPortal() + '/Custom/POB/pob.ms'">
+          <Query field="NameOfUser" value="^1" arguments="username()" />
+        </Url>
+      </Browser>
+      <Browser name="PeoplePlanner_MyPlan" title="My Plan">
+        <Url value="urlOpenMyPlan()" />
+      </Browser>
+      <!-- <Browser name="TimeReport">
+        <ControlBar progress="true" address="false" navigation="false" />
+        <Url value="urlOpenReportingServer() + '/_layouts/ReportServer/RSViewerPage.aspx'">
+          <Query field="rv:RelativeReportUrl" value="/Reports/Time%20Report.rdl" />
+          <Query field="rp:Employee" value="^1" arguments="userName()" />
+          <Query field="rp:Type" value="^1" arguments="'Employee'" />
+          <Query field="rp:Project" value="^1" arguments="0" />
+          <Query field="rv:ParamMode" value="^1" arguments="'Collapsed'" />
+        </Url>
+      </Browser> -->
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Style name="DescriptionDay1" ref="attentionField" condition="UsesDailyDescriptionsVar and NumberDay1 != 0 and DescriptionDay1 = ''" />
+        <Style name="DescriptionDay2" ref="attentionField" condition="UsesDailyDescriptionsVar and NumberDay2 != 0 and DescriptionDay2 = ''" />
+        <Style name="DescriptionDay3" ref="attentionField" condition="UsesDailyDescriptionsVar and NumberDay3 != 0 and DescriptionDay3 = ''" />
+        <Style name="DescriptionDay4" ref="attentionField" condition="UsesDailyDescriptionsVar and NumberDay4 != 0 and DescriptionDay4 = ''" />
+        <Style name="DescriptionDay5" ref="attentionField" condition="UsesDailyDescriptionsVar and NumberDay5 != 0 and DescriptionDay5 = ''" />
+        <Style name="DescriptionDay6" ref="attentionField" condition="UsesDailyDescriptionsVar and NumberDay6 != 0 and DescriptionDay6 = ''" />
+        <Style name="DescriptionDay7" ref="attentionField" condition="UsesDailyDescriptionsVar and NumberDay7 != 0 and DescriptionDay7 = ''" />
+        <Style name="MissingJob" ref="attentionField" condition="LineDetailsVar = 'Job?'" />
+        <Style name="MissingTask" ref="attentionField" condition="LineDetailsVar = 'Task?'" />
+        <Style name="LineNotOK" ref="attentionField" condition="LineDetailsVar != 'OK'" />
+        <Style name="hours" zeroSuppression="true" size="tiny" />
+        
+        <Trigger name="checkactivity110">
+
+<!--         <Check condition=" -->
+<!--         if(and envVar('user.employeeinfo.EmployeeType')!=employeetypetype'\external\) -->
+<!--         then -->
+<!--         activitynumber!='110' -->
+<!--         else -->
+<!--         true -->
+<!--         ">  -->
+
+<!--         <Error template="Activity Number must be different from 110!!" focusField="ActivityNumber" /> -->
+<!--          </Check> -->
+
+        <Check condition="
+        if(envVar('user.employeeinfo.EmployeeType')!=employeetypetype'\external\)
+        then
+        activitynumber!='110'
+        else
+        true
+        ">
+             <Error template="Activity Number must be different from 110!!" focusField="ActivityNumber" /> 
+        </Check>
+         <Check condition="
+        if(envVar('user.employeeinfo.EmployeeType')=employeetypetype'\external\)
+        then
+        activitynumber='110'
+        else
+        true
+        ">
+           <Error template="Activity Number must be 110!!" focusField="ActivityNumber" />
+        </Check>
+      
+        </Trigger>
+      </Define>
+      <Table name="Full">
+        <Actions all="true">
+          <If condition="hasWorkspace('TimeAndExpenseRegistration') and booleanSysPar('AllowIncompleteExpenseAndMileageRegistrations') and not inCreate()">
+            <If condition="parent.NumberOfExpenseSheetsVar = 0">
+              <Action source="primary-&gt;TimeSheetLineExpenses.Expense" title="Expense" wizard="NewExpenseSheetWizard" disabled="EmployeeNumber = '' defaultTo true" />
+            </If>
+            <ElseIf condition="parent.NumberOfExpenseSheetsVar = 1">
+              <Action source="primary-&gt;TimeSheetLineExpenses.Expense" title="Expense" disabled="EmployeeNumber = '' defaultTo true" />
+            </ElseIf>
+            <Else>
+              <Action source="primary-&gt;TimeSheetLineExpenses.Expense" title="Expense" wizard="ChooseExpenseSheetWizard" disabled="EmployeeNumber = '' defaultTo true" />
+            </Else>
+            <If condition="parent.NumberOfMileageSheetsVar = 0">
+              <Action source="primary-&gt;TimeSheetLineMileage.Mileage" title="Mileage" wizard="NewMileageSheetWizard" disabled="EmployeeNumber = '' defaultTo true" />
+            </If>
+            <ElseIf condition="parent.NumberOfMileageSheetsVar = 1">
+              <Action source="primary-&gt;TimeSheetLineMileage.Mileage" title="Mileage" disabled="EmployeeNumber = '' defaultTo true" />
+            </ElseIf>
+            <Else>
+              <Action source="primary-&gt;TimeSheetLineMileage.Mileage" title="Mileage" wizard="ChooseMileageSheetWizard" disabled="EmployeeNumber = '' defaultTo true" />
+            </Else>
+          </If>
+          <Update preTrigger="checkactivity110" /> 
+       <!--    <Create preTrigger="checkactivity110"/> -->
+        
+        </Actions>
+        <Columns>
+          <Style ref="calendarTimeRejected" condition="ApprovalStatus = ApprovalStatusType'Rejected" />
+          <Field source="PermanentLine" title="Keep" size="tiny" />
+          <Field source="Favorite" size="large" />
+       <!--  <If condition="isSolutionPropertyEnabled('ShowJobNumberWithJobName')">
+            <Field source="JobNumber" style="MissingJob" />
+          </If>
+       -->
+          <Field source="JobNameVar" title="Job Name" style="MissingJob" />
+          <!-- <Field source="TaskName" title="Task" size="tiny" style="MissingTask" searchView="Custom2" searchOption="only100"/> -->
+          <Field source="TaskName" title="Task" size="tiny" style="MissingTask"/>
+          <Field source="OvertimeType" size="small" />
+          <Field source="EntryText" />
+          <Scope style="hours">
+            <If condition="parent.DayHeading1Var != ''">
+              <Field title="Mon" source="NumberDay1" style="DescriptionDay1" />
+            </If>
+            <Else>
+              <Field title="Mon" source="NumberDay1" style="DescriptionDay1" open="false" />
+            </Else>
+            <If condition="parent.DayHeading2Var != ''">
+              <Field title="Tue" source="NumberDay2" style="DescriptionDay2" />
+            </If>
+            <Else>
+              <Field title="Tue" source="NumberDay2" style="DescriptionDay2" open="false" />
+            </Else>
+            <If condition="parent.DayHeading3Var != ''">
+              <Field title="Wed" source="NumberDay3" style="DescriptionDay3" />
+            </If>
+            <Else>
+              <Field title="Wed" source="NumberDay3" style="DescriptionDay3" open="false" />
+            </Else>
+            <If condition="parent.DayHeading4Var != ''">
+              <Field title="Thu" source="NumberDay4" style="DescriptionDay4" />
+            </If>
+            <Else>
+              <Field title="Thu" source="NumberDay4" style="DescriptionDay4" open="false" />
+            </Else>
+            <If condition="parent.DayHeading5Var != ''">
+              <Field title="Fri" source="NumberDay5" style="DescriptionDay5" />
+            </If>
+            <Else>
+              <Field title="Fri" source="NumberDay5" style="DescriptionDay5" open="false" />
+            </Else>
+            <If condition="parent.DayHeading6Var != ''">
+              <Field title="Sat" source="NumberDay6" style="DescriptionDay6" />
+            </If>
+            <Else>
+              <Field title="Sat" source="NumberDay6" style="DescriptionDay6" open="false" />
+            </Else>
+            <If condition="parent.DayHeading7Var != ''">
+              <Field title="Sun" source="NumberDay7" style="DescriptionDay7" />
+            </If>
+            <Else>
+              <Field title="Sun" source="NumberDay7" style="DescriptionDay7" open="false" />
+            </Else>
+            <Field source="WeekTotal" />
+            
+          </Scope>
+          <!-- <Field source="Invoiceable" />
+					<Field source="CustomerNameVar" size="medium" /> -->
+		<Field source="ActivityNumber"  size="tiny" open="false" />
+		 <Field source="JobNumber" title="Job Number" style="MissingJob" />
+          <Field source="CompanyNumber" open="false" />
+          <Field source="LocationName" open="false" />
+          <!-- <Field source="LineDetailsVar" title="Details" size="medium" style="LineNotOK" />-->
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--70f855ce3dbabb838583160fd4adc982a745de12-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--6c1ec44990c8c994badb4bec517566989c554393-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest ecb75395f6f2f2ea8e9409744939ac05   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:42
+  TAC*MaconomyHQ: yes
+-->
+<!-- RMA, 02/07/09: Create empty workspace for every dialog (37794).-->
+<!-- PBO, 15/12/10: Auto-populate workspace's title by the one defined in the GlobalMenu (39149).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="SD_JobReallocation" title="Job Reallocation">
+    <Filter source="JobReallocation" view="Standard">
+      <Expansions minimized="false">
+        <With>
+          <Card view="Full">
+            <Expansions>
+              <With>
+                <Table />
+              </With>
+            </Expansions>
+          </Card>
+        </With>
+      </Expansions>
+    </Filter>
+  </Workspace>
+</MWSL>
+

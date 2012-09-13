@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--29e7c014ad7fb02837c724d91b5ab4d0496ee860-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--06cad0ad83205f2727d97a88693f421525c7e467-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 9a2d99d3eea8b33ffabbb63f198d6f59   3 _ _   209
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:9
+  TAC*MaconomyHQ: yes
+-->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- PSZ, 16/07/10: New field Invoiceable in Table part of Original layout (38561).-->
+<!-- BPE, 01/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- MJA, 07/09/10: Implement conditional layout (38461).-->
+<!-- KRN, 21/09/10: Supervisor approval filter options (38894).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- PSZ, 08/12/10: Improve the look of the layout (38805).-->
+<!-- PSZ, 25/02/11: New variables for combined registration of time, expenses, mileage (39419).-->
+<!-- PSZ, 10/06/11: Align daily time sheet approval layouts with weekly layouts (39616).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- SBA, 12/09/11: Adding new variables (39856). -->
+<!-- PSZ, 20/09/11: Hide Submit and Approve actions if user does not have access (39751).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="DailyTimeSheets">
+    <FilterPane>
+      <Define>
+        <Style name="TinySize" size="tiny" />
+        <Function name="CanSubmitTimeSheet" type="boolean">
+          <Value><![CDATA[EmployeeNumber = userEmployeeNumber()
+					or SuperiorEmployee = userEmployeeNumber()
+					or SecretaryEmployee = userEmployeeNumber()
+					or booleanEnvVar('user.info.CanChangeAllTimeSheets')]]></Value>
+        </Function>
+        <Function name="CanApproveTimeSheet" type="boolean">
+          <Value><![CDATA[SuperiorEmployee = userEmployeeNumber()
+					or SecretaryEmployee = userEmployeeNumber()
+						 and booleanSysPar('@SecretaryCanApproveTimeSheets')
+					or booleanEnvVar('user.info.CanChangeAllTimeSheets')
+						 and booleanEnvVar('user.info.CanTransferTimeSheets')]]></Value>
+        </Function>
+      </Define>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="EmployeeName;EmployeeNumber;TheDate" />
+        </Compact>
+        <Columns>
+          <Field source="EmployeeNumber" />
+          <Field source="EmployeeName" />
+          <Field source="TheDate" />
+          <Field source="Approved" />
+          <Field source="ApprovedBy" />
+          <Field source="ApprovalDate" />
+          <Field source="CreatedBy" />
+          <Field source="CreatedDate" />
+          <Field source="SuperiorEmployee" />
+          <Field source="SecretaryEmployee" />
+        </Columns>
+      </Filter>
+      <Filter name="SupervisorApproval">
+        <ControlBar>
+          <Selection default="EmployeesUnapprovedTimeSheets">
+            <Option title="Time Sheets Awaiting Approval" name="EmployeesUnapprovedTimeSheets" restriction="Submitted and not Approved" />
+            <Option title="Not Submitted Time Sheets" name="DueTimeSheets" restriction="not Submitted and TheDate lt currentDate()" />
+            <Option title="All Time Sheets" name="AllTimeSheets" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="EmployeeName;EmployeeNumber;TheDate" />
+        </Compact>
+        <Columns>
+          <Field source="EmployeeNumber" />
+          <Field source="EmployeeName" />
+          <Field source="TheDate" />
+          <Field source="InternalTimeDayTotal" size="tiny" />
+          <Field source="ExternalTimeDayTotal" size="tiny" />
+          <Description template="^1" title="Balance, Total" style="TinySize" arguments="InternalTimeDayTotal + ExternalTimeDayTotal - FixedNumber" />
+          <Link title="Action" template="">
+            <Override condition="not Submitted and TheDate lt currentDate() and not CanSubmitTimeSheet()">
+              <Link style="calendarTimeDue" disabled="true" />
+            </Override>
+            <ElseOverride condition="not Submitted and TheDate lt currentDate()">
+              <Link template="Submit" style="calendarTimeDue" action="with.SubmitTimeSheet" />
+            </ElseOverride>
+            <ElseOverride condition="not Submitted and TheDate ge currentDate() and CanSubmitTimeSheet()">
+              <Link template="Submit" action="with.SubmitTimeSheet" />
+            </ElseOverride>
+            <ElseOverride condition="Submitted and not Approved and not CanApproveTimeSheet()">
+              <Link style="calendarTimeSubmitted" disabled="true" />
+            </ElseOverride>
+            <ElseOverride condition="Submitted and not Approved">
+              <Link template="Approve" style="calendarTimeSubmitted" action="with.ApproveTimeSheet" />
+            </ElseOverride>
+            <ElseOverride condition="Approved">
+              <Link style="calendarTimeApproved" disabled="true" />
+            </ElseOverride>
+          </Link>
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Style name="valueWarning" ref="trafficlightForegroundRed" condition="fieldValue() lt 0" />
+        <Style name="valueOk" ref="trafficlightForegroundGreen" condition="fieldValue() ge 0" />
+        <Style name="hours" size="tiny" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Employee Information">
+              <Field source="EmployeeNumber" />
+              <Field source="EmployeeName" />
+              <Field source="DepartmentVar" title="Department" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Period">
+              <Field source="TheDate" />
+              <Field source="DayVar" title="Day" />
+              <Field source="WeekCalendarNumberVar" title="Week Calendar No." />
+            </Group>
+          </Column>
+          <Column />
+        </Row>
+        <Row>
+          <Group title="Working Hours">
+            <Grid style="grid_compact">
+              <Header cells="||Expected{Expected Check in}||;||Actual{Actual Check in}||" title="" style="grid_header" />
+              <Header cells="|Check in{Expected check in}|;|Check out{Expected check out}|;|Check in{Actual check in}|;|Check out{Actual check out}|;|Absence|;|Working Hours|;|Reg.{abbr}|;|Bal.|;|Var.{Diff.}|;|Popup 1|;|Remarks 1|" title="" style="grid_header" />
+              <Row cells="TimeCheckedInExpected;TimeCheckedOutExpected;TimeCheckedIn;TimeCheckedOut;AbsenceNumber;WorkHoursNumberVar;TotalNumberVar;BalanceQuantityVar;DifferenceNumberVar;Popup1;Remark1" />
+            </Grid>
+          </Group>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Total{1}">
+              <Grid style="grid_compact">
+                <Header cells="|External{neutr}|;|Internal{neutral}|;|Total{In total}|;|Fixed|;|Overtime|" title="" style="grid_header" />
+                <Row cells="ExternalTimeDayTotal;InternalTimeDayTotal;TotalNumberVar;FixedNumberVar;OvertimeNumberVar" />
+              </Grid>
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Supervisor">
+              <Reference foreignKey="SuperiorEmployee_Employee" />
+            </Group>
+            <Group title="Secretary">
+              <Reference foreignKey="SecretaryEmployee_Employee" />
+            </Group>
+            <Group title="Mentor">
+              <Reference foreignKey="TutorEmployee_Employee" />
+            </Group>
+            <Group title="Employee Remarks">
+              <Field source="Remark1Var" appearance="maximized" />
+              <Field source="Remark2Var" appearance="maximized" />
+              <Field source="Remark3Var" appearance="maximized" />
+              <Field source="Remark4Var" appearance="maximized" />
+              <Field source="Remark5Var" appearance="maximized" />
+            </Group>
+            <Group title="Copy Time Sheet">
+              <Field source="CopyFromDate" title="Date" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Status">
+              <Field source="CreatedBy" />
+              <Field source="CreatedDate" title="Date" />
+              <Field source="Submitted" />
+              <Field source="SubmittedBy" />
+              <Field source="DateSubmitted" title="Date" />
+              <Field source="TemporarilySubmitted" />
+              <Field source="TemporarilySubmBy" />
+              <Field source="DateTemporarilySubmitted" title="Date" />
+              <Field source="Transferred" />
+              <Field source="TransferredBy" />
+              <Field source="TransferDate" title="Date" />
+              <Field source="Approved" />
+              <Field source="ApprovedBy" />
+              <Field source="ApprovalDate" title="Date" />
+              <Field source="Reopened" />
+            </Group>
+            <Group title="Transaction">
+              <Field source="TransactionType" />
+            </Group>
+          </Column>
+          <Column />
+        </Row>
+      </Form>
+      <Form name="SupervisorApproval">
+        <Actions>
+          <Action source="SubmitTimeSheet" />
+          <Action source="ApproveTimeSheet" />
+          <Action source="ReopenTimeSheet" />
+          <Action source="PrintThis" />
+          <Update />
+          <Refresh />
+        </Actions>
+        <Row>
+          <Group title="Time Information" style="hours">
+            <Field title="Total" source="TotalNumberVar" />
+            <Field title="Fixed" source="FixedNumberVar" />
+            <Field title="Balance" source="OvertimeNumberVar" style="valueWarning,valueOk" />
+            <Field title="Invoiceable" source="InvoiceableTimeDayTotal" />
+          </Group>
+          <Group title="Employee and Period">
+            <Reference keySource="EmployeeNumber" descriptionSource="EmployeeName" title="Employee" />
+            <Description title="Day" template="^1, ^2" arguments="DayVar;TheDate" />
+          </Group>
+          <Group title="Status">
+            <If condition="Submitted">
+              <Description titleSource="Submitted" template="^1 by ^2" arguments="DateSubmitted;SubmittedBy" />
+            </If>
+            <Else>
+              <Description titleSource="Submitted" template="No" />
+            </Else>
+            <If condition="Approved">
+              <Description titleSource="Approved" template="^1 by ^2" arguments="ApprovalDate;ApprovedBy" />
+            </If>
+            <Else>
+              <Description titleSource="Approved" template="No" />
+            </Else>
+          </Group>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="ActivityNumber" />
+          <Field source="TaskName" />
+          <If condition="maconomy:booleanSysPar('@RejectRegOnAmountActivitiesOnTimeSheets')">
+            <Field source="NumberOf" title="Hours" />
+          </If>
+          <Else>
+            <Field source="NumberOf" />
+          </Else>
+          <Field source="PlannedForThePeriod" title="Planned" />
+          <Field source="EstimatedTimeToCompletion" />
+          <Field source="EstimatedTimeToCompletionManDays" title="Est. Time to Compl., Days" />
+          <Field source="Executed" />
+          <If condition="maconomy:booleanSysPar('@RejectRegOnAmountActivitiesOnTimeSheets')">
+            <Field source="NumberProposed" />
+          </If>
+          <Else>
+            <Field source="NumberProposed" title="Proposed Quantity" />
+          </Else>
+          <Field source="BillingPriceCurrencyVar" />
+          <Field source="BillingPriceTotalCurrencyVar" />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="EntryText" />
+          <Field source="CompanyNumber" />
+          <Field source="ActivityType" title="Activity Type" />
+          <Field source="Favorite" />
+          <Field source="RegistrationNote" />
+          <Field source="PermanentLine" />
+          <Field source="TaskPathVar" title="Task Path" />
+          <Columns ref="DimensionColumns" />
+          <Field source="InternalJob" title="Internal" />
+          <Field source="Invoiceable" />
+          <Field source="Remark" />
+          <Field source="Description" />
+          <Field source="ActivityTextVar" title="Activity Name" />
+          <Field source="TaskTextVar" title="Task Description{1}" />
+          <Field source="CustomerNumberVar" title="Customer No." />
+          <Field source="CustomerNameVar" title="Customer Name" />
+          <Field source="LanguageVar" title="Language" />
+          <Field source="OvertimeType" />
+          <Field source="DailyDescription" />
+          <Field source="TransactionType" />
+        </Columns>
+      </Table>
+      <Table name="SupervisorApproval">
+        <Columns>
+          <Field source="CustomerNameVar" title="Customer Name" />
+          <Field source="JobNumber" />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="TaskName" />
+          <Field source="TaskTextVar" title="Task Name" />
+          <Field source="EntryText" />
+          <If condition="maconomy:booleanSysPar('@RejectRegOnAmountActivitiesOnTimeSheets')">
+            <Field source="NumberOf" title="Hours" />
+          </If>
+          <Else>
+            <Field source="NumberOf" />
+          </Else>
+          <Field source="DailyDescription" />
+          <Field source="Invoiceable" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

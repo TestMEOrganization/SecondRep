@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- BPE, 31/08/10: Changed layout to use global definition dimensions (38745). -->
+<!-- BPE, 17/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- PSZ, 13/12/10: Remove FixedTextEnterVar or replace with pane state based message (38807).-->
+<!-- PSZ, 18/07/11: Remove pane state based fixed text messages (39771).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="BatchJobReallocation">
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Boolean source="ShowLinesVar" title="Show Lines" />
+              <Interval firstSource="FromJobNumber" lastSource="ToJobNumber" title="Job No." />
+              <Interval firstSource="FromTransactionNumber" lastSource="ToTransactionNumber" title="Trans. No." />
+              <Interval firstSource="FromJournalNumber" lastSource="ToJournalNumber" title="Journal No." />
+              <Interval firstSource="FromEntryDate" lastSource="ToEntryDate" title="Entry Date" />
+              <Interval firstSource="FromCompanyNumber" lastSource="ToCompanyNumber" title="Company No." />
+              <Interval firstSource="FromExecutingCompanyNumber" lastSource="ToExecutingCompanyNumber" title="Exec. Company No." />
+              <Interval firstSource="FromItemNumber" lastSource="ToItemNumber" title="Item No." />
+              <Interval firstSource="FromActivityNumber" lastSource="ToActivityNumber" title="Activity No." />
+              <Field source="ActivityType" title="Activity Type" appearance="interval" />
+              <Interval firstSource="FromEmployeeNumber" lastSource="ToEmployeeNumber" title="Employee No." />
+              <Interval firstSource="FromTaskName" lastSource="ToTaskName" title="Task" />
+              <Field source="OvertimeType" title="Overtime Spec." appearance="interval" />
+              <Field source="AccrualType" title="Accrual Type" appearance="interval" />
+              <Interval firstSource="FromFromAccrualPeriod" lastSource="ToFromAccrualPeriod" title="Accrual Period From" />
+              <Interval firstSource="FromToAccrualPeriod" lastSource="ToToAccrualPeriod" title="Accrual Period To" />
+              <Interval firstSource="FromReallocatedFromJobNumber" lastSource="ToReallocatedFromJobNumber" title="Reallocated from Job No." />
+              <Interval firstSource="FromReallocatedFromTaskName" lastSource="ToReallocatedFromTaskName" title="Reallocated from Task" />
+              <Boolean source="ReallocateOnlyOpenJobEntries" title="Open Only{pl}" />
+              <Boolean source="ShowOnlyMarkedJobEntriesVar" title="Marked Only" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Reallocate To">
+              <Field source="NewJobNumber" title="Job No." />
+              <Field source="NewTransactionNumber" title="Trans. No." />
+              <Field source="DefaultTransactionType" title="Trans. Type" />
+              <Field source="TransactionNumberSeries" title="Number Series{sg}" />
+              <Field source="NewEntryDateVar" title="Entry Date" />
+              <Reference foreignKey="NewItemNumber_ItemInformation" />
+              <Reference foreignKey="NewActivityNumber_Activity" />
+              <Reference foreignKey="NewEmployeeNumber_Employee" />
+              <Field source="NewTaskName" title="Task" />
+              <Field source="NewTaskTextVar" title="Task Description{1}" />
+              <Field source="NewOvertimeType" title="Overtime Spec." />
+              <Boolean source="NewNoOvertimeType" title="No overtime spec." />
+              <Field source="NewAccrualType" title="Accrual Type" />
+              <Boolean source="NewNoAccrualType" title="No accrual type" />
+              <Field source="NewFromAccrualPeriod" title="Accrual Period From" />
+              <Field source="NewToAccrualPeriod" title="Accrual Period To" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group ref="DimensionsTargetGroupIntervals" />
+          </Column>
+          <Column>
+            <Group ref="DimensionNewGroup" title="Reallocate To, Dimensions" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Boolean source="ShowLinesVar" title="Show Lines" />
+              <Interval firstSource="FromJobNumber" lastSource="ToJobNumber" title="Job No." />
+              <Interval firstSource="FromTransactionNumber" lastSource="ToTransactionNumber" title="Trans. No." />
+              <Interval firstSource="FromJournalNumber" lastSource="ToJournalNumber" title="Journal No." />
+              <Interval firstSource="FromEntryDate" lastSource="ToEntryDate" title="Entry Date" />
+              <Interval firstSource="FromCompanyNumber" lastSource="ToCompanyNumber" title="Company No." />
+              <Interval firstSource="FromExecutingCompanyNumber" lastSource="ToExecutingCompanyNumber" title="Exec. Company No." />
+              <Interval firstSource="FromItemNumber" lastSource="ToItemNumber" title="Item No." />
+              <Interval firstSource="FromActivityNumber" lastSource="ToActivityNumber" title="Activity No." />
+              <Field source="ActivityType" title="Activity Type" appearance="interval" />
+              <Interval firstSource="FromTaskName" lastSource="ToTaskName" title="Task" />
+              <Field source="OvertimeType" title="Overtime Spec." appearance="interval" />
+              <Field source="AccrualType" title="Accrual Type" appearance="interval" />
+              <Interval firstSource="FromFromAccrualPeriod" lastSource="ToFromAccrualPeriod" title="Accrual Period From" />
+              <Interval firstSource="FromToAccrualPeriod" lastSource="ToToAccrualPeriod" title="Accrual Period To" />
+              <Interval firstSource="FromReallocatedFromJobNumber" lastSource="ToReallocatedFromJobNumber" title="Reallocated from Job No." />
+              <Interval firstSource="FromReallocatedFromTaskName" lastSource="ToReallocatedFromTaskName" title="Reallocated from Task" />
+              <Boolean source="ReallocateOnlyOpenJobEntries" title="Open Only{pl}" />
+              <Boolean source="ShowOnlyMarkedJobEntriesVar" title="Marked Only" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Reallocate To">
+              <Field source="NewJobNumber" title="Job No." />
+              <Field source="NewTransactionNumber" title="Trans. No." />
+              <Field source="DefaultTransactionType" title="Trans. Type" />
+              <Field source="TransactionNumberSeries" title="Number Series{sg}" />
+              <Field source="NewEntryDateVar" title="Entry Date" />
+              <Reference foreignKey="NewItemNumber_ItemInformation" />
+              <Reference foreignKey="NewActivityNumber_Activity" />
+              <Field source="NewTaskName" title="Task" />
+              <Field source="NewTaskTextVar" title="Task Description{1}" />
+              <Field source="NewOvertimeType" title="Overtime Spec." />
+              <Boolean source="NewNoOvertimeType" title="No overtime spec." />
+              <Field source="NewAccrualType" title="Accrual Type" />
+              <Boolean source="NewNoAccrualType" title="No accrual type" />
+              <Field source="NewFromAccrualPeriod" title="Accrual Period From" />
+              <Field source="NewToAccrualPeriod" title="Accrual Period To" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group ref="DimensionsTargetGroupIntervals" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="Reallocate" />
+          <Field source="EntryDate" title="Entry Date" />
+          <Field source="TransactionNumber" />
+          <Field source="TransactionType" title="Trans. Type" />
+          <Field source="JournalNumber" />
+          <Field source="TaskName" />
+          <Field source="TaskTextVar" title="Task Description{1}" />
+          <Field source="ActivityNumber" />
+          <Field source="ActivityText" />
+          <Field source="EmployeeNumber" title="Empl." />
+          <Field source="EmployeeNameVar" title="Employee Name" />
+          <Field source="NumberRegistered" title="Quantity Registered" />
+          <Field source="NumberTransferredTo" title="Quantity Transferred To" />
+          <Field source="NumberOpen" />
+          <Field source="NumberReallocated" title="Quantity Reallocated" />
+          <Field source="ReallocationDate" title="Reallocation Date" />
+          <Field source="ReallocatedFromJobNumber" title="Reallocated from Job" />
+          <Field source="ReallocatedFromTaskName" />
+          <Field source="ItemNumber" />
+          <Field source="ItemTextVar" title="Description{Item}" />
+          <Field source="CompanyNumber" />
+          <Field source="ExecutingCompanyNumber" />
+          <Columns ref="DimensionColumns" />
+          <Field source="Remark" />
+          <Field source="InternalJob" />
+          <Field source="EntryNumber" />
+          <Field source="OvertimeType" />
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+          <Field source="FromSubscriptionPeriod" />
+          <Field source="ToSubscriptionPeriod" />
+        </Columns>
+      </Table>
+      <Table name="Custom">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="Reallocate" />
+          <Field source="EntryDate" title="Entry Date" />
+          <Field source="TransactionNumber" />
+          <Field source="TransactionType" title="Trans. Type" />
+          <Field source="JournalNumber" />
+          <Field source="TaskName" />
+          <Field source="TaskTextVar" title="Task Description{1}" />
+          <Field source="ActivityNumber" />
+          <Field source="ActivityText" />
+          <Field source="EmployeeNumber" title="Empl." />
+          <Field source="EmployeeNameVar" title="Employee Name" />
+          <Field source="NumberRegistered" title="Quantity Registered" />
+          <Field source="NumberTransferredTo" title="Quantity Transferred To" />
+          <Field source="NumberOpen" />
+          <Field source="NumberReallocated" title="Quantity Reallocated" />
+          <Field source="ReallocationDate" title="Reallocation Date" />
+          <Field source="ReallocatedFromJobNumber" title="Reallocated from Job" />
+          <Field source="ReallocatedFromTaskName" />
+          <Field source="ItemNumber" />
+          <Field source="ItemTextVar" title="Description{Item}" />
+          <Field source="CompanyNumber" />
+          <Field source="ExecutingCompanyNumber" />
+          <Columns ref="DimensionColumns" />
+          <Field source="Remark" />
+          <Field source="InternalJob" />
+          <Field source="EntryNumber" />
+          <Field source="OvertimeType" />
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+          <Field source="FromSubscriptionPeriod" />
+          <Field source="ToSubscriptionPeriod" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

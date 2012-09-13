@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 14/09/10: Update Original views and add Analysis view (38847).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 04/03/11: New filter views (39452).-->
+<!-- CSK, 22/03/11: Removed filter views (39452).-->
+<!-- KUN, 22/03/11: Improved tax settlement (39491).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- KUN, 22/08/11: Improved tax settlement (39491).-->
+<!-- CSK, 02/11/11: Replace date'Null with date(nulldate) (40126).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="VATSettlement">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+          <Field source="FromMonth" />
+          <Field source="FromYear" />
+          <Field source="ToMonth" />
+          <Field source="ToYear" />
+          <Field source="ApprovedBy" />
+          <Field source="ApprovedDate" />
+          <Field source="Settlement" />
+        </Columns>
+      </Filter>
+      <Filter name="Approved">
+        <ControlBar>
+          <Selection default="ApprovedVATSettlements">
+            <Option name="ApprovedVATSettlements" title="Approved VAT Settlements" restriction="ApprovedDate != date(nulldate)" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1/^2 - ^3/^4" arguments="FromMonth;FromYear;ToMonth;ToYear" />
+        </Compact>
+        <Columns>
+          <Field source="FromMonth" />
+          <Field source="FromYear" />
+          <Field source="ToMonth" />
+          <Field source="ToYear" />
+          <Field source="ApprovedBy" />
+          <Field source="ApprovedDate" />
+          <Field source="Settlement" />
+        </Columns>
+      </Filter>
+      <Filter name="ApprovedSamePeriod">
+        <ControlBar>
+          <Selection default="ApprovedVATSettlements">
+            <Option name="ApprovedVATSettlements" title="Approved VAT Settlements" restriction="FromYear = parent.FromYear                  and FromMonth = parent.FromMonth                   and ToYear = parent.ToYear                  and ToMonth = parent.ToMonth                  and not Reopened                  and ApprovedBy != ''" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Approved by ^1 (^2)" arguments="ApprovedBy;ApprovedDate" />
+        </Compact>
+        <Columns>
+          <Field source="ApprovedBy" />
+          <Field source="ApprovedDate" />
+          <Field source="Settlement" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions>
+          <Print />
+          <PrintThis />
+          <Action source="PrintSettlement" />
+          <If condition="ApprovedBy=''">
+            <Action source="CreateSettlement" />
+            <Action source="ApproveSettlement" />
+          </If>
+          <Else>
+            <Action source="ReopenSettlement" />
+          </Else>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Tax Reporting Unit">
+              <Field source="Name" title="Name" />
+              <Field source="CurrencyVar" title="Currency" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="Sales{Amount}, Tax level 1">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Group title="Sales{Amount}, Tax level 3">
+                  <Field source="SalesSubjectToVATLevel3" title="Taxable" />
+                  <Field source="SalesExportLevel3" title="Export{noun}" />
+                  <Field source="NonVATExemptSalesLevel3Var" title="Taxable + Export" />
+                  <Field source="SalesFreeOfVATLevel3" title="Tax Exempt{VAT}" />
+                  <Field source="TotalSalesLevel3" title="Total Turnover" />
+                </Group>
+              </If>
+            </If>
+            <Group title="Taxes">
+              <Field source="OutgoingSum" title="Tax Payable" />
+              <Field source="AcquisitionVATSum" title="Acquisition Tax" />
+              <Field source="InvestmentTax" title="Investment Tax" />
+              <Field source="TaxesTotalVar" title="Total Taxes" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Group title="EU Revenue, Tax Level 3">
+                <Field source="EUPurchaseLevel3" title="EU Purchase" />
+                <Field source="EUSaleLevel3" title="EU Sale" />
+                <Field source="EUVATFreeSalesLevel3" title="Tax Exempt Sales" />
+              </Group>
+            </If>
+            <Group title="Deduction">
+              <Field source="IncomingSum" title="Tax Receivable" />
+              <Field source="OtherTaxes" title="Taxes" />
+              <Field source="TaxAllowanceTotalVar" title="Total Allowance" />
+            </Group>
+            <Group title="Reconciliation Tax">
+              <Field source="ReconciliationSum" title="Ratio Tax" />
+              <Field source="SalesTax" title="Sales Tax{sg}" />
+            </Group>
+            <Group title="Tax Settlement">
+              <Field source="Settlement" title="Tax Settlement" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Period">
+              <PeriodYearInterval firstPeriodSource="FromMonth" firstYearSource="FromYear" lastPeriodSource="ToMonth" lastYearSource="ToYear" title="Mth/Yr" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="Sales{Amount}, Tax level 2">
+                <Field source="SalesSubjectToVATLevel2" title="Taxable" />
+                <Field source="SalesExportLevel2" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel2Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVATLevel2" title="Tax Exempt{VAT}" />
+                <Field source="TotalSalesLevel2" title="Total Turnover" />
+              </Group>
+            </If>
+            <Else>
+              <Group title="Sales{Amount}">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+            </Else>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="EU Revenue, Tax Level 1">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+              <Group title="EU Revenue, Tax Level 2">
+                <Field source="EUPurchaseLevel2" title="EU Purchase" />
+                <Field source="EUSaleLevel2" title="EU Sale" />
+                <Field source="EUVATFreeSalesLevel2" title="Tax Exempt Sales" />
+              </Group>
+            </If>
+            <Else>
+              <Group title="EU Revenue">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+            </Else>
+            <Group title="Basis">
+              <Field source="BasisWithInvestmentTax" title="Incl. Investment Tax" />
+              <Field source="BasisWithoutInvestmentTax" title="Without Investment Tax" />
+            </Group>
+            <Group title="Status">
+              <If condition="CreatedByName != ''">
+                <Description template="^1 by ^2" arguments="DateMade;CreatedByName" title="Created" />
+              </If>
+              <Else>
+                <Description template="No" title="Created" />
+              </Else>
+              <If condition="ApprovedBy = ''">
+                <Field source="ChangedSinceCreateSettlement" title="Changed" />
+              </If>
+              <Else>
+                <Description template="^1 by ^2" arguments="ApprovedDate;ApprovedBy" title="Approved" />
+              </Else>
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Analysis">
+        <Actions>
+          <Print />
+          <PrintThis />
+          <Action source="PrintSettlement" />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Tax Reporting Unit">
+              <Field source="Name" title="Name" />
+              <Field source="CurrencyVar" title="Currency" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="Sales{Amount}, Tax level 1">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+              <Group title="Sales{Amount}, Tax level 2">
+                <Field source="SalesSubjectToVATLevel2" title="Taxable" />
+                <Field source="SalesExportLevel2" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel2Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVATLevel2" title="Tax Exempt{VAT}" />
+                <Field source="TotalSalesLevel2" title="Total Turnover" />
+              </Group>
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Group title="Sales{Amount}, Tax level 3">
+                  <Field source="SalesSubjectToVATLevel3" title="Taxable" />
+                  <Field source="SalesExportLevel3" title="Export{noun}" />
+                  <Field source="NonVATExemptSalesLevel3Var" title="Taxable + Export" />
+                  <Field source="SalesFreeOfVATLevel3" title="Tax Exempt{VAT}" />
+                  <Field source="TotalSalesLevel3" title="Total Turnover" />
+                </Group>
+              </If>
+            </If>
+            <Else>
+              <Group title="Sales{Amount}">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+            </Else>
+            <Group title="Taxes">
+              <Field source="OutgoingSum" title="Tax Payable" />
+              <Field source="AcquisitionVATSum" title="Acquisition Tax" />
+              <Field source="InvestmentTax" title="Investment Tax" />
+              <Field source="TaxesTotalVar" title="Total Taxes" />
+            </Group>
+            <Group title="Deduction">
+              <Field source="IncomingSum" title="Tax Receivable" />
+              <Field source="OtherTaxes" title="Taxes" />
+              <Field source="TaxAllowanceTotalVar" title="Total Allowance" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Period">
+              <PeriodYear periodSource="FromMonth" title="From Mth/Yr" yearSource="FromYear" />
+              <PeriodYear periodSource="ToMonth" title="To Mth/Yr" yearSource="ToYear" />
+            </Group>
+            <Group title="Tax Settlement">
+              <Field source="Settlement" title="Tax Settlement" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="EU Revenue, Tax Level 1">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+              <Group title="EU Revenue, Tax Level 2">
+                <Field source="EUPurchaseLevel2" title="EU Purchase" />
+                <Field source="EUSaleLevel2" title="EU Sale" />
+                <Field source="EUVATFreeSalesLevel2" title="Tax Exempt Sales" />
+              </Group>
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Group title="EU Revenue, Tax Level 3">
+                  <Field source="EUPurchaseLevel3" title="EU Purchase" />
+                  <Field source="EUSaleLevel3" title="EU Sale" />
+                  <Field source="EUVATFreeSalesLevel3" title="Tax Exempt Sales" />
+                </Group>
+              </If>
+            </If>
+            <Else>
+              <Group title="EU Revenue">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+            </Else>
+            <Group title="Basis">
+              <Field source="BasisWithInvestmentTax" title="Incl. Investment Tax" />
+              <Field source="BasisWithoutInvestmentTax" title="Without Investment Tax" />
+            </Group>
+            <Group title="Reconciliation Tax">
+              <Field source="ReconciliationSum" title="Ratio Tax" />
+              <Field source="SalesTax" title="Sales Tax{sg}" />
+            </Group>
+            <Group title="Status">
+              <Description template="^1 by ^2" arguments="DateMade;CreatedByName" title="Created" />
+              <If condition="ApprovedBy = ''">
+                <Field source="ChangedSinceCreateSettlement" title="Changed" />
+              </If>
+              <Else>
+                <Description template="^1 by ^2" arguments="ApprovedDate;ApprovedBy" title="Approved" />
+                <Field source="Reopened" />
+                <If condition="Reopened">
+                  <Description template="^1 by ^2" arguments="ReopenedDate;ReopenedBy" title="Reopened" />
+                </If>
+              </Else>
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="VATSettlement">
+        <Actions>
+          <Print />
+          <PrintThis />
+          <Action source="PrintSettlement" />
+          <If condition="ApprovedBy=''">
+            <Update />
+            <Action source="CreateSettlement" />
+            <Action source="ApproveSettlement" />
+          </If>
+          <Else>
+            <Action source="ReopenSettlement" />
+          </Else>
+        </Actions>
+        <Row>
+          <Column>
+            <Group>
+              <If condition="ExistsSettlementForSamePeriodVar">
+                <Description appearance="maximized" template="This tax settlement includes only adjustments, since there are other approved tax settlements for the same period" style="attentionText" />
+              </If>
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Tax Reporting Unit">
+              <Field source="Name" title="Name" />
+              <Field source="CurrencyVar" title="Currency" />
+            </Group>
+            <Group title="Deduction">
+              <Field source="IncomingSum" title="Tax Receivable" />
+              <Field source="OtherTaxes" title="Taxes" />
+              <Field source="TaxAllowanceTotalVar" title="Total Allowance" />
+            </Group>
+            <Group title="Tax Settlement">
+              <Field source="Settlement" title="Tax Settlement" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="EU Revenue, Tax Level 1">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+              <Group title="EU Revenue, Tax Level 2">
+                <Field source="EUPurchaseLevel2" title="EU Purchase" />
+                <Field source="EUSaleLevel2" title="EU Sale" />
+                <Field source="EUVATFreeSalesLevel2" title="Tax Exempt Sales" />
+              </Group>
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Group title="EU Revenue, Tax Level 3">
+                  <Field source="EUPurchaseLevel3" title="EU Purchase" />
+                  <Field source="EUSaleLevel3" title="EU Sale" />
+                  <Field source="EUVATFreeSalesLevel3" title="Tax Exempt Sales" />
+                </Group>
+              </If>
+            </If>
+            <Else>
+              <Group title="EU Revenue">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+            </Else>
+            <Group title="Status">
+              <If condition="CreatedByName != ''">
+                <Description template="^1 by ^2" arguments="DateMade;CreatedByName" title="Created" />
+              </If>
+              <Else>
+                <Description template="No" title="Created" />
+              </Else>
+              <If condition="ApprovedBy = ''">
+                <Field source="ChangedSinceCreateSettlement" title="Changed" />
+              </If>
+              <Else>
+                <Description template="^1 by ^2" arguments="ApprovedDate;ApprovedBy" title="Approved" />
+                <Field source="Reopened" />
+                <If condition="Reopened">
+                  <Description template="^1 by ^2" arguments="ReopenedDate;ReopenedBy" title="Reopened" />
+                </If>
+              </Else>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Period">
+              <PeriodYearInterval firstPeriodSource="FromMonth" firstYearSource="FromYear" lastPeriodSource="ToMonth" lastYearSource="ToYear" title="Mth/Yr" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="Sales{Amount}, Tax level 1">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+              <Group title="Sales{Amount}, Tax level 2">
+                <Field source="SalesSubjectToVATLevel2" title="Taxable" />
+                <Field source="SalesExportLevel2" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel2Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVATLevel2" title="Tax Exempt{VAT}" />
+                <Field source="TotalSalesLevel2" title="Total Turnover" />
+              </Group>
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Group title="Sales{Amount}, Tax level 3">
+                  <Field source="SalesSubjectToVATLevel3" title="Taxable" />
+                  <Field source="SalesExportLevel3" title="Export{noun}" />
+                  <Field source="NonVATExemptSalesLevel3Var" title="Taxable + Export" />
+                  <Field source="SalesFreeOfVATLevel3" title="Tax Exempt{VAT}" />
+                  <Field source="TotalSalesLevel3" title="Total Turnover" />
+                </Group>
+              </If>
+            </If>
+            <Else>
+              <Group title="Sales{Amount}">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+            </Else>
+            <Group title="Taxes">
+              <Field source="OutgoingSum" title="Tax Payable" />
+              <Field source="AcquisitionVATSum" title="Acquisition Tax" />
+              <Field source="InvestmentTax" title="Investment Tax" />
+              <Field source="TaxesTotalVar" title="Total Taxes" />
+            </Group>
+            <Group title="Reconciliation Tax">
+              <Field source="ReconciliationSum" title="Ratio Tax" />
+              <Field source="SalesTax" title="Sales Tax{sg}" />
+            </Group>
+            <Group title="Basis">
+              <Field source="BasisWithInvestmentTax" title="Incl. Investment Tax" />
+              <Field source="BasisWithoutInvestmentTax" title="Without Investment Tax" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_VATSettlement" open="hasRole('Finance Admin')">
+        <Actions>
+          <Print />
+          <PrintThis />
+          <Action source="PrintSettlement" />
+          <If condition="ApprovedBy=''">
+            <Update />
+            <Action source="CreateSettlement" />
+            <Action source="ApproveSettlement" />
+          </If>
+          <Else>
+            <Action source="ReopenSettlement" />
+          </Else>
+        </Actions>
+        <Row>
+          <Column>
+            <Group>
+              <If condition="ExistsSettlementForSamePeriodVar">
+                <Description appearance="maximized" template="This tax settlement includes only adjustments, since there are other approved tax settlements for the same period" style="attentionText" />
+              </If>
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Tax Reporting Unit">
+              <Field source="Name" title="Name" />
+              <Field source="CurrencyVar" title="Currency" />
+            </Group>
+            <Group title="Deduction">
+              <Field source="IncomingSum" title="Tax Receivable" />
+              <Field source="OtherTaxes" title="Taxes" />
+              <Field source="TaxAllowanceTotalVar" title="Total Allowance" />
+            </Group>
+            <Group title="Tax Settlement">
+              <Field source="Settlement" title="Tax Settlement" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="EU Revenue, Tax Level 1">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+              <Group title="EU Revenue, Tax Level 2">
+                <Field source="EUPurchaseLevel2" title="EU Purchase" />
+                <Field source="EUSaleLevel2" title="EU Sale" />
+                <Field source="EUVATFreeSalesLevel2" title="Tax Exempt Sales" />
+              </Group>
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Group title="EU Revenue, Tax Level 3">
+                  <Field source="EUPurchaseLevel3" title="EU Purchase" />
+                  <Field source="EUSaleLevel3" title="EU Sale" />
+                  <Field source="EUVATFreeSalesLevel3" title="Tax Exempt Sales" />
+                </Group>
+              </If>
+            </If>
+            <Else>
+              <Group title="EU Revenue">
+                <Field source="EUPurchase" title="EU Purchase" />
+                <Field source="EUSale" title="EU Sale" />
+                <Field source="EUVATFreeSales" title="Tax Exempt Sales" />
+              </Group>
+            </Else>
+            <Group title="Status">
+              <If condition="CreatedByName != ''">
+                <Description template="^1 by ^2" arguments="DateMade;CreatedByName" title="Created" />
+              </If>
+              <Else>
+                <Description template="No" title="Created" />
+              </Else>
+              <If condition="ApprovedBy = ''">
+                <Field source="ChangedSinceCreateSettlement" title="Changed" />
+              </If>
+              <Else>
+                <Description template="^1 by ^2" arguments="ApprovedDate;ApprovedBy" title="Approved" />
+                <Field source="Reopened" />
+                <If condition="Reopened">
+                  <Description template="^1 by ^2" arguments="ReopenedDate;ReopenedBy" title="Reopened" />
+                </If>
+              </Else>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Period">
+              <PeriodYearInterval firstPeriodSource="FromMonth" firstYearSource="FromYear" lastPeriodSource="ToMonth" lastYearSource="ToYear" title="Mth/Yr" />
+            </Group>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Group title="Sales{Amount}, Tax level 1">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+              <Group title="Sales{Amount}, Tax level 2">
+                <Field source="SalesSubjectToVATLevel2" title="Taxable" />
+                <Field source="SalesExportLevel2" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel2Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVATLevel2" title="Tax Exempt{VAT}" />
+                <Field source="TotalSalesLevel2" title="Total Turnover" />
+              </Group>
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Group title="Sales{Amount}, Tax level 3">
+                  <Field source="SalesSubjectToVATLevel3" title="Taxable" />
+                  <Field source="SalesExportLevel3" title="Export{noun}" />
+                  <Field source="NonVATExemptSalesLevel3Var" title="Taxable + Export" />
+                  <Field source="SalesFreeOfVATLevel3" title="Tax Exempt{VAT}" />
+                  <Field source="TotalSalesLevel3" title="Total Turnover" />
+                </Group>
+              </If>
+            </If>
+            <Else>
+              <Group title="Sales{Amount}">
+                <Field source="SalesSubjectToVAT" title="Taxable" />
+                <Field source="SalesExport" title="Export{noun}" />
+                <Field source="NonVATExemptSalesLevel1Var" title="Taxable + Export" />
+                <Field source="SalesFreeOfVAT" title="Tax Exempt{VAT}" />
+                <Field source="TotalSales" title="Total Turnover" />
+              </Group>
+            </Else>
+            <Group title="Taxes">
+              <Field source="OutgoingSum" title="Tax Payable" />
+              <Field source="AcquisitionVATSum" title="Acquisition Tax" />
+              <Field source="InvestmentTax" title="Investment Tax" />
+              <Field source="TaxesTotalVar" title="Total Taxes" />
+            </Group>
+            <Group title="Reconciliation Tax">
+              <Field source="ReconciliationSum" title="Ratio Tax" />
+              <Field source="SalesTax" title="Sales Tax{sg}" />
+            </Group>
+            <Group title="Basis">
+              <Field source="BasisWithInvestmentTax" title="Incl. Investment Tax" />
+              <Field source="BasisWithoutInvestmentTax" title="Without Investment Tax" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="VATSettlementType" />
+          <Field source="VATAccountReferenceName" />
+          <Field source="VATNature" />
+          <Field source="VATType" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATLevel" />
+          </If>
+          <Field source="DebitBasisReportingCurrency" />
+          <Field source="CreditBasisReportingCurrency" />
+          <Field source="MovementBasisCurrencyVar" title="Change Basis, Currency" />
+          <Field source="DebitVATReportingCurrency" />
+          <Field source="CreditVATReportingCurrency" />
+          <Field source="MovementVATCurrencyVar" title="Change Tax, Currency" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- MJA, 03/11/09: Corrections to auto-converted Original layouts. (38090).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- BPE, 01/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- BPE, 07/09/10: Renaming fields (38801).-->
+<!-- BPE, 08/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- PBO, 22/09/10: Implement conditional layout (38843).-->
+<!-- SBA, 09/03/11: Layout improvements (39471) -->
+<!-- PSZ, 11/04/11: Remove fixed text variables (39540).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="InvoiceDraftStatus">
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Boolean source="ShowApproved" />
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+              <Interval firstSource="FromJobNumber" lastSource="ToJobNumber" title="Job No." />
+              <Interval firstSource="FromCompanyNumber" lastSource="ToCompanyNumber" title="Company No." />
+              <Interval firstSource="FromSettlingCompanyNumber" lastSource="ToSettlingCompanyNumber" title="Settling Company No." />
+              <Interval firstSource="FromCustomerNumber" lastSource="ToCustomerNumber" title="Customer No." />
+              <Field source="CustomerGroup" appearance="interval" />
+              <Interval firstSource="FromPaymentCustomerNumber" lastSource="ToPaymentCustomerNumber" title="Payment Customer" />
+              <Field source="DepartmentNumber" appearance="interval" />
+              <Field source="SalesPersonNumber" appearance="interval" />
+              <Field source="EmployeeNumber1" title="Employee 1 No." appearance="interval" />
+              <Field source="EmployeeNumber2" title="Employee 2 No." appearance="interval" />
+              <Field source="EmployeeNumber3" title="Employee 3 No." appearance="interval" />
+              <Field source="EmployeeNumber4" title="Employee 4 No." appearance="interval" />
+              <Field source="EmployeeNumber5" title="Employee 5 No." appearance="interval" />
+              <Field source="EmployeeNumber6" title="Employee 6 No." appearance="interval" />
+              <Field source="EmployeeNumber7" title="Employee 7 No." appearance="interval" />
+              <Field source="EmployeeNumber8" title="Employee 8 No." appearance="interval" />
+              <Field source="EmployeeNumber9" title="Employee 9 No." appearance="interval" />
+              <Field source="EmployeeNumber10" title="Employee 10 No." appearance="interval" />
+            </Group>
+            <Group ref="DimensionsTargetGroupIntervals" />
+          </Column>
+          <Column>
+            <Group title="Totals">
+              <Grid style="grid_compact">
+                <Define>
+                  <Style name="AlertWriteUp" ref="trafficlightGreen" condition="fieldValue() gt 0" />
+                  <Style name="AlertWriteDown" ref="trafficlightRed" condition="fieldValue() lt 0" />
+                  <Style name="amounts" size="small" />
+                </Define>
+                <Header cells="|Invoice|;|Up/Down|" title="" style="grid_header" />
+                <Scope>
+                  <Style ref=";AlertWriteUp,AlertWriteDown" />
+                  <Row cells="TotalAmountCurrentEnterpriseVar+EnterpriseCurrencyVar;TotalUpDownCurrentEnterpriseVar+EnterpriseCurrencyVar" title="Current" />
+                  <Row cells="TotalAmountPriorEnterpriseVar+EnterpriseCurrencyVar;TotalUpDownPriorEnterpriseVar+EnterpriseCurrencyVar" title="Prior" />
+                  <Row cells="TotalInvoiceAmountEnterpriseVar+EnterpriseCurrencyVar;TotalUpDownEnterpriseVar+EnterpriseCurrencyVar" title="Total" />
+                </Scope>
+              </Grid>
+              <EmptyLabel />
+              <Field source="EnterpriseCurrencyVar" title="Enterprise Currency" />
+              <Field source="NumberOfInvoicesToApproveVar" title="Invoice Drafts to Approve" />
+              <Field source="NumberOfDraftsToPrintVar" title="Invoice Drafts to Print" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom">
+        <Actions all="not HasPMReadOnly()" />
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Boolean source="ShowApproved" />
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+              <Interval firstSource="FromJobNumber" lastSource="ToJobNumber" title="Job No." />
+              <Interval firstSource="FromCompanyNumber" lastSource="ToCompanyNumber" title="Company No." />
+              <Interval firstSource="FromSettlingCompanyNumber" lastSource="ToSettlingCompanyNumber" title="Settling Company No." />
+              <Interval firstSource="FromCustomerNumber" lastSource="ToCustomerNumber" title="Customer No." />
+              <Field source="CustomerGroup" appearance="interval" />
+              <Interval firstSource="FromPaymentCustomerNumber" lastSource="ToPaymentCustomerNumber" title="Payment Customer" />
+              <Field source="DepartmentNumber" appearance="interval" />
+              <Field source="SalesPersonNumber" appearance="interval" />
+              <Field source="EmployeeNumber1" title="Employee 1 No." appearance="interval" />
+              <Field source="EmployeeNumber2" title="Employee 2 No." appearance="interval" />
+              <Field source="EmployeeNumber3" title="Employee 3 No." appearance="interval" />
+              <Field source="EmployeeNumber4" title="Employee 4 No." appearance="interval" />
+              <Field source="EmployeeNumber5" title="Employee 5 No." appearance="interval" />
+              <Field source="EmployeeNumber6" title="Employee 6 No." appearance="interval" />
+              <Field source="EmployeeNumber7" title="Employee 7 No." appearance="interval" />
+              <Field source="EmployeeNumber8" title="Employee 8 No." appearance="interval" />
+              <Field source="EmployeeNumber9" title="Employee 9 No." appearance="interval" />
+              <Field source="EmployeeNumber10" title="Employee 10 No." appearance="interval" />
+            </Group>
+            <Group ref="DimensionsTargetGroupIntervals" />
+          </Column>
+          <Column>
+            <Group title="Totals">
+              <Grid style="grid_compact">
+                <Define>
+                  <Style name="AlertWriteUp" ref="trafficlightGreen" condition="fieldValue() gt 0" />
+                  <Style name="AlertWriteDown" ref="trafficlightRed" condition="fieldValue() lt 0" />
+                  <Style name="amounts" size="small" />
+                </Define>
+                <Header cells="|Invoice|;|Up/Down|" title="" style="grid_header" />
+                <Scope>
+                  <Style ref=";AlertWriteUp,AlertWriteDown" />
+                  <Row cells="TotalAmountCurrentEnterpriseVar+EnterpriseCurrencyVar;TotalUpDownCurrentEnterpriseVar+EnterpriseCurrencyVar" title="Current" />
+                  <Row cells="TotalAmountPriorEnterpriseVar+EnterpriseCurrencyVar;TotalUpDownPriorEnterpriseVar+EnterpriseCurrencyVar" title="Prior" />
+                  <Row cells="TotalInvoiceAmountEnterpriseVar+EnterpriseCurrencyVar;TotalUpDownEnterpriseVar+EnterpriseCurrencyVar" title="Total" />
+                </Scope>
+              </Grid>
+              <EmptyLabel />
+              <Field source="EnterpriseCurrencyVar" title="Enterprise Currency" />
+              <Field source="NumberOfInvoicesToApproveVar" title="Invoice Drafts to Approve" />
+              <Field source="NumberOfDraftsToPrintVar" title="Invoice Drafts to Print" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+        <Function name="IsWrittenUp" value="UpDownCurrencyVar gt 0" />
+        <Function name="IsWrittenDown" value="UpDownCurrencyVar lt 0" />
+        <Style name="AlertWriteUp" ref="trafficlightGreen" condition="IsWrittenUp()" />
+        <Style name="AlertWriteDown" ref="trafficlightRed" condition="IsWrittenDown()" />
+        <Style name="DraftDue" parameters="Date Approved" ref="trafficlightRed" condition="Date != date(nulldate) and Date lt currentDate() and not Approved" />
+        <Function name="IsCreditMemo" value="DebitCredit like 'Credit'" />
+        <Style name="HighlightCreditMemo" ref="highlightOppositeSign" condition="IsCreditMemo()" />
+      </Define>
+      <Table name="Full" style="HighlightCreditMemo">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" title="Job No." />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="PaymentCustomer" title="Bill to Customer No." />
+          <Field source="PaymentCustomerNameVar" title="Bill to Customer" />
+          <Field source="DebitCredit" title="Type" size="tiny" />
+          <Field source="InvoiceCurrency" size="tiny" />
+          <UnitField source="BillingPriceForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Amount for Invoicing" size="small" />
+          <UnitField source="UpDownCurrencyVar" unitSource="Currency" title="Up/Down" style="AlertWriteUp,AlertWriteDown" size="small" />
+          <Field source="ApprovedForInvoicing" title="Approved" />
+          <Field source="SelectedForInvoiceDraftApproval" />
+          <Field source="CreatedDate" style="DraftDue(CreatedDate,ApprovedForInvoicing)" />
+          <Field source="ProjectManagerVar" title="Project Manager" />
+          <Field source="SelectedForInvoiceDraftPrinting" />
+          <Field source="InvoiceDateVar" title="Invoice Date" />
+          <Field source="TotalInclVATInvoiceCurrencyVar" title="Total Incl. Tax" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VAT1ForInvoicingInvoiceCurrency" title="Tax 1, Invoice Currency" />
+            <Field source="VAT2ForInvoicingInvoiceCurrency" title="Tax 2, Invoice Currency" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VAT3ForInvoicingInvoiceCurrency" title="Tax 3, Invoice Currency" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATForInvoicingInvoiceCurrency" title="Tax, Invoice Currency" />
+          </Else>
+          <Field source="InvoiceDiscountPercentage" />
+          <Field source="InvoiceDiscountInvoiceCurrency" title="Invoice Discount, Invoice Currency" />
+          <Field source="InvoiceDiscountCurrencyVar" title="Invoice Discount, Currency" />
+          <Field source="InvoicedPriorCurrencyVar" title="Invoiced Prior, Currency" />
+          <Field source="UpDownPriorCurrencyVar" title="Up/Down Prior, Currency" />
+          <Field source="NetOnAccountCurrencyVar" title="Net on Account, Currency" />
+          <Field source="InvoiceName" />
+          <Field source="TotalInclVATCurrencyVar" title="Total Incl. Tax, Currency" />
+          <Field source="Currency" />
+          <Field source="DraftNumber" />
+          <Field source="InvoiceAmountBaseVar" title="Invoice Amount, Base" />
+          <Field source="UpDownBaseVar" title="Up/Down, Base" />
+          <Field source="InvoiceDiscountBaseVar" title="Invoice Discount, Base" />
+          <Field source="InvoicedPriorBaseVar" title="Invoiced Prior, Base" />
+          <Field source="UpDownPriorBaseVar" title="Up/Down Prior, Base" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VAT1BaseVar" title="Tax 1, Base" />
+            <Field source="VAT2BaseVar" title="Tax 2, Base" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VAT3BaseVar" title="Tax 3, Base" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATBaseVar" title="Tax, Base" />
+          </Else>
+          <Field source="NetOnAccountBaseVar" title="Net on Account, Base" />
+          <Field source="TotalInclVATBaseVar" title="Total Incl. Tax, Base" />
+          <Field source="BaseCurrency" />
+          <Field source="ProjectManagerNumber" />
+          <Field source="CreatedBy" />
+          <Field source="DepartmentNumber" />
+          <Field source="SalesPersonNumber" />
+          <Field source="SalesPerson" />
+          <Field source="CustomerGroup" />
+          <Field source="CustomerNumber" />
+          <Field source="CustomerNameVar" title="Customer" />
+          <Field source="CompanyNumber" />
+          <Field source="CompanyNameVar" title="Company" />
+          <Field source="SettlingCompany" />
+          <Field source="SettlingCompanyNameVar" title="Settling Company" />
+          <Columns ref="DimensionColumns" />
+          <Field source="EmployeeNumber1" />
+          <Field source="EmployeeNumber2" />
+          <Field source="EmployeeNumber3" />
+          <Field source="EmployeeNumber4" />
+          <Field source="EmployeeNumber5" />
+          <Field source="EmployeeNumber6" />
+          <Field source="EmployeeNumber7" />
+          <Field source="EmployeeNumber8" />
+          <Field source="EmployeeNumber9" />
+          <Field source="EmployeeNumber10" />
+        </Columns>
+      </Table>
+      <Table name="Standard" style="HighlightCreditMemo">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" title="Job No." />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="PaymentCustomer" title="Bill to Customer No." />
+          <Field source="PaymentCustomerNameVar" title="Bill to Customer" />
+          <Field source="DebitCredit" title="Type" size="tiny" />
+          <Field source="InvoiceCurrency" size="tiny" />
+          <UnitField source="BillingPriceForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Amount for Invoicing" size="small" />
+          <UnitField source="UpDownCurrencyVar" unitSource="Currency" title="Up/Down" style="AlertWriteUp,AlertWriteDown" size="small" />
+          <Field source="ApprovedForInvoicing" title="Approved" />
+          <Field source="SelectedForInvoiceDraftApproval" />
+          <Field source="CreatedDate" style="DraftDue(CreatedDate,ApprovedForInvoicing)" />
+          <Field source="ProjectManagerVar" title="Project Manager" />
+          <Field source="SelectedForInvoiceDraftPrinting" />
+          <Field source="InvoiceDateVar" title="Invoice Date" />
+          <UnitField source="TotalInclVATInvoiceCurrencyVar" unitSource="InvoiceCurrency" title="Total Incl. Tax" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <UnitField source="VAT1ForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax 1, Invoice Currency" />
+            <UnitField source="VAT2ForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax 2, Invoice Currency" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <UnitField source="VAT3ForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax 3, Invoice Currency" />
+            </If>
+          </If>
+          <Else>
+            <UnitField source="VATForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax, Invoice Currency" />
+          </Else>
+          <Field source="InvoiceDiscountPercentage" />
+          <UnitField source="InvoiceDiscountInvoiceCurrency" unitSource="InvoiceCurrency" title="Invoice Discount, Invoice Currency" />
+          <UnitField source="InvoiceDiscountCurrencyVar" unitSource="Currency" title="Invoice Discount, Currency" />
+          <UnitField source="InvoicedPriorCurrencyVar" unitSource="Currency" title="Invoiced Prior, Currency" />
+          <UnitField source="UpDownPriorCurrencyVar" unitSource="Currency" title="Up/Down Prior, Currency" />
+          <UnitField source="NetOnAccountCurrencyVar" unitSource="Currency" title="Net on Account, Currency" />
+          <Field source="InvoiceName" />
+          <UnitField source="TotalInclVATCurrencyVar" unitSource="Currency" title="Total Incl. Tax, Currency" />
+          <Field source="Currency" />
+          <Field source="DraftNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Table>
+      <Table name="Custom" style="HighlightCreditMemo">
+        <Actions all="not HasPMReadOnly()" />
+        <Columns>
+          <!-- <Link title="Link" workspace="DraftInvoices" template="Go to DraftInvoice" >
+          	<Waypoint pane="InvoiceEditing_Card">
+          		<Focus>
+          			<Match value="JobNumber" field="JobNumber" />
+          		</Focus>
+          	</Waypoint>
+          	<Target pane="InvoiceEditing_Card">
+          		<Restriction template="Jobnumber" expression="JobNumber = target.JobNumber" />
+          	</Target>
+          </Link> -->
+          <!-- <Link title="Link" workspace="DraftInvoices" template="Draft Invoice" >
+          	<Target pane="InvoiceEditing_Filter">
+              <Restriction template="All Drafts" expression="JobNumber=target.JobNumber" />
+              <Focus>
+                <Match field="JobNumber" value="JobNumber" />
+              </Focus>
+            </Target>
+           </Link> -->
+          <Field source="JobNumber" title="Job No." />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="PaymentCustomer" title="Bill to Customer No." />
+          <Field source="PaymentCustomerNameVar" title="Bill to Customer" />
+          <Field source="DebitCredit" title="Type" size="tiny" />
+          <Field source="InvoiceCurrency" size="tiny" />
+          <UnitField source="BillingPriceForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Amount for Invoicing" size="small" />
+          <UnitField source="UpDownCurrencyVar" unitSource="Currency" title="Up/Down" style="AlertWriteUp,AlertWriteDown" size="small" />
+          <Field source="ApprovedForInvoicing" title="Approved" />
+          <Field source="SelectedForInvoiceDraftApproval" />
+          <Field source="CreatedDate" style="DraftDue(CreatedDate,ApprovedForInvoicing)" />
+          <Field source="ProjectManagerVar" title="Project Manager" />
+          <Field source="SelectedForInvoiceDraftPrinting" />
+          <Field source="InvoiceDateVar" title="Invoice Date" />
+          <Field source="TotalInclVATInvoiceCurrencyVar" title="Total Incl. Tax" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VAT1ForInvoicingInvoiceCurrency" title="Tax 1, Invoice Currency" />
+            <Field source="VAT2ForInvoicingInvoiceCurrency" title="Tax 2, Invoice Currency" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VAT3ForInvoicingInvoiceCurrency" title="Tax 3, Invoice Currency" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATForInvoicingInvoiceCurrency" title="Tax, Invoice Currency" />
+          </Else>
+          <Field source="InvoiceDiscountPercentage" />
+          <Field source="InvoiceDiscountInvoiceCurrency" title="Invoice Discount, Invoice Currency" />
+          <Field source="InvoiceDiscountCurrencyVar" title="Invoice Discount, Currency" />
+          <Field source="InvoicedPriorCurrencyVar" title="Invoiced Prior, Currency" />
+          <Field source="UpDownPriorCurrencyVar" title="Up/Down Prior, Currency" />
+          <Field source="NetOnAccountCurrencyVar" title="Net on Account, Currency" />
+          <Field source="InvoiceName" />
+          <Field source="TotalInclVATCurrencyVar" title="Total Incl. Tax, Currency" />
+          <Field source="Currency" />
+          <Field source="DraftNumber" />
+          <Field source="InvoiceAmountBaseVar" title="Invoice Amount, Base" />
+          <Field source="UpDownBaseVar" title="Up/Down, Base" />
+          <Field source="InvoiceDiscountBaseVar" title="Invoice Discount, Base" />
+          <Field source="InvoicedPriorBaseVar" title="Invoiced Prior, Base" />
+          <Field source="UpDownPriorBaseVar" title="Up/Down Prior, Base" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VAT1BaseVar" title="Tax 1, Base" />
+            <Field source="VAT2BaseVar" title="Tax 2, Base" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VAT3BaseVar" title="Tax 3, Base" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATBaseVar" title="Tax, Base" />
+          </Else>
+          <Field source="NetOnAccountBaseVar" title="Net on Account, Base" />
+          <Field source="TotalInclVATBaseVar" title="Total Incl. Tax, Base" />
+          <Field source="BaseCurrency" />
+          <Field source="ProjectManagerNumber" />
+          <Field source="CreatedBy" />
+          <Field source="DepartmentNumber" />
+          <Field source="SalesPersonNumber" />
+          <Field source="SalesPerson" />
+          <Field source="CustomerGroup" />
+          <Field source="CustomerNumber" />
+          <Field source="CustomerNameVar" title="Customer" />
+          <Field source="CompanyNumber" />
+          <Field source="CompanyNameVar" title="Company" />
+          <Field source="SettlingCompany" />
+          <Field source="SettlingCompanyNameVar" title="Settling Company" />
+          <Columns ref="DimensionColumns" />
+          <Field source="EmployeeNumber1" />
+          <Field source="EmployeeNumber2" />
+          <Field source="EmployeeNumber3" />
+          <Field source="EmployeeNumber4" />
+          <Field source="EmployeeNumber5" />
+          <Field source="EmployeeNumber6" />
+          <Field source="EmployeeNumber7" />
+          <Field source="EmployeeNumber8" />
+          <Field source="EmployeeNumber9" />
+          <Field source="EmployeeNumber10" />
+        </Columns>
+      </Table>
+      <Table name="Standard" style="HighlightCreditMemo">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" title="Job No." />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="PaymentCustomer" title="Bill to Customer No." />
+          <Field source="PaymentCustomerNameVar" title="Bill to Customer" />
+          <Field source="DebitCredit" title="Type" size="tiny" />
+          <Field source="InvoiceCurrency" size="tiny" />
+          <UnitField source="BillingPriceForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Amount for Invoicing" size="small" />
+          <UnitField source="UpDownCurrencyVar" unitSource="Currency" title="Up/Down" style="AlertWriteUp,AlertWriteDown" size="small" />
+          <Field source="ApprovedForInvoicing" title="Approved" />
+          <Field source="SelectedForInvoiceDraftApproval" />
+          <Field source="CreatedDate" style="DraftDue(CreatedDate,ApprovedForInvoicing)" />
+          <Field source="ProjectManagerVar" title="Project Manager" />
+          <Field source="SelectedForInvoiceDraftPrinting" />
+          <Field source="InvoiceDateVar" title="Invoice Date" />
+          <UnitField source="TotalInclVATInvoiceCurrencyVar" unitSource="InvoiceCurrency" title="Total Incl. Tax" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <UnitField source="VAT1ForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax 1, Invoice Currency" />
+            <UnitField source="VAT2ForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax 2, Invoice Currency" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <UnitField source="VAT3ForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax 3, Invoice Currency" />
+            </If>
+          </If>
+          <Else>
+            <UnitField source="VATForInvoicingInvoiceCurrency" unitSource="InvoiceCurrency" title="Tax, Invoice Currency" />
+          </Else>
+          <Field source="InvoiceDiscountPercentage" />
+          <UnitField source="InvoiceDiscountInvoiceCurrency" unitSource="InvoiceCurrency" title="Invoice Discount, Invoice Currency" />
+          <UnitField source="InvoiceDiscountCurrencyVar" unitSource="Currency" title="Invoice Discount, Currency" />
+          <UnitField source="InvoicedPriorCurrencyVar" unitSource="Currency" title="Invoiced Prior, Currency" />
+          <UnitField source="UpDownPriorCurrencyVar" unitSource="Currency" title="Up/Down Prior, Currency" />
+          <UnitField source="NetOnAccountCurrencyVar" unitSource="Currency" title="Net on Account, Currency" />
+          <Field source="InvoiceName" />
+          <UnitField source="TotalInclVATCurrencyVar" unitSource="Currency" title="Total Incl. Tax, Currency" />
+          <Field source="Currency" />
+          <Field source="DraftNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

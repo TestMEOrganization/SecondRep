@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--841000389749e0365e174feaa09a1113e1375dc4-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--e0f252d884f97708fce5d1d68531972e8e6b3e24-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 93b5acab6048c24ca90da2dccb2a608d   3 _ _   213
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 28.10.2011
+  TAC_CreationTime: 14:31:39
+  TAC*MaconomyHQ: yes
+-->
+<!-- MJA, 23/10/09: New workspace (38067).-->
+<!-- MJA, 14/01/10: Updated after design review (38067).-->
+<!-- KRN, 14/07/10: Show details only if job is set up for revenue recognition (38651).-->
+<!-- KRN, 13/08/10: Demo layout used (38644).-->
+<!-- BPE, 19/01/11: Updating foreign keys (39350).-->
+<!-- PSZ, 11/07/11: PSO Jobs workspace changes (39759).-->
+<!-- AGB, 06/09/11: Added "Job Progress History" workspace to "Jobs" workspace (39867).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="JobProgress" title="Progress Evaluation">
+    <Card source="JobProgress" view="Custom" title="Progress Evaluation" >
+      <With>
+        <Table title="Tasks">
+          <!-- <Expansions minimized="true">
+						<Bind foreignKey="primary">
+							<Table source="TaskProgress" view="Standard" title="ETC from Time Sheet" />
+						</Bind>
+					</Expansions>-->
+        </Table>
+      </With>
+    </Card>
+    <!-- <Hidden source="Jobs">
+      <Restrict reversedForeignKey="JobNumber_JobHeader">
+        <Filter source="JobProgressHistory" title="History" view="JobProgress">
+          <Expansions minimized="false">
+            <With>
+              <Card view="Updated" title="Job Progress History">
+                <With>
+                  <Table view="UpdatedHours" title="Hours" />
+                  <Table view="UpdatedCost" title="Cost" />
+                </With>
+              </Card>
+            </With>
+          </Expansions>
+        </Filter>
+      </Restrict>
+    </Hidden>
+    <Card source="JobRevenueRecognitionDetails" view="Demo" title="Revenue Recognition" hidden="not parent.RecognizeRevenueByCompletionPct">
+      <With>
+        <Table view="Full" title="Revenue Recognition Groups" />
+      </With>
+    </Card> -->
+  </Workspace>
+</MWSL>
+

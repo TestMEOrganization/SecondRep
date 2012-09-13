@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 08/12/11: New Format Specification workspace (40281).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="FormatSpecification" title="Format Specification">
+    <Formation>
+      <Section title="Payment">
+        <Mount>
+          <Filter source="SpecOfOutgoingPaymentFormats" view="Standard" title="List of Formats" name="PaymentFormatFilter">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Format">
+                  <Assistants parentSize="large">
+                    <Bind foreignKey="OutputDataFormatName_OutputDataFormat">
+                      <Card source="SpecOfOutputDataFormats" view="Full" hidden="Parent.OutputDataFormatName=''" title="Output Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                    <Bind foreignKey="InputDataFormatName_InputDataFormat">
+                      <Card source="SpecOfInputDataFormats" view="Full" hidden="Parent.InputDataFormatName=''" title="Input Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                  </Assistants>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfOutgoingPaymentForms" view="Standard" title="List of Forms" name="PaymentFormFilter">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Form" />
+              </With>
+            </Expansions>
+          </Filter>
+          <Card source="ExportPaymentForms" view="Full" title="Export Forms">
+            <With>
+              <Table view="Full" title="Forms" />
+            </With>
+          </Card>
+        </Mount>
+      </Section>
+      <Section title="Customer Payment">
+        <Mount>
+          <Filter source="SpecOfCustomerPaymentFormats" view="Standard" title="List of Formats" name="CustomerPaymentFormatFilter">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Format">
+                  <Assistants parentSize="large">
+                    <Bind foreignKey="OutputDataFormatName_OutputDataFormat">
+                      <Card source="SpecOfOutputDataFormats" view="Full" hidden="Parent.OutputDataFormatName=''" title="Output Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                    <Bind foreignKey="InputDataFormatName_InputDataFormat">
+                      <Card source="SpecOfInputDataFormats" view="Full" hidden="Parent.InputDataFormatName=''" title="Input Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                  </Assistants>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfCustomerPaymentForms" view="Standard" title="List of Forms" name="CustomerPaymentFormFilter">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Form" />
+              </With>
+            </Expansions>
+          </Filter>
+          <Card source="ExportCustomerPaymentForms" view="Full" title="Export Forms">
+            <With>
+              <Table view="Full" title="Forms" />
+            </With>
+          </Card>
+        </Mount>
+      </Section>
+      <Section title="Import">
+        <Mount>
+          <Filter source="SpecOfImportFormats" view="Standard" title="List of Formats">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Format">
+                  <Assistants parentSize="large">
+                    <Bind foreignKey="OutputDataFormatName_OutputDataFormat">
+                      <Card source="SpecOfOutputDataFormats" view="Full" hidden="Parent.OutputDataFormatName=''" title="Output Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                    <Bind foreignKey="InputDataFormatName_InputDataFormat">
+                      <Card source="SpecOfInputDataFormats" view="Full" hidden="Parent.InputDataFormatName=''" title="Input Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                  </Assistants>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfImportForms" view="Standard" title="List of Forms">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Form" />
+              </With>
+            </Expansions>
+          </Filter>
+          <Card source="ExportImportForms" view="Full" title="Export Forms">
+            <With>
+              <Table view="Full" title="Forms" />
+            </With>
+          </Card>
+        </Mount>
+      </Section>
+      <Section title="Export">
+        <Mount>
+          <Filter source="SpecOfExportFormats" view="Standard" title="List of Formats">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Format">
+                  <Assistants parentSize="large">
+                    <Bind foreignKey="OutputDataFormatName_OutputDataFormat">
+                      <Card source="SpecOfOutputDataFormats" view="Full" hidden="Parent.OutputDataFormatName=''" title="Output Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                    <Bind foreignKey="InputDataFormatName_InputDataFormat">
+                      <Card source="SpecOfInputDataFormats" view="Full" hidden="Parent.InputDataFormatName=''" title="Input Data Format">
+                        <With>
+                          <Table view="Full" title="Substitution Tables" />
+                        </With>
+                      </Card>
+                    </Bind>
+                  </Assistants>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfExportForms" view="Standard" title="List of Forms">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Form" />
+              </With>
+            </Expansions>
+          </Filter>
+          <Card source="ExportExportForms" view="Full" title="Export Forms">
+            <With>
+              <Table view="Full" title="Forms" />
+            </With>
+          </Card>
+        </Mount>
+      </Section>
+      <Section title="Output Data">
+        <Mount>
+          <Filter source="SpecOfOutputDataFormats" view="Standard" title="List of Formats" name="OutputDataFormatFilter">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Format">
+                  <Expansions>
+                    <With>
+                      <Table view="Full" />
+                    </With>
+                  </Expansions>
+                  <Assistants enlarged="true">
+                    <Restrict reversedForeignKey="OutputDataFormatName_OutputDataFormat">
+                      <Filter source="SpecOfOutputDataForms" view="Standard" title="Forms">
+                        <Restrict reversedForeignKey="OutputDataFormandFormatName_OutputDataForm">
+                          <Filter source="SpecOfOutputDataRecords" view="Standard" title="Records">
+                            <Mount>
+                              <Filter source="SpecOfOutputDataFields" view="Record" title="Fields" />
+                            </Mount>
+                          </Filter>
+                        </Restrict>
+                      </Filter>
+                    </Restrict>
+                  </Assistants>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfOutputDataForms" view="Standard" title="List of Forms">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Form">
+                  <With>
+                    <Table view="Full" />
+                  </With>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfOutputDataRecords" view="Standard" title="List of Records">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Record">
+                  <With>
+                    <Table view="Full" title="Fields" />
+                  </With>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfOutputDataFields" view="Standard" title="List of Fields">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Field" />
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Input Data">
+        <Mount>
+          <Filter source="SpecOfInputDataFormats" view="Standard" title="List of Formats" name="InputDataFormatFilter">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Format">
+                  <Expansions>
+                    <With>
+                      <Table view="Full" title="Substitution Tables" />
+                    </With>
+                  </Expansions>
+                  <Assistants enlarged="true">
+                    <Restrict reversedForeignKey="InputDataFormatName_InputDataFormat">
+                      <Filter source="SpecOfInputDataForms" view="Standard" title="Forms">
+                        <Restrict reversedForeignKey="InputDataFormAndFormatName_InputDataForm">
+                          <Filter source="SpecOfInputDataRecords" view="Standard" title="Records">
+                            <Mount>
+                              <Filter source="SpecOfInputDataFields" view="Record" title="Fields" />
+                            </Mount>
+                          </Filter>
+                        </Restrict>
+                      </Filter>
+                    </Restrict>
+                  </Assistants>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfInputDataForms" view="Standard" title="List of Forms">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Form" />
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfInputDataRecords" view="Standard" title="List of Records">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Record">
+                  <With>
+                    <Table view="Full" title="Fields" />
+                  </With>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="SpecOfInputDataFields" view="Standard" title="List of Fields">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Field" />
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+    </Formation>
+  </Workspace>
+</MWSL>
+

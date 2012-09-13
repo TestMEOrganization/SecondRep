@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 29/01/10: Minimal and Overview views added for Companies workspace (37818).-->
+<!-- CSK, 05/02/10: Predefined filters added to Minimal filter (37818).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- SJK, 21/05/10: Filter button restrictions converted to common expression language (38492).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- BPE, 09/09/10: Changed layout to use global definition dimensions (38815). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 01/12/10: Overview view improved (39093).-->
+<!-- CSK, 25/02/11: New Overview_Vertical view added, used as entry assistant (39379).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 26/07/11: New Home filter and form for Fixed Assets (39789).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- CSK, 21/10/11: Creation wizard title updated (40064).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="Assets">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="DescriptionOfAsset;AssetNumber;AssetGroup" />
+        </Compact>
+        <Columns>
+          <Field source="AssetNumber" />
+          <Field source="AssetGroup" />
+          <Field source="AssetSubGroup" />
+          <Field source="DescriptionOfAsset" />
+          <Field source="Responsible" />
+          <Field source="SeriesNumber" />
+          <Field source="InternalSerialNumber" />
+          <Field source="AcquisitionDate" />
+          <Field source="CompanyNumber" />
+        </Columns>
+      </Filter>
+      <Filter name="Home">
+        <Actions>
+          <If condition="hasWorkspace('FixedAssets')">
+            <Action source="with.Create" wizard="MDK_CreateAssetWizard" disabled="false" />
+          </If>
+        </Actions>
+        <ControlBar>
+          <Selection default="MyAssets">
+            <Option name="MyAssets" title="My Assets" restriction="Responsible = userEmployeeNumber()" />
+            <Option name="OpenAssets" title="Open Assets" restriction="DateClosed = date(nulldate)" />
+            <Option name="AssetsWithBookValue" title="Valuable Assets" restriction="PostedValue != amount(0.00)" />
+            <Option name="AllAssets" title="All Assets" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="DescriptionOfAsset;AssetNumber;AssetGroup" />
+        </Compact>
+        <Columns>
+          <Field source="AssetNumber" />
+          <Field source="AssetGroup" />
+          <Field source="DescriptionOfAsset" />
+          <Field source="SeriesNumber" />
+          <Field source="InternalSerialNumber" />
+          <If condition="not maconomy:isSelectedOption('MyAssets')">
+            <Field source="Responsible" />
+          </If>
+          <Field source="CompanyNumber" />
+          <Field source="AcquisitionDate" />
+          <Field source="AcquisitionPrice" />
+          <Field source="MarketValue" />
+          <Field source="PostedValue" />
+          <If condition="not maconomy:isSelectedOption('OpenAssets')">
+            <Field source="DateClosed" />
+          </If>
+        </Columns>
+      </Filter>
+      <Filter name="Minimal">
+        <ControlBar>
+          <Selection default="OpenAssets">
+            <Option name="OpenAssets" title="Open Assets" restriction="DateClosed = date(nulldate)" />
+            <Option name="AssetsWithBookValue" title="Valuable Assets" restriction="PostedValue != amount(0.00)" />
+            <Option name="AllAssets" title="All Assets" />
+          </Selection>
+        </ControlBar>
+        <Columns>
+          <Field source="AssetNumber" />
+          <Field source="AssetGroup" />
+          <Field source="DescriptionOfAsset" />
+          <Field source="Responsible" />
+          <Field source="AcquisitionDate" />
+          <Field source="AcquisitionPrice" />
+          <Field source="MarketValue" />
+          <Field source="PostedValue" />
+          <Field source="DateClosed" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Wizard name="CreateAssetWizard" title="Create Asset">
+        <Page form="CreateAssetWizardPage1" title="Step 1 of 2" description="Please enter the asset group. Company and transaction type cannot be changed later." />
+        <Page form="CreateAssetWizardPage2" title="Step 2 of 2" description="Please enter the acquisition date. If cost is specified an acquisition will be created automatically." />
+      </Wizard>
+      <Wizard name="MDK_CreateAssetWizard" title="Create Asset">
+        <Page form="MDK_CreateAssetWizardPage1" title="Step 1 of 2" description="Please enter the asset group. Company and transaction type cannot be changed later." />
+        <Page form="MDK_CreateAssetWizardPage2" title="Step 2 of 2" description="Please enter the acquisition date. If cost is specified an acquisition will be created automatically." />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('FixedAssets')">
+              <Create />
+            </If>
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column style="fullWidth">
+            <Group title="Asset Information">
+              <Field source="AssetNumber" />
+              <Field source="AssetGroup" />
+              <Field source="AssetSubGroup" />
+              <Field source="DescriptionOfAsset" />
+              <Field source="Model" />
+              <Field source="AssetLocation" />
+              <Field source="SeriesNumber" />
+              <Field source="InternalSerialNumber" />
+            </Group>
+            <Group title="Financial Information">
+              <Field source="RateableValue" />
+              <Field source="MarketValue" />
+              <Field source="Mortgage" />
+              <Field source="InsuredValue" />
+              <Field source="PolicyNumber" />
+              <Field source="InternalMarkUp" />
+              <Boolean source="BoughtFromEnterpriseCompany" />
+            </Group>
+            <Group title="Depreciation Information">
+              <Boolean source="ManualDepreciation" />
+              <Field source="DepreciationMethod" />
+              <Field source="DepreciationPeriod" />
+              <Field source="LastDepreciation" />
+            </Group>
+            <Group title="Transaction">
+              <Field source="TransactionTypeVar" title="Transaction Type" size="large" />
+              <Field source="TransactionNumberSeriesVar" title="Transaction Number Series{sg}" size="large" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Contact">
+              <Reference foreignKey="Responsible_Employee" title="Responsible" />
+              <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+              <Field source="BaseCurrencyVar" title="Base Currency" />
+            </Group>
+            <Group ref="DimensionGroup" />
+            <Group title="History{Asset Information}">
+              <Field source="AcquisitionDate" size="large" />
+              <Field source="AcquisitionResponsible" title="Acquisition Responsible" />
+              <Field source="DateClosed" />
+              <Field source="ClosedByResponsible" title="Closing Responsible" />
+              <Field source="TransferredToAssetNumber" title="Transferred To" />
+              <Boolean source="TaxAmount" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Depreciable Value">
+              <Grid style="grid_compact">
+                <Header cells="|Base Currency|;|Enterprise Currency|" title="" style="grid_header" />
+                <Row cells="BaseCurrencyVar;EnterpriseCurrencyVar" title="Currency" />
+                <Row cells="AcquisitionPriceVar;AcquisitionPriceEnterprise" title="Cost{Asset}" />
+                <Row cells="NonDepreciable;NonDepreciableEnterprise" title="Non-Depreciable{abbr 1}" />
+                <Row cells="ResidualValue;ResidualValueEnterprise" title="Residual Value" />
+                <Row cells="ImprovementTotal;ImprovementTotalEnterprise" title="Improvements" />
+                <Row cells="WriteUpTotal;WriteUpTotalEnterprise" title="Write-Ups" />
+                <Row cells="WriteDownTotal;WriteDownTotalEnterprise" title="Write-Downs" />
+                <Row cells="DepreciableValue;DeprecBasisEnterprise" title="Depreciable Value" />
+              </Grid>
+            </Group>
+            <Group title="Net Book Value">
+              <Grid style="grid_compact">
+                <Header cells="|Base Currency|;|Enterprise Currency|" title="" style="grid_header" />
+                <Row cells="BaseCurrencyVar;EnterpriseCurrencyVar" title="Currency" />
+                <Row cells="AcquisitionPrice;AcquisitionPriceEnterprise" title="Cost{Asset}" />
+                <Row cells="ImprovementTotal;ImprovementTotalEnterprise" title="Improvements" />
+                <Row cells="WriteUpTotal;WriteUpTotalEnterprise" title="Write-Ups" />
+                <Row cells="DepreciationTotal;DepreciationTotalEnterprise" title="Depreciation" />
+                <Row cells="WriteDownTotal;WriteDownTotalEnterprise" title="Write-Downs" />
+                <Row cells="PostedValue;PostedValueEnterprise" title="Book Value" />
+              </Grid>
+            </Group>
+            <Group title="Document Archive" style="fullWidth">
+              <Reference foreignKey="DocumentArchiveNumber_DocumentArchiveHeader" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Technical Data">
+            <Field source="TechnicalData1" appearance="maximized" />
+            <Field source="TechnicalData2" appearance="maximized" />
+            <Field source="TechnicalData3" appearance="maximized" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="FreeText1" appearance="maximized" />
+            <Field source="FreeText2" appearance="maximized" />
+            <Field source="FreeText3" appearance="maximized" />
+            <Field source="FreeText4" appearance="maximized" />
+            <Field source="FreeText5" appearance="maximized" />
+            <Field source="FreeText6" appearance="maximized" />
+            <Field source="FreeText7" appearance="maximized" />
+            <Field source="FreeText8" appearance="maximized" />
+            <Field source="FreeText9" appearance="maximized" />
+            <Field source="FreeText10" appearance="maximized" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CreateAssetWizardPage1">
+        <Actions all="true" />
+        <Column>
+          <Group title="Asset Information">
+            <Field source="AssetNumber" size="large" />
+            <Field source="AssetGroup" size="large" />
+            <Field source="AssetSubGroup" />
+            <Field source="DescriptionOfAsset" />
+            <Field source="TransactionTypeVar" title="Transaction Type" size="large" />
+            <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+            <Reference foreignKey="Responsible_Employee" title="Responsible" />
+            <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="CreateAssetWizardPage2">
+        <Actions all="true" />
+        <Column>
+          <Group title="Acquisition" style="fullWidth">
+            <Field source="AcquisitionDate" title="Date" />
+            <Field source="AcquisitionResponsible" title="Responsible" />
+            <Field source="AcquisitionPriceVar" title="Cost" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="MDK_CreateAssetWizardPage1">
+        <Actions all="true" />
+        <Column>
+          <Group title="Asset Information">
+            <Field source="AssetGroup" size="large" />
+            <Field source="AssetSubGroup" />
+            <Field source="DescriptionOfAsset" mandatory="true" />
+            <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" keyMandatory="true" />
+            <!-- <Reference foreignKey="Responsible_Employee" title="Responsible" />
+            <Reference foreignKey="EmployeeNumber_Employee" title="Employee" /> -->
+          </Group>
+        </Column>
+      </Form>
+      <Form name="MDK_CreateAssetWizardPage2">
+        <Actions all="true" />
+        <Column>
+          <Group title="Acquisition" style="fullWidth">
+            <Field source="AcquisitionDate" title="Date" />
+            <Field source="AcquisitionPriceVar" title="Cost" />
+            <Reference foreignKey="LocationName_Location" keyMandatory="true" />
+            <Field source="InternalSerialNumber" />
+            <Field source="DepreciationPeriod" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Custom_RoleRestricted_Overview" open="hasRole('Finance Admin')" >
+        <Column>
+          <Group title="Asset Information">
+            <Field source="AssetNumber" size="large" />
+            <Field source="AssetGroup" size="large" />
+            <Field source="AssetSubGroup" />
+            <Field source="DescriptionOfAsset" />
+            <Field source="Model" />
+            <Field source="AssetLocation" />
+            <Field source="SeriesNumber" />
+            <Field source="InternalSerialNumber" />
+            <Reference foreignKey="Responsible_Employee" title="Responsible" />
+            <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+          </Group>
+          <Group title="Depreciation Information">
+            <Field source="ManualDepreciation" />
+            <Field source="DepreciationMethod" />
+            <Field source="DepreciationPeriod" />
+            <Field source="LastDepreciation" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Net Book Value">
+            <UnitField source="AcquisitionPrice" unitSource="BaseCurrencyVar" />
+            <UnitField source="ImprovementTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteUpTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="DepreciationTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteDownTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="PostedValue" unitSource="BaseCurrencyVar" />
+          </Group>
+          <Group title="Financial Information">
+            <UnitField source="RateableValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="MarketValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="Mortgage" unitSource="BaseCurrencyVar" />
+            <UnitField source="InsuredValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="InternalMarkUp" unitSource="BaseCurrencyVar" />
+          </Group>
+          <Group title="History{Asset Information}">
+            <If condition="AcquisitionDate != date(nulldate)">
+              <If condition="AcquisitionResponsible != ''">
+                <Description template="^1 by ^2" arguments="AcquisitionDate;AcquisitionResponsible" title="Acquired" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="AcquisitionDate" title="Acquired" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Acquired" />
+            </Else>
+            <If condition="DateClosed != date(nulldate)">
+              <If condition="ClosedByResponsible != ''">
+                <Description template="^1 by ^2" arguments="DateClosed;ClosedByResponsible" title="Closed" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="DateClosed" title="Closed" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Closed" />
+            </Else>
+            <Field source="TransferredToAssetNumber" title="Transferred To" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Overview">
+        <Column>
+          <Group title="Asset Information">
+            <Field source="AssetNumber" size="large" />
+            <Field source="AssetGroup" size="large" />
+            <Field source="AssetSubGroup" />
+            <Field source="DescriptionOfAsset" />
+            <Field source="Model" />
+            <Field source="AssetLocation" />
+            <Field source="SeriesNumber" />
+            <Field source="InternalSerialNumber" />
+            <Reference foreignKey="Responsible_Employee" title="Responsible" />
+            <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+          </Group>
+          <Group title="Depreciation Information">
+            <Field source="ManualDepreciation" />
+            <Field source="DepreciationMethod" />
+            <Field source="DepreciationPeriod" />
+            <Field source="LastDepreciation" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Net Book Value">
+            <UnitField source="AcquisitionPrice" unitSource="BaseCurrencyVar" />
+            <UnitField source="ImprovementTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteUpTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="DepreciationTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteDownTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="PostedValue" unitSource="BaseCurrencyVar" />
+          </Group>
+          <Group title="Financial Information">
+            <UnitField source="RateableValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="MarketValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="Mortgage" unitSource="BaseCurrencyVar" />
+            <UnitField source="InsuredValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="InternalMarkUp" unitSource="BaseCurrencyVar" />
+          </Group>
+          <Group title="History{Asset Information}">
+            <If condition="AcquisitionDate != date(nulldate)">
+              <If condition="AcquisitionResponsible != ''">
+                <Description template="^1 by ^2" arguments="AcquisitionDate;AcquisitionResponsible" title="Acquired" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="AcquisitionDate" title="Acquired" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Acquired" />
+            </Else>
+            <If condition="DateClosed != date(nulldate)">
+              <If condition="ClosedByResponsible != ''">
+                <Description template="^1 by ^2" arguments="DateClosed;ClosedByResponsible" title="Closed" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="DateClosed" title="Closed" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Closed" />
+            </Else>
+            <Field source="TransferredToAssetNumber" title="Transferred To" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Overview_Vertical">
+        <Column>
+          <Group title="Asset Information">
+            <Field source="AssetNumber" size="large" />
+            <Field source="AssetGroup" size="large" />
+            <Field source="AssetSubGroup" />
+            <Field source="DescriptionOfAsset" />
+            <Field source="Model" />
+            <Field source="AssetLocation" />
+            <Field source="SeriesNumber" />
+            <Field source="InternalSerialNumber" />
+            <Reference foreignKey="Responsible_Employee" title="Responsible" />
+            <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+          </Group>
+          <Group title="History{Asset Information}">
+            <If condition="AcquisitionDate != date(nulldate)">
+              <If condition="AcquisitionResponsible != ''">
+                <Description template="^1 by ^2" arguments="AcquisitionDate;AcquisitionResponsible" title="Acquired" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="AcquisitionDate" title="Acquired" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Acquired" />
+            </Else>
+            <If condition="DateClosed != date(nulldate)">
+              <If condition="ClosedByResponsible != ''">
+                <Description template="^1 by ^2" arguments="DateClosed;ClosedByResponsible" title="Closed" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="DateClosed" title="Closed" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Closed" />
+            </Else>
+            <Field source="TransferredToAssetNumber" title="Transferred To" />
+          </Group>
+          <Group title="Net Book Value">
+            <UnitField source="AcquisitionPrice" unitSource="BaseCurrencyVar" />
+            <UnitField source="ImprovementTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteUpTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="DepreciationTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteDownTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="PostedValue" unitSource="BaseCurrencyVar" />
+          </Group>
+          <Group title="Financial Information">
+            <UnitField source="RateableValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="MarketValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="Mortgage" unitSource="BaseCurrencyVar" />
+            <UnitField source="InsuredValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="InternalMarkUp" unitSource="BaseCurrencyVar" />
+          </Group>
+          <Group title="Depreciation Information">
+            <Field source="ManualDepreciation" />
+            <Field source="DepreciationMethod" />
+            <Field source="DepreciationPeriod" />
+            <Field source="LastDepreciation" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Home">
+        <Column>
+          <Group title="Asset Information">
+            <Field source="AssetNumber" size="large" />
+            <Field source="AssetGroup" size="large" />
+            <Field source="AssetSubGroup" />
+            <Field source="DescriptionOfAsset" />
+            <Field source="Model" />
+            <Field source="AssetLocation" />
+            <Field source="SeriesNumber" />
+            <Field source="InternalSerialNumber" />
+            <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+            <Reference foreignKey="Responsible_Employee" title="Responsible" />
+            <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Depreciation Information">
+            <Field source="ManualDepreciation" />
+            <Field source="DepreciationMethod" />
+            <Field source="DepreciationPeriod" />
+            <Field source="LastDepreciation" />
+          </Group>
+          <Group title="History{Asset Information}">
+            <If condition="AcquisitionDate != date(nulldate)">
+              <If condition="AcquisitionResponsible != ''">
+                <Description template="^1 by ^2" arguments="AcquisitionDate;AcquisitionResponsible" title="Acquired" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="AcquisitionDate" title="Acquired" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Acquired" />
+            </Else>
+            <If condition="DateClosed != date(nulldate)">
+              <If condition="ClosedByResponsible != ''">
+                <Description template="^1 by ^2" arguments="DateClosed;ClosedByResponsible" title="Closed" />
+              </If>
+              <Else>
+                <Description template="^1" arguments="DateClosed" title="Closed" />
+              </Else>
+            </If>
+            <Else>
+              <Description template="-" title="Closed" />
+            </Else>
+            <Field source="TransferredToAssetNumber" title="Transferred To" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Net Book Value">
+            <UnitField source="AcquisitionPrice" unitSource="BaseCurrencyVar" />
+            <UnitField source="ImprovementTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteUpTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="DepreciationTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="WriteDownTotal" unitSource="BaseCurrencyVar" />
+            <UnitField source="PostedValue" unitSource="BaseCurrencyVar" />
+          </Group>
+          <Group title="Financial Information">
+            <UnitField source="RateableValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="MarketValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="Mortgage" unitSource="BaseCurrencyVar" />
+            <UnitField source="InsuredValue" unitSource="BaseCurrencyVar" />
+            <UnitField source="InternalMarkUp" unitSource="BaseCurrencyVar" />
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

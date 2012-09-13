@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--46b3d8432a97a1dc20646ac3741897fe2321b828-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--89322549426b9ed816afe175438f5af9f1622ca3-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 7c9ea88c66ad95fc420a0c3babb568e0   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:14
+  TAC*MaconomyHQ: yes
+-->
+<!-- PSZ, 16/05/11: New dialog SupervisorTimeSheetStatus (39616).-->
+<!-- JSV, 18/08/11: Icon on links (39862).-->
+<!-- PSZ, 26/08/11: Changed term 'Color explanation' to 'Legend' (39683).-->
+<!-- PSZ, 20/09/11: Hide Approve action if user does not have access to it (39751).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="SupervisorTimeSheetStatus">
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <Action source="CreateTimeSheet" />
+          </Exclude>
+        </Actions>
+        <Column>
+          <Group>
+            <Calendar source="DateVar" inputField="false" autoSelection="true" appearance="maximized">
+              <Style fontSize="medium">
+                <Switch source="TimeSheetStatusVar">
+                  <Case char="1">
+                    <Tooltip text="Due" />
+                    <Style ref="calendarTimeDue" />
+                  </Case>
+                  <Case char="2">
+                    <Tooltip text="Submitted" />
+                    <Style ref="calendarTimeSubmitted" />
+                  </Case>
+                  <!-- *** RAMBØLL Customization - partly approved not used -->
+                  <!--<Case char="3">
+										<Tooltip text="Approved" />
+										<Style ref="calendarTimeApproved" />
+									</Case>-->
+                  <Case char="4">
+                    <Tooltip text="Fully Approved" />
+                    <Style ref="calendarTimeFullyApproved" />
+                  </Case>
+                </Switch>
+              </Style>
+            </Calendar>
+          </Group>
+        </Column>
+        <Column>
+          <Group>
+            <Description titleSource="SelectedWeekNumberVar" arguments="SelectedWeekNumberVar;SelectedWeekPartVar" template="^1 ^2" size="tiny" style="applyBold" />
+          </Group>
+          <Group title="Legend">
+            <Grid>
+              <Row title="     " cells="|      |;|Not Submitted|" style="calendarTimeDueLegend" />
+              <Row title="     " cells="|      |;|Submitted|" style="calendarTimeSubmittedLegend" />
+              <Row title="     " cells="|      |;|Approved|" style="calendarTimeFullyApprovedLegend" />
+              <!-- *** RAMBØLL Customization - partly approved not used -->
+              <!-- <Row title="     " cells="|      |;|Fully Approved|" style="calendarTimeFullyApprovedLegend" /> -->
+            </Grid>
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Link template="" tooltip="Send email to employee" title="Send Email" url="'mailto:'+urlEncode(ElectronicMailAddress)" size="tiny" icon="Mail">
+            <Override condition="EmployeeTimeSheetStatusVar = '1'">
+              <Link>
+                <Url value="'mailto:'+urlEncode(ElectronicMailAddress)">
+                  <Query field="subject" value="Missing time sheet for week ^1" arguments="parent.SelectedWeekNumberVar" />
+                  <Query field="body" value="Please create a time sheet for the above week" />
+                </Url>
+              </Link>
+            </Override>
+            <ElseOverride condition="EmployeeTimeSheetStatusVar = '2'">
+              <Link>
+                <Url value="'mailto:'+urlEncode(ElectronicMailAddress)">
+                  <Query field="subject" value="Due time sheet for week ^1" arguments="parent.SelectedWeekNumberVar" />
+                  <Query field="body" value="Please submit the time sheet for the above week" />
+                </Url>
+              </Link>
+            </ElseOverride>
+          </Link>
+          <Field source="Name1" title="Employee" />
+          <Field source="InternalTimeWeekTotalVar" size="tiny" />
+          <Field source="ExternalTimeWeekTotalVar" size="tiny" />
+          <Field source="OvertimeWeekTotalVar" size="tiny" />
+            <Link title="Action" template="">
+              <Override condition="EmployeeTimeSheetStatusVar = '1'">
+                <Link template="Create" style="calendarTimeDue" action="parent.CreateTimeSheet" />
+              </Override>
+              <ElseOverride condition="EmployeeTimeSheetStatusVar = '2'">
+                <Link template="Submit" style="calendarTimeDue" action="Employee_TimeSheetHeader-&gt;TimeSheets.SubmitTimeSheet" />
+              </ElseOverride>
+              <ElseOverride condition="EmployeeTimeSheetStatusVar = '3' and not CanApproveTimeSheetVar">
+                <Link style="calendarTimeSubmitted" disabled="true" />
+              </ElseOverride>
+              <ElseOverride condition="EmployeeTimeSheetStatusVar = '3'">
+                <Link template="Approve" style="calendarTimeSubmitted" action="Employee_TimeSheetHeader-&gt;TimeSheets.ApproveTimeSheet" />
+              </ElseOverride>
+              <ElseOverride condition="EmployeeTimeSheetStatusVar = '4'">
+                <Link style="calendarTimeApproved" disabled="true" />
+              </ElseOverride>
+              <ElseOverride condition="EmployeeTimeSheetStatusVar = '5'">
+                <Link style="calendarTimeFullyApproved" disabled="true" />
+              </ElseOverride>
+              <ElseOverride condition="EmployeeTimeSheetStatusVar = '0' and not CreatedVar">
+                <Link template="Create" action="parent.CreateTimeSheet" />
+              </ElseOverride>
+              <ElseOverride condition="EmployeeTimeSheetStatusVar = '0' and CreatedVar and not SubmittedVar">
+                <Link template="Submit" action="Employee_TimeSheetHeader-&gt;TimeSheets.SubmitTimeSheet" />
+              </ElseOverride>
+            </Link>
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

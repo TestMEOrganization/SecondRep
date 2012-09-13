@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MJA, 19/05/09: First version (37738).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 29/01/10: CompanyHome view added for Companies workspace (37818).-->
+<!-- MJA, 03/05/10: Remove temporary "Standard" view (37816).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- MJA, 30/08/10: Structure updated (37738).-->
+<!-- JSV, 01/12/10: Compact block in Original filter (39106).-->
+<!-- SBA, 17/12/10: Styles should apply to labels (39243).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="CompanyParameters">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1, Company No. ^2" arguments="InternalName;CompanyNumber" />
+        </Compact>
+        <Columns>
+          <Field source="InternalName" />
+          <Field source="CompanyNumber" />
+          <Field source="Currency" />
+          <Field source="Boolean1" />
+          <Field source="Integer1" />
+          <Field source="Real1" />
+          <Field source="Amount1" />
+          <Field source="String1" />
+          <Field source="Date1" />
+          <Field source="Remark1" />
+          <Field source="Remark2" />
+          <Field source="Remark3" />
+          <Columns ref="UserUpdateColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="ShowAll">
+        <Columns>
+          <Field source="InternalName" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <Pane>
+      <Define>
+        <Function name="IsBoolean" value="BooleanDescriptionVar != ''" />
+        <Function name="IsString" value="StringDescriptionVar != '' or String1 !=''" />
+        <Function name="IsInteger" value="IntegerDescriptionVar != '' or Integer1 != 0 " />
+        <Function name="IsReal" value="RealDescriptionVar != '' or Real1 != 0" />
+        <Function name="IsAmount" value="AmountDescriptionVar != '' or Amount1 != 0" />
+        <Function name="IsDate" value="DateDescriptionVar != '' or Date1 != date(nulldate)" />
+      </Define>
+      <Form name="Custom_RoleRestricted_Full" open="hasRole('Finance Admin')" >
+        <Actions all="true" />
+        <Column>
+          <Group title="Company">
+            <Reference foreignKey="CompanyNumber_CompanyInformation">
+              <Ruler encloseAlignment="true" />
+            </Reference>
+          </Group>
+          <Group title="Parameter Values">
+            <If condition="IsBoolean()">
+              <BooleanGroup titleValue="BooleanDescriptionVar">
+                <Boolean source="Boolean1" title="Company" />
+                <Boolean source="SystemBooleanVar" title="System" />
+              </BooleanGroup>
+            </If>
+            <ElseIf condition="not inEmpty()">
+              <Grid>
+                <Header cells="|   |;|Company|;|   |;|System|">
+                  <Style>
+                    <Label bold="true" anchor="right" />
+                  </Style>
+                </Header>
+                <If condition="IsReal()">
+                  <Row titleValue="RealDescriptionVar" cells="|   |;Real1;|   |;SystemRealVar" />
+                </If>
+                <If condition="IsAmount()">
+                  <Row titleValue="AmountDescriptionVar" cells="|   |;Amount1+Currency;|   |;SystemAmountVar+SystemCurrencyVar" />
+                </If>
+                <If condition="IsInteger()">
+                  <Row titleValue="IntegerDescriptionVar" cells="|   |;Integer1;|   |;SystemIntegerVar" />
+                </If>
+                <If condition="IsString()">
+                  <Row titleValue="StringDescriptionVar" cells="|   |;String1;|   |;SystemStringVar" />
+                </If>
+                <If condition="IsDate()">
+                  <Row titleValue="DateDescriptionVar" cells="|   |;Date1;|   |;SystemDateVar" />
+                </If>
+              </Grid>
+            </ElseIf>
+          </Group>
+          <Group title="Remarks{pl}">
+            <Field source="Remark1" appearance="maximized" />
+            <Field source="Remark2" appearance="maximized" />
+            <Field source="Remark3" appearance="maximized" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Company">
+            <Reference foreignKey="CompanyNumber_CompanyInformation">
+              <Ruler encloseAlignment="true" />
+            </Reference>
+          </Group>
+          <Group title="Parameter Values">
+            <If condition="IsBoolean()">
+              <BooleanGroup titleValue="BooleanDescriptionVar">
+                <Boolean source="Boolean1" title="Company" />
+                <Boolean source="SystemBooleanVar" title="System" />
+              </BooleanGroup>
+            </If>
+            <ElseIf condition="not inEmpty()">
+              <Grid>
+                <Header cells="|   |;|Company|;|   |;|System|">
+                  <Style>
+                    <Label bold="true" anchor="right" />
+                  </Style>
+                </Header>
+                <If condition="IsReal()">
+                  <Row titleValue="RealDescriptionVar" cells="|   |;Real1;|   |;SystemRealVar" />
+                </If>
+                <If condition="IsAmount()">
+                  <Row titleValue="AmountDescriptionVar" cells="|   |;Amount1+Currency;|   |;SystemAmountVar+SystemCurrencyVar" />
+                </If>
+                <If condition="IsInteger()">
+                  <Row titleValue="IntegerDescriptionVar" cells="|   |;Integer1;|   |;SystemIntegerVar" />
+                </If>
+                <If condition="IsString()">
+                  <Row titleValue="StringDescriptionVar" cells="|   |;String1;|   |;SystemStringVar" />
+                </If>
+                <If condition="IsDate()">
+                  <Row titleValue="DateDescriptionVar" cells="|   |;Date1;|   |;SystemDateVar" />
+                </If>
+              </Grid>
+            </ElseIf>
+          </Group>
+          <Group title="Remarks{pl}">
+            <Field source="Remark1" appearance="maximized" />
+            <Field source="Remark2" appearance="maximized" />
+            <Field source="Remark3" appearance="maximized" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </Pane>
+  </Layout>
+</MDML>
+

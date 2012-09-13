@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 29/04/09: New Accounts workspace (37691).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- CSK, 07/07/09: Use Original view instead of Standard view (37691).-->
+<!-- CSK, 17/08/09: Workspace renamed to GlobalAccounts (37691).-->
+<!-- CSK, 22/03/10: Finance reconciliation temporarily removed (37691).-->
+<!-- CSK, 29/07/10: FinanceEntries workspace renamed to FinanceEntry (38545).-->
+<!-- BPE, 19/01/11: Commented out erroneous binding as agreed with CSK (39350).-->
+<!-- CSK, 12/04/11: Improvements for Accounts workspace (39547).-->
+<!-- KUN, 09/08/11: Added name to information pane (39546).-->
+<!-- CSK, 10/10/11: New AccountUsage embedded workspace (39492).-->
+<!-- CSK, 10/10/11: Align the account ledger to Financial Analysis (39547).-->
+<!-- CSK, 09/11/11: Improved hiding of panes (40146).-->
+<!-- KUN, 01/12/11: Title changed to Accounts. The title is used in links (40227). -->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="GlobalAccounts" title="Accounts">
+    <Filter source="AccountCard" view="Home" title="List of Accounts">
+      <With>
+        <Card view="Custom_RoleRestricted_Overview" title="Overview">
+          <Expansions parentSize="small">
+            <Through>
+              <Section title="Used By">
+                <Expansions>
+                  <Mount>
+                    <Filter source="ShowAccountUsage" view="Account" title="Dimension Combinations" hidden="not Parent.UsedByDimensionCombinationsVar">
+                      <Expansions minimized="true">
+                        <With>
+                          <Workspace source="AccountUsage" />
+                        </With>
+                      </Expansions>
+                      <Assistants parentSize="huge">
+                        <Bind foreignKey="DimensionCombNumber_DimensionCombHeader">
+                          <Card source="DimensionCombinations" view="DimensionOrigin" title="Dimension Combination" />
+                        </Bind>
+                      </Assistants>
+                    </Filter>
+                  </Mount>
+                  <Restrict reversedForeignKey="AccountNumber_Account">
+                    <Filter source="ShowDimensionCombLines" view="Standard" title="Dimension Combination Lines" hidden="not Parent.UsedByDimensionCombinationLinesVar">
+                      <Expansions minimized="true">
+                        <Bind foreignKey="DimensionCombNumber_DimensionCombHeader">
+                          <Card source="DimensionCombinations" view="ReadOnly" title="Dimension Combination">
+                            <With>
+                              <Table view="Custom_RoleRestricted_DimensionOrigin" />
+                            </With>
+                          </Card>
+                        </Bind>
+                      </Expansions>
+                    </Filter>
+                  </Restrict>
+                  <Restrict reversedForeignKey="StandardAccountNumber_Account">
+                    <Filter source="DataAgents" view="Minimal" title="Data Agents" hidden="not Parent.UsedByDataAgentsVar">
+                      <Expansions minimized="true">
+                        <With>
+                          <Card view="Custom_RoleRestricted_AccountOrigin" title="Data Agent" />
+                        </With>
+                      </Expansions>
+                    </Filter>
+                  </Restrict>
+                </Expansions>
+              </Section>
+            </Through>
+            <Restrict reversedForeignKey="AccountNumber_Account">
+              <Filter source="ExternalAccounts" view="Minimal_NoAccount" title="External Accounts" hidden="not Parent.UsedByExternalAccountsVar">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_DimensionOrigin" title="External Account">
+                      <With>
+                        <Table view="ReadOnly" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Restrict>
+          </Expansions>
+        </Card>
+        <Card view="Custom_RoleRestricted_Full" title="Information" name="Information">
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="AccountStructure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Account')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Account')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+      <Bind foreignKey="primary">
+        <Card source="AccountLedger" view="Analysis" title="Ledger">
+          <With>
+            <Table title="Finance Entries" view="Standard">
+              <Expansions minimized="true">
+                <Bind foreignKey="primary">
+                  <Workspace source="FinanceEntry" />
+                </Bind>
+              </Expansions>
+            </Table>
+          </With>
+        </Card>
+      </Bind>
+    </Filter>
+  </Workspace>
+</MWSL>
+

@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--0cad333607715ac6701b1acd74e2c8c4dbf0a0f2-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--678c65db7560b8f6bf9c76d9f43895a1f579e42a-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!-- AMC, 13/02/09: First draft Job Invoicing Workspace (37416).-->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- AMC, 12/06/09: Draft Invoice Editing Overview (37775).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- AMC, 13/11/09: Draft Invoice Editing workspace (38106) -->
+<!-- SJK, 25/05/10: Filter button restrictions converted to common expression language (38492).-->
+<!-- MJA, 13/09/10: Implement conditional layout (38461).-->
+<!-- JSV, 14/09/10: Use style from GlobalDefinitions (38848).-->
+<!-- MJA, 14/09/10: Demo layouts updated with trafficlighting, zerosuppression and conditionals on context (38597).-->
+<!-- MJA, 17/11/10: Error corrections and updates (38597).-->
+<!-- JSV, 01/12/10: Compact block in Original filter (39106).-->
+<!-- JSV, 03/12/10: Use attentionField in the conditional style ToBeAdjustedOnDraft (39148). -->
+<!-- MJA, 17/12/10: Updates after verification (38597).-->
+<!-- JSV, 04/03/11: Hide the options in the demo filter from Jobs workspace (39458).-->
+<!-- SBA, 11/03/11: Hide the options in the demo filter from BatchJobInvoicing workspace (39471).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 21/06/11: Simplify layout for invoices on account (39464).-->
+<!-- SBA, 15/07/11: Adding view Crediting (39489).-->
+<!-- JSV, 08/08/11: New field Header (39826).-->
+<!-- JSV, 19/08/11: Corrections after verification (39458).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- JSV, 30/08/11: Description source for reference on JobNumber_JobHeader (39874).-->
+<!-- JSV, 02/09/11: Move up/down further down inside the same group in Demo form (39256).-->
+<!-- JSV, 14/09/11: Restrict to location of employee rather than user as department in option (39332).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="InvoiceEditing">
+    <FilterPane>
+      <Define>
+        <Style name="AlertWriteUp" ref="trafficlightGreen" condition="BillingPriceUpDownCurrency gt 0" />
+        <Style name="AlertWriteDown" ref="trafficlightRed" condition="BillingPriceUpDownCurrency lt 0" />
+      </Define>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), Draft No. ^3, ^4 (^5)" arguments="JobName;JobNumber;DraftNumber;PaymentCustomerName;PaymentCustomer" />
+        </Compact>
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="PaymentCustomer" />
+          <Field source="PaymentCustomerName" />
+          <Field source="Appropriation" />
+          <Field source="DraftNumber" />
+          <Field source="InvoiceName" />
+          <Field source="DraftCreatedBy" />
+          <Field source="DraftCreatedDate" />
+          <Field source="JobGroup" />
+        </Columns>
+      </Filter>
+      <Filter name="Demo">
+        <ControlBar>
+          <Selection>
+            <If condition="not hasWorkspace('Jobs') and not hasWorkspace('BatchJobInvoicing')">
+              <Option name="OpenForEdit" title="Open for Editing" restriction="not ApprovedForInvoicing" />
+              <Option name="DepartmentDrafts" title="Department Drafts" restriction="LocationName = stringEnvVar('user.employeeinfo.EntityName')" />
+              <Option name="AllDrafts" title="All Drafts" />
+            </If>
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2), Draft No. ^3, ^4 (^5)" arguments="JobName;JobNumber;DraftNumber;PaymentCustomerName;PaymentCustomer" />
+        </Compact>
+        <Columns>
+          <If condition="not hasWorkspace('Jobs')">
+            <Field source="JobNumber" />
+            <Field source="JobName" />
+          </If>
+          <Field source="DraftNumber" size="tiny" />
+          <Field source="PaymentCustomer" />
+          <Field source="PaymentCustomerName" title="Bill to Customer Name" />
+          <If condition="hasWorkspace('Jobs')">
+            <Field source="ApprovedForInvoicing" size="small" />
+          </If>
+          <Field source="BillingPriceForInvoicingInvoiceCurrency" title="Billing Price" />
+          <Field source="BillingPriceUpDownCurrency" style="AlertWriteUp,AlertWriteDown" />
+          <Field source="DraftCreatedDate" />
+          <Field source="DraftCreatedBy" />
+          <Field source="PreferredInvoiceDate" />
+        </Columns>
+      </Filter>
+      <Filter name="Custom">
+        <ControlBar>
+          <Selection>
+            <If condition="not hasWorkspace('Jobs') and not hasWorkspace('BatchJobInvoicing')">
+              <Option name="OpenForEdit" title="Open for Editing" restriction="not ApprovedForInvoicing" />
+              <Option name="MyDrafts" title="My Drafts" restriction="ProjectManagerNumber = UserEmployeeNumber()" />
+              <Option name="DepartmentDrafts" title="Responsible Department Drafts" restriction="LocationName = stringEnvVar('user.employeeinfo.EntityName')" />
+              <Option name="AllDrafts" title="All Drafts" />
+            </If>
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2), Draft No. ^3, ^4 (^5)" arguments="JobName;JobNumber;DraftNumber;PaymentCustomerName;PaymentCustomer" />
+        </Compact>
+        <Columns>
+          <If condition="not hasWorkspace('Jobs')">
+            <Field source="JobNumber" />
+            <Field source="JobName" />
+          </If>
+          <Field source="DraftNumber" size="tiny" />
+          <Field source="PaymentCustomer" />
+          <Field source="PaymentCustomerName" title="Bill to Customer Name" />
+          <If condition="hasWorkspace('Jobs')">
+            <Field source="ApprovedForInvoicing" size="small" />
+          </If>
+          <Field source="BillingPriceForInvoicingInvoiceCurrency" title="Billing Price" />
+          <Field source="BillingPriceUpDownCurrency" style="AlertWriteUp,AlertWriteDown" />
+          <Field source="DraftCreatedDate" />
+          <Field source="DraftCreatedBy" />
+          <Field source="PreferredInvoiceDate" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Style name="AlertWriteUp" ref="trafficlightGreen" condition="BillingPriceUpDownCurrency gt 0" />
+        <Style name="AlertWriteDown" ref="trafficlightRed" condition="BillingPriceUpDownCurrency lt 0" />
+        <Style name="ToBeAdjustedOnDraft" ref="attentionField" condition="DifferenceForInvoicingInvoiceCurrency != 0" />
+      </Define>
+      <Wizard name="WrapLines" title="Text Wrapping">
+        <Page form="Demo_WrapLines_Page1" title="Enter Line Width Percentage" />
+      </Wizard>
+      <Wizard name="CopyEditingFromInvoice" title="Copy Editing from Invoice">
+        <Page form="Demo_CopyEditingFromInvoice" title="Select Invoice to Copy" />
+      </Wizard>
+      <Wizard name="CopyEditingFromDraft" title="Copy Editing from Draft">
+        <Page form="Demo_CopyEditingFromDraft" title="Select Draft to Copy from" description="Enter Job No., Bill to Customer and Appropriation identifying the draft." />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Job">
+              <Reference foreignKey="JobNumber_JobHeader" descriptionSource="JobNameVar" />
+              <Field source="JobGroupVar" title="Job Group" />
+              <Field source="StatusVar" title="Status" />
+              <Field source="ResponsibleVar" title="Responsible" />
+            </Group>
+            <Group title="Draft">
+              <Field source="DraftNumber" />
+              <Field source="CreatedBy" />
+              <Field source="CreatedDate" title="Date" />
+            </Group>
+            <Group title="Customer">
+              <Field source="CustomerNumber" title="Ship to Customer" />
+              <Field source="Name1Var" title="" />
+              <Reference foreignKey="PaymentCustomer_Customer" />
+              <Field source="Appropriation" />
+            </Group>
+            <Group title="Up/Down">
+              <Field source="QuantityUpDownTime" title="Hours" />
+              <Field source="BillingPriceUpDownTimeCurrency" title="Billing Price, Time" />
+              <Field source="BillingPriceUpDownCurrency" title="Billing Price" />
+            </Group>
+            <Group title="Status">
+              <Field source="ApprovedForInvoicing" title="Approved{Sg}" />
+              <Field source="ApprovedForInvoicingBy" title="Approved by" />
+              <Field source="ApprovedForInvoicingDate" title="Approval Date" />
+              <Field source="IncludesSubJobsVar" title="Includes Subjobs" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompany_CompanyInformation" />
+            </Group>
+            <Group title="Restore Editing">
+              <Field source="RestoreFromInvoiceNumberVar" title="Restore from Invoice No." />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Balance{Difference}">
+              <Field source="DifferenceForInvoicingInvoiceCurrency" title="Billing Price" />
+              <If condition="booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VAT1DifferenceForInvoicingInvoiceCurrency" title="Tax 1" />
+                <Field source="VAT2DifferenceForInvoicingInvoiceCurrency" title="Tax 2" />
+                <If condition="booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3DifferenceForInvoicingInvoiceCurrency" title="Tax 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATDifferenceForInvoicingInvoiceCurrency" title="Tax{VAT}" />
+              </Else>
+            </Group>
+            <Group title="Invoice/Credit Memo">
+              <Field source="DebitCredit" title="Type" />
+              <Field source="InvoiceCurrency" />
+              <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="Billing Price Total" />
+              <Field source="InvoiceDiscountPercentage" />
+              <Field source="InvoiceDiscountVar" title="Invoice Discount" />
+              <If condition="booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VAT1ForInvoicingInvoiceCurrency" title="Tax 1" />
+                <Field source="VAT2ForInvoicingInvoiceCurrency" title="Tax 2" />
+                <If condition="booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3ForInvoicingInvoiceCurrency" title="Tax 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATForInvoicingInvoiceCurrencyVar" title="Tax{VAT}" />
+              </Else>
+              <Field source="SetOffOnAccountNetCurrencyVar" title="Net on Account" />
+              <Field source="SetOffOnAccountVATCurrencyVar" title="Tax on Account" />
+              <Field source="TotalToPayInvoiceCurrencyVar" title="Balance Due" />
+              <Field source="InvoiceName" />
+              <Field source="PreferredInvoiceDate" title="Invoice Date" />
+              <Field source="PaymentTerms" />
+              <Field source="DueDateVar" title="Due Date" />
+              <Field source="ApprovedForInvoicingOnAccount" title="Invoice on Account" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Text Wrapping">
+              <Field source="LineWidthPercentage" title="Width %" />
+            </Group>
+            <Group title="Copy Editing">
+              <Field source="CopiesFromJobNumberVar" title="Copy from Job No." />
+              <Field source="CopyFromPaymentCustomerVar" title="Copy from Bill to Customer" />
+              <Field source="CopyFromAppropriationVar" title="Copy from Appropriation" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Demo_WrapLines_Page1">
+        <Actions>
+          <Update />
+        </Actions>
+        <Group>
+          <Field source="LineWidthPercentage" />
+        </Group>
+      </Form>
+      <Form name="Demo_CopyEditingFromInvoice">
+        <Actions>
+          <Update />
+        </Actions>
+        <Group>
+          <Reference foreignKey="Card_RestoreFromInvoiceNumberVar_Invoice" title="Invoice No." style="zeroSuppression" />
+        </Group>
+      </Form>
+      <Form name="Demo_CopyEditingFromDraft">
+        <Actions>
+          <Update />
+        </Actions>
+        <Group>
+          <Field source="CopiesFromJobNumberVar" />
+          <Field source="CopyFromPaymentCustomerVar" />
+          <Field source="CopyFromAppropriationVar" />
+        </Group>
+      </Form>
+      <Form name="Demo">
+        <Actions all="true">
+          <Exclude>
+            <If condition="ApprovedForInvoicing">
+              <Action source="CloseEditing" />
+            </If>
+            <Else>
+              <Action source="ReopenEditing" />
+            </Else>
+          </Exclude>
+          <Action source="RestoreInvoice" title="Copy Editing from Invoice" wizard="CopyEditingFromInvoice" />
+          <Action source="CopyEditing" title="Copy Editing from Draft" wizard="CopyEditingFromDraft" />
+          <Action source="WrapLines" title="Text Wrapping" wizard="WrapLines" />
+        </Actions>
+        <Column>
+          <If condition="DebitCredit = DebitCreditType'Credit">
+            <Group title="Credit Memo">
+              <Field source="DraftNumber" />
+              <Field source="BasedOnInvoiceNumber" style="zeroSuppression" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+            </Group>
+          </If>
+          <ElseIf condition="ApprovedForInvoicingOnAccount">
+            <Group title="Invoice on Account">
+              <Field source="DraftNumber" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+            </Group>
+          </ElseIf>
+          <Else>
+            <Group title="Invoice">
+              <Field source="DraftNumber" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+            </Group>
+          </Else>
+        </Column>
+        <Column>
+          <Group title="Draft Status">
+            <Description title="Created" template="^1 by ^2" arguments="CreatedDate;CreatedBy" />
+            <If condition="ApprovedForInvoicing">
+              <Description title="Approved" template="^1 by ^2" arguments="ApprovedForInvoicingDate;ApprovedForInvoicingBy" />
+            </If>
+            <Else>
+              <Description title="Approved" template="No" />
+            </Else>
+          </Group>
+          <Group title="Editing" style="compact_amountAlignment">
+            <If condition="ApprovedForInvoicingOnAccount">
+              <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="For Invoicing On Account" />
+            </If>
+            <Else>
+              <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="Selected for Invoicing" />
+            </Else>
+            <Field source="DifferenceForInvoicingInvoiceCurrency" title="To be adjusted on draft" style="ToBeAdjustedOnDraft" />
+          </Group>
+        </Column>
+        <Column style="compact_amountAlignment">
+          <Group title="Price Breakdown">
+            <Field source="InvoiceCurrency" />
+            <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="Billing Price" />
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="InvoiceDiscountVar" title="Invoice Discount" />
+            </If>
+            <If condition="booleanSysPar('UseMultipleVATLevels')">
+              <Field source="VAT1ForInvoicingInvoiceCurrency" title="Tax 1" />
+              <Field source="VAT2ForInvoicingInvoiceCurrency" title="Tax 2" />
+              <If condition="booleanSysPar('ShowThreeVATLevels')">
+                <Field source="VAT3ForInvoicingInvoiceCurrency" title="Tax 3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="VATForInvoicingInvoiceCurrencyVar" title="Tax{VAT}" />
+            </Else>
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="SetOffOnAccountNetCurrencyVar" />
+              <Field source="SetOffOnAccountVATCurrencyVar" />
+            </If>
+            <Field source="TotalToPayInvoiceCurrencyVar" title="Balance Due" />
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="BillingPriceUpDownCurrency" title="Write Up/Down" style="AlertWriteUp,AlertWriteDown" />
+            </If>
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Custom">
+        <Actions all="not HasPMReadOnly()">
+          <Exclude>
+            <If condition="ApprovedForInvoicing">
+              <Action source="CloseEditing" />
+            </If>
+            <Else>
+              <Action source="ReopenEditing" />
+            </Else>
+            <Action source="RemoveOtherDrafts" />
+          </Exclude>
+          <Action source="RestoreInvoice" title="Copy Editing from Invoice" wizard="CopyEditingFromInvoice" disabled="HasPMReadOnly()" />
+          <Action source="CopyEditing" title="Copy Editing from Draft" wizard="CopyEditingFromDraft" disabled="HasPMReadOnly()" />
+          <Action source="WrapLines" title="Text Wrapping" wizard="WrapLines" disabled="HasPMReadOnly()" />
+        </Actions>
+        <Column>
+          <If condition="DebitCredit = DebitCreditType'Credit">
+            <Group title="Credit Memo">
+              <Field source="DraftNumber" />
+              <Field source="BasedOnInvoiceNumber" style="zeroSuppression" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+              <Link template="Project Follow-Up Report" icon="WorkspaceLink" appearance="maximized">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+		        <Url value="urlOpenReportingServer() + '/_layouts/ReportServer/RSViewerPage.aspx'">
+		          <Query field="rv:RelativeReportUrl" value="/Reports/Project_follow-up.rdl" />
+		          <Query field="rv:HeaderArea" value="^1" arguments="'None'" />
+		          <Query field="rp:Input" value="^1" arguments="parent.JobNumber" />
+		        </Url>
+              </Link>
+            </Group>
+          </If>
+          <ElseIf condition="ApprovedForInvoicingOnAccount">
+            <Group title="Invoice on Account">
+              <Field source="DraftNumber" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+            </Group>
+          </ElseIf>
+          <Else>
+            <Group title="Invoice">
+              <Field source="DraftNumber" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+              <Link template="Project Follow-Up Report" icon="WorkspaceLink" appearance="maximized">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+		        <Url value="urlOpenReportingServer() + '/_layouts/ReportServer/RSViewerPage.aspx'">
+		          <Query field="rv:RelativeReportUrl" value="/Reports/Project_follow-up.rdl" />
+		          <Query field="rv:HeaderArea" value="^1" arguments="'None'" />
+		          <Query field="rp:Input" value="^1" arguments="parent.JobNumber" />
+		        </Url>
+              </Link>
+		        <Link template="Send mail" icon="Mail" appearance="maximized" >
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+		        	<Url value="'mailto:-'" >
+		        		<Query field="Subject" value="Draft Invoice for job: ^1 (^2)" arguments="JobName;JobNumber" />
+		        	</Url>
+		        </Link>
+            </Group>
+          </Else>
+        </Column>
+        <Column>
+          <Group title="Draft Status">
+            <Description title="Created" template="^1 by ^2" arguments="CreatedDate;CreatedBy" />
+            <If condition="ApprovedForInvoicing">
+              <Description title="Approved" template="^1 by ^2" arguments="ApprovedForInvoicingDate;ApprovedForInvoicingBy" />
+            </If>
+            <Else>
+              <Description title="Approved" template="No" />
+            </Else>
+          </Group>
+          <Group title="Editing" style="compact_amountAlignment">
+            <If condition="ApprovedForInvoicingOnAccount">
+              <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="For Invoicing On Account" />
+            </If>
+            <Else>
+              <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="Selected for Invoicing" />
+            </Else>
+            <Field source="DifferenceForInvoicingInvoiceCurrency" title="To be adjusted on draft" style="ToBeAdjustedOnDraft" />
+          </Group>
+        </Column>
+        <Column style="compact_amountAlignment">
+          <Group title="Price Breakdown">
+            <Field source="InvoiceCurrency" />
+            <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="Billing Price" />
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="InvoiceDiscountVar" title="Invoice Discount" />
+            </If>
+            <If condition="booleanSysPar('UseMultipleVATLevels')">
+              <Field source="VAT1ForInvoicingInvoiceCurrency" title="Tax 1" />
+              <Field source="VAT2ForInvoicingInvoiceCurrency" title="Tax 2" />
+              <If condition="booleanSysPar('ShowThreeVATLevels')">
+                <Field source="VAT3ForInvoicingInvoiceCurrency" title="Tax 3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="VATForInvoicingInvoiceCurrencyVar" title="Tax{VAT}" />
+            </Else>
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="SetOffOnAccountNetCurrencyVar" />
+              <Field source="SetOffOnAccountVATCurrencyVar" />
+            </If>
+          </Group>
+            <Group title="Comment">
+              <Field source="parent.parent.parent.primary->jobs.Description1" appearance="maximized" />
+            </Group>
+        </Column>
+      </Form>
+      <Form name="Custom_Reporting">
+        <Actions all="not HasPMReadOnly()">
+          <Exclude>
+            <If condition="ApprovedForInvoicing">
+              <Action source="CloseEditing" />
+            </If>
+            <Else>
+              <Action source="ReopenEditing" />
+            </Else>
+          </Exclude>
+          <Action source="RestoreInvoice" title="Copy Editing from Invoice" wizard="CopyEditingFromInvoice" disabled="HasPMReadOnly()" />
+          <Action source="CopyEditing" title="Copy Editing from Draft" wizard="CopyEditingFromDraft" disabled="HasPMReadOnly()" />
+          <Action source="WrapLines" title="Text Wrapping" wizard="WrapLines" disabled="HasPMReadOnly()" />
+        </Actions>
+        <Column>
+          <If condition="DebitCredit = DebitCreditType'Credit">
+            <Group title="Credit Memo">
+              <Field source="DraftNumber" />
+              <Field source="BasedOnInvoiceNumber" style="zeroSuppression" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+            </Group>
+          </If>
+          <ElseIf condition="ApprovedForInvoicingOnAccount">
+            <Group title="Invoice on Account">
+              <Field source="DraftNumber" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+            </Group>
+          </ElseIf>
+          <Else>
+            <Group title="Invoice">
+              <Field source="DraftNumber" />
+              <Field source="InvoiceName" />
+              <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="PayerNameVar" title="Bill to Customer" />
+              <Field source="PaymentTerms" />
+              <Field source="PreferredInvoiceDate" />
+              <Field source="DueDateVar" title="Due Date" />
+            </Group>
+          </Else>
+        </Column>
+        <Column>
+          <Group title="Draft Status">
+            <Description title="Created" template="^1 by ^2" arguments="CreatedDate;CreatedBy" />
+            <If condition="ApprovedForInvoicing">
+              <Description title="Approved" template="^1 by ^2" arguments="ApprovedForInvoicingDate;ApprovedForInvoicingBy" />
+            </If>
+            <Else>
+              <Description title="Approved" template="No" />
+            </Else>
+          </Group>
+          <Group title="Editing" style="compact_amountAlignment">
+            <If condition="ApprovedForInvoicingOnAccount">
+              <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="For Invoicing On Account" />
+            </If>
+            <Else>
+              <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="Selected for Invoicing" />
+            </Else>
+            <Field source="DifferenceForInvoicingInvoiceCurrency" title="To be adjusted on draft" style="ToBeAdjustedOnDraft" />
+          </Group>
+        </Column>
+        <Column style="compact_amountAlignment">
+          <Group title="Price Breakdown">
+            <Field source="InvoiceCurrency" />
+            <Field source="BillingPriceForInvoicingInvoiceCurrencyVar" title="Billing Price" />
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="InvoiceDiscountVar" title="Invoice Discount" />
+            </If>
+            <If condition="booleanSysPar('UseMultipleVATLevels')">
+              <Field source="VAT1ForInvoicingInvoiceCurrency" title="Tax 1" />
+              <Field source="VAT2ForInvoicingInvoiceCurrency" title="Tax 2" />
+              <If condition="booleanSysPar('ShowThreeVATLevels')">
+                <Field source="VAT3ForInvoicingInvoiceCurrency" title="Tax 3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="VATForInvoicingInvoiceCurrencyVar" title="Tax{VAT}" />
+            </Else>
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="SetOffOnAccountNetCurrencyVar" />
+              <Field source="SetOffOnAccountVATCurrencyVar" />
+            </If>
+            <Field source="TotalToPayInvoiceCurrencyVar" title="Balance Due" />
+            <If condition="not ApprovedForInvoicingOnAccount">
+              <Field source="BillingPriceUpDownCurrency" title="Write Up/Down" style="AlertWriteUp,AlertWriteDown" />
+            </If>
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="Text" title="Description{Text}" />
+          <Field source="NumberOf" title="Quantity{Number}" />
+          <Field source="Unit" />
+          <Field source="BillingPriceCurrency" title="Billing Price" />
+          <Field source="BillingPriceTotalCurrency" title="Billing Price Total" />
+          <If condition="booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATCode" />
+            <Field source="VATCode2" />
+            <If condition="booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VATCode3" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATCode" title="Tax Code" />
+          </Else>
+          <Field source="OnlyTotalPrice" title="Total Price Only" />
+          <Field source="SubTotal" title="Subtotal" />
+          <Field source="SumLevel" title="Sum Level" />
+          <Field source="TheLevel" title="Indentation Level" />
+          <Field source="Header" />
+        </Columns>
+      </Table>
+      <Table name="Crediting">
+        <Actions all="true">
+          <Action source="parent.ReopenEditing" />
+          <Action source="parent.CloseEditing" />
+        </Actions>
+        <Columns>
+          <Field source="Text" title="Description{Text}" />
+          <Field source="NumberOf" title="Quantity{Number}" />
+          <Field source="Unit" />
+          <Field source="BillingPriceCurrency" title="Billing Price" />
+          <Field source="BillingPriceTotalCurrency" title="Billing Price Total" />
+          <If condition="booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATCode" />
+            <Field source="VATCode2" />
+            <If condition="booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VATCode3" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATCode" title="Tax Code" />
+          </Else>
+          <Field source="OnlyTotalPrice" title="Total Price Only" />
+          <Field source="SubTotal" title="Subtotal" />
+          <Field source="SumLevel" title="Sum Level" />
+          <Field source="TheLevel" title="Indentation Level" />
+          <Field source="Header" />
+        </Columns>
+      </Table>
+      <Table name="Demo">
+        <Actions all="true">
+          <Exclude>
+            <Print />
+          </Exclude>
+        </Actions>
+        <Columns>
+          <Field source="Text" title="Description" size="huge" />
+          <If condition="not parent.ApprovedForInvoicingOnAccount">
+            <Field source="NumberOf" title="Quantity" size="small" style="zeroSuppression" />
+            <Field source="BillingPriceCurrency" title="Billing Price" style="zeroSuppression" />
+          </If>
+          <Field source="BillingPriceTotalCurrency" title="Billing Price Total" style="zeroSuppression" />
+          <If condition="booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATCode" />
+            <Field source="VATCode2" />
+            <If condition="booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VATCode3" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATCode" title="Tax Code" />
+          </Else>
+          <If condition="not parent.ApprovedForInvoicingOnAccount">
+            <Field source="SubTotal" title="Subtotal" size="small" />
+            <Field source="OnlyTotalPrice" title="Total Price Only" />
+            <Field source="SumLevel" title="Sum Level" size="tiny" />
+            <Field source="TheLevel" title="Indentation Level" size="tiny" />
+            <Field source="Header" size="tiny" />
+          </If>
+        </Columns>
+      </Table>
+      <Table name="Custom">
+        <Actions all="not HasPMReadOnly()">
+          <Exclude>
+            <Print />
+          </Exclude>
+        </Actions>
+        <Columns>
+          <Field source="Text" title="Description" size="huge" />
+          <If condition="not parent.ApprovedForInvoicingOnAccount">
+            <Field source="NumberOf" title="Quantity" size="small" style="zeroSuppression" />
+            <Field source="BillingPriceCurrency" title="Billing Price" style="zeroSuppression" />
+          </If>
+          <Field source="BillingPriceTotalCurrency" title="Billing Price Total" style="zeroSuppression" />
+          <If condition="booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATCode" />
+            <Field source="VATCode2" />
+            <If condition="booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VATCode3" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATCode" title="Tax Code" open="false" />
+          </Else>
+          <If condition="not parent.ApprovedForInvoicingOnAccount">
+            <Field source="OnlyTotalPrice" title="Total Price Only" />
+          </If>
+        </Columns>
+      </Table>
+      <Table name="Custom_Reporting">
+        <Actions all="not HasPMReadOnly()">
+          <Exclude>
+            <Print />
+          </Exclude>
+        </Actions>
+        <Columns>
+          <Field source="Text" title="Description" size="huge" />
+          <If condition="not parent.ApprovedForInvoicingOnAccount">
+            <Field source="NumberOf" title="Quantity" size="small" style="zeroSuppression" />
+            <Field source="BillingPriceCurrency" title="Billing Price" style="zeroSuppression" />
+          </If>
+          <Field source="BillingPriceTotalCurrency" title="Billing Price Total" style="zeroSuppression" />
+          <If condition="booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATCode" />
+            <Field source="VATCode2" />
+            <If condition="booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VATCode3" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATCode" title="Tax Code" open="false" />
+          </Else>
+          <If condition="not parent.ApprovedForInvoicingOnAccount">
+            <Field source="OnlyTotalPrice" title="Total Price Only" />
+          </If>
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

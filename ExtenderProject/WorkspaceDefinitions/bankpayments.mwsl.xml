@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 06/12/11: New Payments workspace (40308).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="BankPayments" title="Payments">
+    <Section title="Selection">
+      <Mount>
+        <Card source="PaymentSelection" view="Full" title="Create" />
+        <Filter source="ChangePaymentSelectionByVendor" view="Payments" title="Edit">
+          <Expansions minimized="true">
+            <With>
+              <Card view="Full" title="Selection">
+                <With>
+                  <Table view="Full" title="Customer Entries" />
+                </With>
+              </Card>
+            </With>
+          </Expansions>
+        </Filter>
+        <Card source="ChangePaymentSelection" view="Standard" title="Approve">
+          <With>
+            <Table view="Full" />
+          </With>
+        </Card>
+      </Mount>
+    </Section>
+    <Section title="Payment">
+      <Mount>
+        <Card source="P_Check" view="Full" title="Check" />
+        <Card source="PaymentFiles" view="Full" title="Payment File" />
+        <Card source="P_PaymentList" view="Full" title="Payment Listing" />
+      </Mount>
+    </Section>
+    <Section title="Status Reporting">
+      <Mount>
+        <Card source="ImportPaymentStatus" view="Full" title="Import" />
+        <Card source="PaymentReports" view="Full" title="Follow Up">
+          <With>
+            <Table view="Full" />
+          </With>
+        </Card>
+      </Mount>
+    </Section>
+    <Section title="Journal">
+      <Mount>
+        <Card source="PaymentJournal" view="Full">
+          <With>
+            <Table view="Full" />
+          </With>
+        </Card>
+      </Mount>
+    </Section>
+    <Section title="Lookup">
+      <Mount>
+        <Card source="ShowPaymentOrders" view="Full" title="Payment Orders">
+          <Expansions parentSize="small">
+            <With>
+              <Table view="Full">
+                <Expansions minimized="true">
+                  <Bind foreignKey="primary">
+                    <Hidden source="ShowPaymentRemittance">
+                      <Expansions minimized="true">
+                        <Bind foreignKey="primary">
+                          <Table source="ShowPaymentReconciliations" view="Full" title="Reconciliation" />
+                        </Bind>
+                        <With>
+                          <Table view="Full" title="Remittance" />
+                        </With>
+                      </Expansions>
+                    </Hidden>
+                  </Bind>
+                </Expansions>
+                <Assistants>
+                  <Bind foreignKey="primary">
+                    <Card source="ShowPaymentRemittance" view="Full" title="Details" />
+                  </Bind>
+                </Assistants>
+              </Table>
+            </With>
+          </Expansions>
+        </Card>
+        <Filter source="ShowImportedPaymentStatus" view="Standard" title="Payment Status">
+          <Expansions minimized="true">
+            <With>
+              <Card view="Full" title="Imported Payment Status" />
+            </With>
+          </Expansions>
+        </Filter>
+        <Card source="P_PaymentOverview" view="Full" title="Payment Overview" />
+      </Mount>
+    </Section>
+  </Workspace>
+</MWSL>
+

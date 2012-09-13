@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- CSK, 02/08/10: Demo_InvoicesInJournal filter view added for tracing journals (38705).-->
+<!-- BPE, 10/09/10: Changed layout to use global definition dimensions (38823). -->
+<!-- JSV, 14/09/10: Removing the filter view Demo_InvoicesInJournal (38848).-->
+<!-- CSK, 21/09/10: EntryOriginLine view added for showing the lines related to an entry (38884).-->
+<!-- CSK, 28/10/10: Use InvoiceBOMLine as origin line (39006).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 12/12/10: New Analysis view added (39091).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- SJK, 20/06/11: demo views (39731).-->
+<!-- SJK, 29/06/11: Filter options for demo filter (39731).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- SJK, 19/08/11: Improvements after verification (39731).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- CSK, 12/09/11: Hide charges in Analysis form (39767).-->
+<!-- CSK, 13/09/11: Minor change in Analysis view (39749).-->
+<!-- MJA, 16/09/11: New Subscriptions workspace (39816).-->
+<!-- MJA, 28/09/11: Disable links for orders when subscription orders not shown (39816).-->
+<!-- CSK, 11/11/11: Parent reference changed in EntryOriginLine table (40151).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ShowInvoice">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Invoice No. ^1, ^2" arguments="InvoiceNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="InvoiceNumber" />
+          <Field source="OrderNumber" />
+          <Field source="LastDeliveryNoteNumber" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="InvoiceName" />
+          <Field source="MainOrderNumber" />
+          <Field source="CustomerNumber" />
+          <Field source="Name1" />
+        </Columns>
+      </Filter>
+      <Filter name="SalesOrders">
+        <ControlBar>
+          <Selection default="MyInvoices">
+            <Option title="My Invoices" name="MyInvoices" restriction="SalesPersonNumber = userEmployeeNumber()" />
+            <Option title="Invoices for My Jobs" name="MyJobsInvoices" restriction="ProjectManagerNumber = userEmployeeNumber()" />
+            <Option title="All Invoices" name="AllSalesOrders" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Invoice No. ^1, ^2" arguments="InvoiceNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="InvoiceNumber" />
+          <Field source="Name1" title="Customer" />
+          <Field source="OrderNumber" />
+          <Field source="SalesPerson" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="ProjectManagerName" />
+          <Field source="LastDeliveryNoteNumber" />
+        </Columns>
+      </Filter>
+      <Filter name="SubscriptionOrders">
+        <ControlBar>
+          <Selection default="SubscriptionInvoices">
+            <Option name="SubscriptionInvoices" title="Subscription Invoices" restriction="SubscriptionOrderNumber != 0" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Invoice No. ^1, ^2, Subscr. Order. No. ^3" arguments="InvoiceNumber;Name1;SubscriptionOrderNumber" />
+        </Compact>
+        <Columns>
+          <Field source="SubscriptionOrderNumber" />
+          <Field source="InvoiceNumber" />
+          <Field source="CustomerNumber" />
+          <Field source="Name1" title="Customer" />
+          <Field source="PaymentCustomer" />
+          <Field source="OrderNumber" />
+          <Field source="InvoiceDate" />
+          <Field source="SalesPerson" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="ProjectManagerName" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Billing Address">
+              <Reference foreignKey="PaymentCustomer_Customer" />
+              <Field source="PayerName2" appearance="maximized" />
+              <Field source="PayerName3" appearance="maximized" />
+              <ZipCity citySource="PayerPostalDistrict" zipSource="PayerZipCode" appearance="maximized" />
+              <Field source="PayerName4" appearance="maximized" />
+              <Field source="PayerName5" appearance="maximized" />
+              <Field source="PayerAttention" title="Attn." />
+              <Field source="PayerCountry" title="Ctry{Show_Invoice}" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompanyVar_CompanyInformation" />
+            </Group>
+            <Group title="Price">
+              <Field source="Currency" />
+              <Field source="ExchangeRateDate" />
+              <Field source="ItemSumCurrency" />
+              <Field source="InvoiceDiscountPercentage" />
+              <Field source="InvoiceDiscountCurrency" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATCurrency" title="Total Tax on Sales" />
+                <Field source="VAT1CurrencyVar" title="Tax on Sales 1" />
+                <Field source="VAT2CurrencyVar" title="Tax on Sales 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3CurrencyVar" title="Tax on Sales 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATCurrency" title="Tax on Sales" />
+              </Else>
+              <Field source="Charge1Currency" titleValue="Charge1Text" />
+              <Field source="Charge2Currency" titleValue="Charge2Text" />
+              <Field source="Charge3Currency" titleValue="Charge3Text" />
+              <Field source="Charge4Currency" titleValue="Charge4Text" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="ChargeVAT" title="Total Tax on Charges" />
+                <Field source="ChargeVAT1Var" title="Tax on Charges 1" />
+                <Field source="ChargeVAT2Var" title="Tax on Charges 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="ChargeVAT3Var" title="Tax on Charges 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="ChargeVAT" title="Tax on Charges" />
+              </Else>
+              <Field source="OnAccountItemSumCurrency" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="OnAccountVATCurrency" title="Total Tax on Account" />
+                <Field source="OnAccountVAT1CurrencyVar" title="Tax on Account 1" />
+                <Field source="OnAccountVAT2CurrencyVar" title="Tax on Account 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="OnAccountVAT3CurrencyVar" title="Tax on Account 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="OnAccountVATCurrency" title="Tax on Account" />
+              </Else>
+              <Field source="TotalCurrency" title="Balance Due" />
+              <Field source="StandardCurrency" />
+              <Field source="TotalStandard" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Ship to Address">
+              <Reference foreignKey="CustomerNumber_Customer" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Country" title="Ctry{Show_Invoice}" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Invoice{noun}">
+              <Field source="InvoiceNumber" />
+              <Boolean source="Printed" />
+              <Field source="OrderNumber" />
+              <Field source="LastDeliveryNoteNumber" />
+              <Field source="VersionNumber" />
+              <Field source="InvoiceDate" />
+              <Field source="DueDate" />
+              <Field source="PrintedBy" />
+              <Field source="PrintingDate" />
+            </Group>
+            <Group ref="DimensionGroup" />
+            <Group title="Customer Information{1}">
+              <Field source="DepartmentNumber" />
+              <Field source="InventoryNumber" />
+              <Field source="Reference" />
+              <Field source="VATNumber" />
+            </Group>
+            <Group title="Sales Orders{General}">
+              <Field source="MainOrderNumber" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="InternalRemark1" appearance="maximized" />
+            <Field source="InternalRemark2" appearance="maximized" />
+            <Field source="InternalRemark3" appearance="maximized" />
+          </Group>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Extra Fields">
+              <Field source="CustomerPopup1" />
+              <Field source="CustomerPopup2" />
+              <Field source="CustomerPopup3" />
+              <Field source="CustomerPopup4" />
+              <Field source="CustomerPopup5" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Credit Card">
+              <Field source="CreditCardNumber" />
+              <Field source="CreditCardExpiryDate" />
+              <Field source="AuthorizationAmount" />
+              <Field source="AuthorizationCode" />
+              <Field source="DateOfAuthorization" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Standard">
+        <Actions all="true">
+          <If condition="ManualInvoice = false and InvoiceOnAccount = false and BasedOnInvoiceNumber = 0 and not hasWorkspace('SubscriptionHome')">
+            <Action source="primary-&gt;InvoiceToCreditOrder.CreateCreditOrder" title="Generate Credit Order" name="GenerateCreditOrder" />
+          </If>
+        <Order>
+            <Group name="default" title="Actions" grouped="always">
+              <Action ref="GenerateCreditOrder" />
+            </Group>
+        </Order>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Price">
+              <UnitField source="ItemSumCurrency" unitSource="Currency" />
+              <UnitField source="InvoiceDiscountPercentage" unitTitle="%" />
+              <UnitField source="InvoiceDiscountCurrency" unitSource="Currency" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <UnitField source="VATCurrency" title="Total Tax on Sales" unitSource="Currency" />
+                <UnitField source="VAT1CurrencyVar" title="Tax on Sales 1" unitSource="Currency" />
+                <UnitField source="VAT2CurrencyVar" title="Tax on Sales 2" unitSource="Currency" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <UnitField source="VAT3CurrencyVar" title="Tax on Sales 3" unitSource="Currency" />
+                </If>
+              </If>
+              <Else>
+                <UnitField source="VATCurrency" title="Tax on Sales" unitSource="Currency" />
+              </Else>
+              <If condition="Charge1Text != ''">
+                <UnitField source="Charge1Currency" titleValue="Charge1Text" unitSource="Currency" />
+              </If>
+              <If condition="Charge2Text != ''">
+                <UnitField source="Charge2Currency" titleValue="Charge2Text" unitSource="Currency" />
+              </If>
+              <If condition="Charge3Text != ''">
+                <UnitField source="Charge3Currency" titleValue="Charge3Text" unitSource="Currency" />
+              </If>
+              <If condition="Charge4Text != ''">
+                <UnitField source="Charge4Currency" titleValue="Charge4Text" unitSource="Currency" />
+              </If>
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <UnitField source="ChargeVAT" title="Total Tax on Charges" unitSource="Currency" />
+                <UnitField source="ChargeVAT1Var" title="Tax on Charges 1" unitSource="Currency" />
+                <UnitField source="ChargeVAT2Var" title="Tax on Charges 2" unitSource="Currency" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <UnitField source="ChargeVAT3Var" title="Tax on Charges 3" unitSource="Currency" />
+                </If>
+              </If>
+              <Else>
+                <UnitField source="ChargeVAT" title="Tax on Charges" unitSource="Currency" />
+              </Else>
+              <UnitField source="OnAccountItemSumCurrency" unitSource="Currency" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <UnitField source="OnAccountVATCurrency" title="Total Tax on Account" unitSource="Currency" />
+                <UnitField source="OnAccountVAT1CurrencyVar" title="Tax on Account 1" unitSource="Currency" />
+                <UnitField source="OnAccountVAT2CurrencyVar" title="Tax on Account 2" unitSource="Currency" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <UnitField source="OnAccountVAT3CurrencyVar" title="Tax on Account 3" unitSource="Currency" />
+                </If>
+              </If>
+              <Else>
+                <UnitField source="OnAccountVATCurrency" title="Tax on Account" unitSource="Currency" />
+              </Else>
+              <UnitField source="TotalCurrency" title="Balance Due" unitSource="Currency" />
+              <If condition="Currency != StandardCurrency">
+                <UnitField source="TotalStandard" unitSource="StandardCurrency" />
+              </If>
+              <Field source="ExchangeRateDate" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompanyVar_CompanyInformation" title="Company" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Billing Address">
+              <Reference foreignKey="PaymentCustomer_Customer" title="Bill to Customer" />
+              <Field source="PayerName2" title="Address" shadowTitle="Street" />
+              <Field source="PayerName3" title="" />
+              <ZipCity citySource="PayerPostalDistrict" zipSource="PayerZipCode" title="" cityShadowTitle="Postal District" zipShadowTitle="Zip Code" />
+              <Field source="PayerName4" title="" />
+              <Field source="PayerName5" title="" />
+              <Field source="PayerAttention" title="Attn." />
+              <Field source="PayerCountry" title="Ctry{Show_Invoice}" />
+            </Group>
+            <Group title="Ship to Address">
+              <Reference foreignKey="CustomerNumber_Customer" title="Ship to Customer" />
+              <Field source="Name2" title="Address" shadowTitle="Street" />
+              <Field source="Name3" title="" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" title="" cityShadowTitle="Postal District" zipShadowTitle="Zip Code" />
+              <Field source="Name4" title="" />
+              <Field source="Name5" title="" />
+              <Field source="Attention" />
+              <Field source="Country" title="Ctry{Show_Invoice}" />
+            </Group>
+            <Group title="Customer Information{1}">
+              <Field source="DepartmentNumber" />
+              <Field source="InventoryNumber" />
+              <Field source="Reference" />
+              <Field source="VATNumber" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Invoice{noun}">
+              <Field source="InvoiceNumber" />
+              <Boolean source="Printed" />
+              <If condition="SubscriptionOrderNumber = 0 or booleanSysInfo('ShowSubscriptionSalesOrders')">
+                <Link workspace="SalesOrders" template="^1" arguments="OrderNumber" title="Order No." icon="WorkspaceLink">
+                  <Target pane="SalesOrders_Filter">
+                    <Restriction template="Selected Sales Order" expression="OrderNumber=target.OrderNumber" />
+                    <Focus>
+                      <Match field="OrderNumber" value="OrderNumber" />
+                    </Focus>
+                  </Target>
+                </Link>
+              </If>
+              <Field source="LastDeliveryNoteNumber" />
+              <Field source="VersionNumber" />
+              <Field source="InvoiceDate" />
+              <Field source="DueDate" />
+              <Field source="PrintedBy" />
+              <Field source="PrintingDate" />
+              <If condition="BasedOnInvoiceNumber != 0 and (SubscriptionOrderNumber = 0 or booleanSysInfo('ShowSubscriptionSalesOrders'))">
+                <Link workspace="SalesOrders" template="^1" arguments="BasedOnInvoiceNumber" title="Converted to Credit Order" style="attentionLabel" icon="WorkspaceLink">
+                  <Target pane="CreditOrders">
+                    <Restriction template="Selected Credit Order" expression="BasedOnInvoiceNumber=target.OrderNumber" />
+                    <Focus>
+                      <Match field="OrderNumber" value="BasedOnInvoiceNumber" />
+                    </Focus>
+                  </Target>
+                </Link>
+              </If>
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Analysis" style="fullWidth">
+        <Actions>
+          <PrintThis />
+          <Print />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Billing Address">
+              <Reference foreignKey="PaymentCustomer_Customer" />
+              <Field source="PayerName2" appearance="maximized" />
+              <Field source="PayerName3" appearance="maximized" />
+              <ZipCity citySource="PayerPostalDistrict" zipSource="PayerZipCode" appearance="maximized" />
+              <Field source="PayerName4" appearance="maximized" />
+              <Field source="PayerName5" appearance="maximized" />
+              <Field source="PayerAttention" title="Attn." />
+              <Field source="PayerCountry" title="Country{Show_Invoice}" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompanyVar_CompanyInformation" />
+            </Group>
+            <Group title="Price">
+              <Field source="Currency" />
+              <Field source="ExchangeRateDate" />
+              <Field source="ItemSumCurrency" />
+              <Field source="InvoiceDiscountPercentage" />
+              <Field source="InvoiceDiscountCurrency" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATCurrency" title="Total Tax on Sales" />
+                <Field source="VAT1CurrencyVar" title="Tax on Sales 1" />
+                <Field source="VAT2CurrencyVar" title="Tax on Sales 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3CurrencyVar" title="Tax on Sales 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATCurrency" title="Tax on Sales" />
+              </Else>
+              <If condition="Charge1Text != ''">
+                <UnitField source="Charge1Currency" titleValue="Charge1Text" unitSource="Currency" />
+              </If>
+              <If condition="Charge2Text != ''">
+                <UnitField source="Charge2Currency" titleValue="Charge2Text" unitSource="Currency" />
+              </If>
+              <If condition="Charge3Text != ''">
+                <UnitField source="Charge3Currency" titleValue="Charge3Text" unitSource="Currency" />
+              </If>
+              <If condition="Charge4Text != ''">
+                <UnitField source="Charge4Currency" titleValue="Charge4Text" unitSource="Currency" />
+              </If>
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="ChargeVAT" title="Total Tax on Charges" />
+                <Field source="ChargeVAT1Var" title="Tax on Charges 1" />
+                <Field source="ChargeVAT2Var" title="Tax on Charges 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="ChargeVAT3Var" title="Tax on Charges 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="ChargeVAT" title="Tax on Charges" />
+              </Else>
+              <Field source="OnAccountItemSumCurrency" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="OnAccountVATCurrency" title="Total Tax on Account" />
+                <Field source="OnAccountVAT1CurrencyVar" title="Tax on Account 1" />
+                <Field source="OnAccountVAT2CurrencyVar" title="Tax on Account 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="OnAccountVAT3CurrencyVar" title="Tax on Account 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="OnAccountVATCurrency" title="Tax on Account" />
+              </Else>
+              <Field source="TotalCurrency" title="Balance Due" />
+              <Field source="StandardCurrency" />
+              <Field source="TotalStandard" />
+            </Group>
+            <Group title="Customer Information{1}">
+              <Field source="DepartmentNumber" />
+              <Field source="InventoryNumber" />
+              <Field source="Reference" />
+              <Field source="VATNumber" />
+            </Group>
+            <Group title="Sales Orders{General}">
+              <Field source="MainOrderNumber" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Ship to Address">
+              <Reference foreignKey="CustomerNumber_Customer" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Country" title="Country{Show_Invoice}" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Invoice{noun}">
+              <Field source="InvoiceNumber" />
+              <Field source="OrderNumber" />
+              <Field source="LastDeliveryNoteNumber" />
+              <Field source="VersionNumber" />
+              <Field source="InvoiceDate" />
+              <Field source="DueDate" />
+              <Field source="PrintedBy" />
+              <Field source="PrintingDate" />
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Extra Fields">
+              <Field source="CustomerPopup1" />
+              <Field source="CustomerPopup2" />
+              <Field source="CustomerPopup3" />
+              <Field source="CustomerPopup4" />
+              <Field source="CustomerPopup5" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Credit Card">
+              <Field source="CreditCardNumber" />
+              <Field source="CreditCardExpiryDate" />
+              <Field source="AuthorizationAmount" />
+              <Field source="AuthorizationCode" />
+              <Field source="DateOfAuthorization" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="ItemNumber" />
+          <Field source="NumberInvoiced" title="Quantity{Number}" />
+          <Field source="Unit" />
+          <Field source="ExternalItemText" />
+          <Field source="UnitPriceCurrency" />
+          <Field source="DiscountPercentage" />
+          <Field source="DiscountCurrency" />
+          <Field source="LinePriceCurrency" title="Extended Price" />
+          <Field source="PriceUnit" title="Pricing Unit" />
+          <Field source="DiscountText" />
+          <Field source="NumberOrdered" title="Ordered" />
+          <Field source="NumberRemainder" title="Back Orders" />
+          <Field source="UnitPrice1Currency" title="Price at Step 1" />
+          <Field source="QuantityDiscountCurrency" title="Quantity Disc." />
+          <Field source="OrderNumber" title="Order No.{0}" />
+          <Field source="OrderLineNumber" title="Line No." />
+          <Columns ref="DimensionColumns" />
+          <Field source="SupplementaryText1" />
+          <Field source="SupplementaryText2" />
+          <Field source="SupplementaryText3" />
+          <Field source="SupplementaryText4" />
+          <Field source="SupplementaryText5" />
+          <Field source="SupplementaryText6" />
+          <Field source="SupplementaryText7" />
+          <Field source="SupplementaryText8" />
+          <Field source="SupplementaryText9" />
+          <Field source="SupplementaryText10" />
+          <Field source="ItemPopup1" title="Popup 1" />
+          <Field source="ItemPopup2" title="Popup 2" />
+          <Field source="ItemPopup3" title="Popup 3" />
+          <Field source="ItemPopup4" title="Popup 4" />
+          <Field source="ItemPopup5" title="Popup 5" />
+        </Columns>
+      </Table>
+      <Table name="EntryOriginLine">
+        <Actions all="true" />
+        <Columns>
+          <!-- The OriginLine could be InvoiceBOMLine, in which case we have to use 
+							 the keys instead of OriginLineInstanceKey -->
+          <Style ref="highlightRow" condition="InstanceKey=Parent.Parent.Parent.Parent.OriginLineInstanceKey                              or InvoiceNumber=Parent.Parent.Parent.Parent.LineKey1IntegerVar                               and LineNumber=Parent.Parent.Parent.Parent.LineKey2IntegerVar" />
+          <Field source="ItemNumber" />
+          <Field source="NumberInvoiced" title="Quantity{Number}" />
+          <Field source="Unit" />
+          <Field source="ExternalItemText" />
+          <Field source="UnitPriceCurrency" />
+          <Field source="DiscountPercentage" />
+          <Field source="DiscountCurrency" />
+          <Field source="LinePriceCurrency" title="Extended Price" />
+          <Field source="PriceUnit" title="Pricing Unit" />
+          <Field source="DiscountText" />
+          <Field source="NumberOrdered" title="Ordered" />
+          <Field source="NumberRemainder" title="Back Orders" />
+          <Field source="UnitPrice1Currency" title="Price at Step 1" />
+          <Field source="QuantityDiscountCurrency" title="Quantity Disc." />
+          <Field source="OrderNumber" title="Order No.{0}" />
+          <Field source="OrderLineNumber" title="Line No." />
+          <Columns ref="DimensionColumns" />
+          <Field source="SupplementaryText1" />
+          <Field source="SupplementaryText2" />
+          <Field source="SupplementaryText3" />
+          <Field source="SupplementaryText4" />
+          <Field source="SupplementaryText5" />
+          <Field source="SupplementaryText6" />
+          <Field source="SupplementaryText7" />
+          <Field source="SupplementaryText8" />
+          <Field source="SupplementaryText9" />
+          <Field source="SupplementaryText10" />
+          <Field source="ItemPopup1" title="Popup 1" />
+          <Field source="ItemPopup2" title="Popup 2" />
+          <Field source="ItemPopup3" title="Popup 3" />
+          <Field source="ItemPopup4" title="Popup 4" />
+          <Field source="ItemPopup5" title="Popup 5" />
+        </Columns>
+      </Table>
+      <Table name="Standard">
+        <Actions all="true" />
+        <Columns>
+          <Field source="ItemNumber" />
+          <Field source="ExternalItemText" />
+          <UnitField source="NumberInvoiced" title="Quantity{Number}" unitSource="Unit" />
+          <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" />
+          <UnitField source="DiscountPercentage" unitTitle="%" />
+          <UnitField source="DiscountCurrency" unitSource="parent.Currency" />
+          <UnitField source="LinePriceCurrency" title="Extended Price" unitSource="parent.Currency" />
+          <UnitField source="PriceUnit" title="Pricing Unit" unitSource="Unit" />
+          <Field source="DiscountText" />
+          <UnitField source="NumberOrdered" title="Ordered" unitSource="Unit" />
+          <UnitField source="NumberRemainder" title="Back Orders" unitSource="Unit" />
+          <UnitField source="UnitPrice1Currency" title="Price at Step 1" unitSource="parent.Currency" />
+          <UnitField source="QuantityDiscountCurrency" title="Quantity Disc." unitSource="parent.Currency" />
+          <Field source="OrderNumber" title="Order No.{0}" />
+          <Field source="OrderLineNumber" title="Line No." />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

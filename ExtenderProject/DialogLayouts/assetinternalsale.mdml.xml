@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- BPE, 09/09/10: Renaming variables (38817).-->
+<!-- BPE, 09/09/10: Changed layout to use global definition dimensions (38815). -->
+<!-- CSK, 26/07/11: Full form improved (39789).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="AssetInternalSale">
+    <Pane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Form name="Custom">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Interval firstSource="FromAssetNumberVar" lastSource="ToAssetNumberVar" title="Asset No." />
+              <Field source="AssetGroupVar" title="Asset Group" appearance="interval" />
+              <Field source="AssetSubGroupVar" title="Asset Sub-Group" appearance="interval" />
+              <Interval firstSource="FromCompanyNumberVar" lastSource="ToCompanyNumberVar" title="Company No." />
+            </Group>
+            <Group ref="DimensionsVarTargetGroupIntervals" />
+          </Column>
+          <Column>
+            <Group title="New Company">
+              <Field source="NewCompanyNumberVar" title="Company No." mandatory="true" />
+            </Group>
+            <Group ref="DimensionNewVarGroup" />
+          </Column>
+          <Column>
+            <Group title="Posting" style="fullWidth">
+              <Field source="EntryDateVar" title="Entry Date" mandatory="true" />
+              <Field source="EntryTextVar" title="Entry Description" />
+              <Field source="ResponsibleVar" title="Responsible" />
+              <Boolean source="PostAutomaticallyVar" title="Post{imp}" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Selection Criteria">
+              <Interval firstSource="FromAssetNumberVar" lastSource="ToAssetNumberVar" title="Asset No." />
+              <Field source="AssetGroupVar" title="Asset Group" appearance="interval" />
+              <Field source="AssetSubGroupVar" title="Asset Sub-Group" appearance="interval" />
+              <Interval firstSource="FromCompanyNumberVar" lastSource="ToCompanyNumberVar" title="Company No." />
+            </Group>
+            <Group ref="DimensionsVarTargetGroupIntervals" />
+          </Column>
+          <Column>
+            <Group title="New Company">
+              <Field source="NewCompanyNumberVar" title="Company No." />
+            </Group>
+            <Group ref="DimensionNewVarGroup" />
+          </Column>
+          <Column>
+            <Group title="Posting" style="fullWidth">
+              <Field source="EntryDateVar" title="Entry Date" />
+              <Field source="EntryTextVar" title="Entry Description" />
+              <Field source="TransactionTypeVar" title="Transaction Type" />
+              <Field source="TransactionNumberSeriesVar" title="Transaction Number Series" />
+              <Field source="TransactionNumberVar" title="Transaction No.{Voucher}" />
+              <Field source="ResponsibleVar" title="Responsible" />
+              <Boolean source="PostAutomaticallyVar" title="Post{imp}" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </Pane>
+  </Layout>
+</MDML>
+

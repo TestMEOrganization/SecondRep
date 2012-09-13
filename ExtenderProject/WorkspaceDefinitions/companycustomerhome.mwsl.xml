@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AMC, 03/04/09: First draft of Customer Home (37635).-->
+<!-- RMA, 23/07/09: Redesign of Customer Home workspace(37635).-->
+<!-- RMA, 08/10/09: New workspace: Company Customer Home (37635).-->
+<!-- RMA, 28/10/09: Fix order of view/title attributes (37635).-->
+<!-- RMA, 13/11/09: Layout improvements for demo purposes (37635).-->
+<!-- KRN, 09/12/09: Foreign key renamed (38152) -->
+<!-- RMA, 13/12/09: Align layouts (37635).-->
+<!-- JSV, 01/09/10: Use view AttachDocument_From_Parent on table with documents (38778).-->
+<!-- JSV, 02/12/10: Place DocumentRevisions in extension instead of assistant (39187).-->
+<!-- BPE, 19/01/11: Embedding the CustomerEntry workspace (39350).-->
+<!-- SJK, 07/06/11: Aligning CRM views (39703).-->
+<!-- CSK, 11/07/11: Entries filter aligned to Financial Analysis (39269).-->
+<!-- CSK, 11/07/11: Filters should be compacted (39279).-->
+<!-- CSK, 11/07/11: Entry drilling added to Periodic Statements (39281).-->
+<!-- CSK, 12/07/11: Jobs filter and Details card view changed (39763).-->
+<!-- CSK, 13/07/11: Company Customers workspace improvements (39765).-->
+<!-- CSK, 22/07/11: Contact persons are read-only (39765).-->
+<!-- CSK, 22/07/11: Link to customer (39765).-->
+<!-- CSK, 12/09/11: Opportunities tab aligned to Contact Companies (39763).-->
+<!-- KUN, 14/11/11: Performance improvements (40161). -->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="CompanyCustomerHome" title="Company Specific Customer Home">
+    <Card source="CompanyCustomerCard" view="CompanyCustomerHomeKPI" title="Overview">
+      <Expansions>
+        <Restrict reversedForeignKey="CompanyCustomer">
+          <Filter source="Jobs" view="RelatedJobs(false,false)" title="Jobs">
+            <Assistants parentSize="large">
+              <Bind foreignKey="primary">
+                <Card source="JobOverview" view="Overview(false,false)" title="Details" />
+              </Bind>
+            </Assistants>
+          </Filter>
+        </Restrict>
+        <Bind foreignKey="CustomerNumber_Customer">
+          <Card source="CustomerCard" view="CustomerHomeKPI" title="Customer" />
+        </Bind>
+      </Expansions>
+    </Card>
+    <Card source="CompanyCustomerCard" view="Custom" title="Information">
+      <Assistants minimized="false" parentSize="huge">
+        <Bind foreignKey="primary">
+          <Card source="CompanyCustomerPaymentInfo" view="Standard" title="Payment">
+            <Assistants>
+              <Bind foreignKey="CompanyCustomerCustomerPaymentMode_CustomerPaymentMode">
+                <Card source="CustomerPaymentModes" view="Readonly" title="Payment Modes" />
+              </Bind>
+              <Bind foreignKey="InterestReminderPrinciple_InterestReminderPrinciple">
+                <Card source="InterestReminderPrinciples" view="Readonly" />
+              </Bind>
+            </Assistants>
+          </Card>
+        </Bind>
+        <With>
+          <Card view="Dimensions" title="Dimensions" />
+          <Card view="ExtraInformation" title="Extra Information" />
+        </With>
+        <Bind foreignKey="Card_ParentLinkingRuleHeader">
+          <Card source="LinkingRules" view="Readonly" title="Parent Linking Rule" hidden="parent.LinkingRuleName = ''">
+            <With>
+              <Table title="Linked fields" />
+            </With>
+          </Card>
+        </Bind>
+        <Bind foreignKey="Card_CompanyLinkingRuleHeader">
+          <Card source="LinkingRules" view="Readonly" title="Company Specific Linking Rule">
+            <With>
+              <Table title="Linked fields" />
+            </With>
+          </Card>
+        </Bind>
+      </Assistants>
+    </Card>
+    <Hidden source="CompanyCustomerCard">
+      <Expansions>
+        <Bind foreignKey="DocumentArchiveNumber_DocumentArchiveHeader">
+          <Table source="DocumentArchives" view="AttachDocument_From_Parent" title="Documents">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="DocumentRevisions" view="Full" />
+              </Bind>
+            </Expansions>
+          </Table>
+        </Bind>
+        <Bind foreignKey="ContactCompanyNumber_ContactCompany">
+          <Hidden source="ContactCompanys">
+            <Expansions>
+              <With>
+                <Table view="Demo_Overview" title="Contact Persons">
+                  <Expansions minimized="true">
+                    <Restrict reversedForeignKey="ContactPersonNumber1_ContactPerson">
+                      <Filter source="Opportunities" view="Minimal" title="Role 1 Opportunities">
+                        <Assistants parentSize="large">
+                          <With>
+                            <Card view="Overview" title="Details" />
+                          </With>
+                        </Assistants>
+                      </Filter>
+                    </Restrict>
+                    <Restrict reversedForeignKey="ContactPersonNumber2_ContactPerson">
+                      <Filter source="Opportunities" view="Minimal" title="Role 2 Opportunities">
+                        <Assistants parentSize="large">
+                          <With>
+                            <Card view="Overview" title="Details" />
+                          </With>
+                        </Assistants>
+                      </Filter>
+                    </Restrict>
+                    <Restrict reversedForeignKey="ContactPersonNumber3_ContactPerson">
+                      <Filter source="Opportunities" view="Minimal" title="Role 3 Opportunities">
+                        <Assistants parentSize="large">
+                          <With>
+                            <Card view="Overview" title="Details" />
+                          </With>
+                        </Assistants>
+                      </Filter>
+                    </Restrict>
+                  </Expansions>
+                </Table>
+              </With>
+            </Expansions>
+          </Hidden>
+          <Hidden source="ContactCompanys" name="Opportunities">
+            <Restrict reversedForeignKey="ContactCompanyNumber_ContactCompany">
+              <Filter source="Opportunities" view="Demo_ContactCompanyHome" title="Opportunities">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Overview" title="Opportunity">
+                      <Expansions minimized="true">
+                        <With>
+                          <Table view="Overview" title="Contact Persons" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Restrict>
+          </Hidden>
+        </Bind>
+      </Expansions>
+    </Hidden>
+  </Workspace>
+</MWSL>
+

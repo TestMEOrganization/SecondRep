@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #Message-digest d31585c8db54952d200eee46b0b2fdbd   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:31
+  TAC*MaconomyHQ: yes
+-->
+<!-- SJK, 09/06/11: New order workspace (39731).-->
+<!-- SJK, 29/06/11: Demo filter for Lookup panes (39731).-->
+<!-- SJK, 22/08/11: Improvements after verification (39731).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+<Workspace name="C_SalesOrders_Commerce" title="Sales Orders">
+	<Formation>
+		<Section title="Sales Orders">
+			<Mount>
+				<Workspace source="SalesOrderHome" />
+			</Mount>
+		</Section>
+		<Section title="Credit Orders">
+			<Mount>
+				<Workspace source="CreditOrderHome" />
+			</Mount>
+			<Mount>
+				<Workspace source="SD_InvoiceToCreditOrder" />
+			</Mount>
+		</Section>
+		<Section title="Lookup">
+			<Mount>
+				<Filter source="ShowInvoice" name="ShowInvoice_Filter" view="SalesOrders" title="Invoices">
+					<With>
+						<Card view="Standard" title="Invoice">
+							<Expansions>
+								<With>
+									<Table view="Standard" />
+								</With>
+							</Expansions>
+							<Assistants>
+								<Bind foreignKey="primary">
+									<Hidden source="InvoiceToCreditOrder" />
+								</Bind>
+							</Assistants>
+						</Card>
+					</With>
+				</Filter>
+				<Filter source="ShowCreditMemo" view="SalesOrders" title="Credit Memos">
+					<With>
+						<Card view="Standard" title="Credit Memo">
+							<With>
+								<Table view="Standard" title="Details" />
+							</With>
+						</Card>
+					</With>
+				</Filter>
+				<Card source="P_InvoiceStatistics" view="Full" />
+			</Mount>
+		</Section>
+	</Formation>
+</Workspace>
+</MWSL>

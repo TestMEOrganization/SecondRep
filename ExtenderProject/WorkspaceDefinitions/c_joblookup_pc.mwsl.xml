@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--89cd31477d9e54569ceee6344555cfe7b2fdaeff-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--cf2eab7deed694f56c1ff87525f4896072919dd8-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 2d54e3164a6017daadf8470f39e04cdf   3 _ _   213
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 28.10.2011
+  TAC_CreationTime: 14:31:39
+  TAC*MaconomyHQ: yes
+-->
+<!-- KRN, 21/05/10: JobLookup extends JobHome (38501).-->
+<!-- KRN, 08/07/10: Subscriptions workspace included here (38608).-->
+<!-- KRN, 09/07/10: More reports to section (38609).-->
+<!-- KRN, 13/08/10: Demo layout used (38644).-->
+<!-- SJK, 23/06/11: Job sales orders included (39727).-->
+<!-- PSZ, 21/07/11: Added title for SalesOrders filter (39759).-->
+<!-- PSZ, 11/08/11: Embed Analytix reports (39843).-->
+<!-- PSZ, 13/09/11: Remove placeholder SingleJobForecast pane (39932).-->
+<!-- PSZ, 15/09/11: Move Invoice History tab to Lookup section (39939).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_JobLookup_PC" title="Lookup">
+    <Define>
+      <Function name="hasAnalytix" value="isEnvVarDefined('analytix.server.host')" type="boolean" />
+    </Define>
+    <Card source="Jobs" view="TimeFromJobs" title="Time Report" />
+    <Card source="Jobs" view="ProjectFollowUp" title="Project Follow-Up" />
+    <!-- <Workspace source="JobSubscriptions" />
+		
+		<Hidden source="Jobs">
+			<Restrict reversedForeignKey="JobNumber_JobHeader">
+				<Filter source="SalesOrders" view="Demo_JobLookup" title="Sales Orders" />
+			</Restrict>
+		</Hidden>
+
+		<Table source="ShowJobTransfers" title="Transfers" view="Full" />-->
+    <Table name="InvoiceHistory_Table" source="JobInvoiceHistory" view="Demo(true)" title="Invoice History">
+      <Expansions>
+        <Bind foreignKey="InvoiceNumber_Invoice">
+          <Card source="ShowJobInvoice" view="Demo" hidden="hasNoSeed()">
+            <Expansions>
+              <With>
+                <Table title="Specification" />
+              </With>
+              <Bind foreignKey="primary">
+                <Table source="JobInvoiceOverview" view="Demo" title="Foundation" hidden="hasNoRecords()" />
+              </Bind>
+              <Bind foreignKey="primary">
+                <Table source="ShowJobInvoiceReconciliations" view="Full" title="On Account Reconciliation" hidden="hasNoRecords()" />
+              </Bind>
+            </Expansions>
+          </Card>
+          <Card source="ShowJobCreditMemo" view="Demo" hidden="hasNoSeed()">
+            <Expansions>
+              <With>
+                <Table title="Specification" />
+              </With>
+              <Bind foreignKey="primary">
+                <Table source="JobInvoiceOverview" view="Demo" title="Foundation" hidden="hasNoRecords()" />
+              </Bind>
+              <Bind foreignKey="primary">
+                <Table source="ShowJobInvoiceReconciliations" view="Full" title="On Account Reconciliation" hidden="hasNoRecords()" />
+              </Bind>
+            </Expansions>
+          </Card>
+        </Bind>
+      </Expansions>
+    </Table>
+	<Card source="Jobs" view="OutstandingInvoices_ProjectManager_Report" />
+    <Card source="FinancialJobCard" title="Financial Job Card" view="Standard">
+      <With>
+        <Table title="Entries" view="Full" />
+      </With>
+    </Card>
+    <Card source="JobCard" title="Job Card" view="Standard" >
+      <With>
+        <Table title="Entries" />
+      </With>
+    </Card>
+    <Table source="ShowJobTransfers" title="Transfers" view="Full" />
+    <Card source="Jobs" view="Analytix_JobProfitability_Budget" title="Job Profitability, Budget (Analytix)" name="JobProfitability_Budget" hidden="not hasAnalytix()" />
+    <Card source="Jobs" view="Analytix_ARTransactions" title="A/R Transactions (Analytix)" name="ARTransactions" hidden="not hasAnalytix()" />
+  </Workspace>
+</MWSL>
+

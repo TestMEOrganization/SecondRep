@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- MJA, 11/05/09: New System Information layout (37693).-->
+<!-- MJA, 23/05/09: Layout for Subscription module added (37733).-->
+<!-- MJA, 25/05/09: Layout for G/L module added (37734).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 19/08/09: Temporary ClosingChecklist view added for Closing workspace prototype (38029).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- MJA, 29/10/09: Remove Standard layout (37816).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- PSZ, 14/07/10: Added JobCost form (38659).-->
+<!-- MJA, 16/07/10: Actions added and structure updated (37947).-->
+<!-- PSZ, 19/11/10: Split Job Cost group on JobCost form into more specific groups (39135).-->
+<!-- PSZ, 30/03/11: New forms for system setup workspace (39512).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- PSZ, 13/07/11: Added missing User Island to layouts (39512).-->
+<!-- MJA, 24/08/11: Add Integration Status Note field (39880).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<!-- PSZ, 17/11/11: Remove unused layouts (40178).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="SystemInformation">
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="General Ledger">
+              <Field source="YearEndResultAccount" />
+              <Field source="InitCompany" />
+              <Field source="InitAccount" />
+              <Field source="LocalChartOfAccountsDimension" />
+              <Field source="JointEntriesMade" />
+              <Boolean source="ReuseTransactionNumber" />
+              <Boolean source="CarryForwardInvertedSign" />
+            </Group>
+            <Group title="Currency">
+              <Field source="SalesExchangeRateTableVar" />
+              <Field source="PurchaseExchangeRateTableVar" />
+              <Field source="DutyExchangeRateTableVar" />
+              <Field source="BudgetExchangeRateTableVar" />
+              <Field source="EnterpriseExchangeRateTableVar" />
+              <Field source="BaseCurrency" />
+              <Field source="EuroCurrency" />
+              <Field source="CurrencyExchangeUnit" />
+              <Boolean source="ExchangeRateGivenInBase" />
+            </Group>
+            <Group title="Invoice / Credit Memo">
+              <Boolean source="IncludeVATSpecification" />
+            </Group>
+            <Group title="Tax{VAT}">
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="StandardVATCode" />
+                <Field source="StandardVATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="StandardVATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="StandardVATCode" title="Standard Tax Code" />
+              </Else>
+              <Field source="OnAccountVATCode" />
+              <Field source="VendorDiscountItemVATCode" />
+              <Field source="StandardItemVATCode" />
+              <Boolean source="ExtendedVATReporting" />
+            </Group>
+            <Group title="Statistics to Tax Authorities">
+              <UnitField source="MaximumFileSize" unitTitle="kb" />
+              <Field source="IntrastatMaxEntriesPerDeclaration" />
+              <Field source="IntrastatSpecification" />
+              <Boolean source="EUSalesListSystemReport" />
+              <Boolean source="IntrastatImportReport" />
+              <Boolean source="IntrastatExportReport" />
+            </Group>
+            <Group title="Rounding">
+              <Boolean source="RoundingOffAmount" />
+            </Group>
+            <Group title="Job Cost">
+              <Boolean source="JobInOrderWhenCreated" />
+              <Field source="TimePricePrinciple" />
+              <Boolean source="PostJobJournalAmount" />
+              <Boolean source="PostJobJournalHours" />
+              <Boolean source="DepartmentFromEmployee" />
+              <Boolean source="FixedMarkUpPercentage" />
+              <Field source="MarkUpPercentage" />
+              <Boolean source="TransferTextsToPurchaseOrder" />
+              <Field source="AllocationPrinciple" />
+              <Boolean source="DuplicateLinesInTimeSheet" />
+              <Boolean source="PostingNonApprovedTimeSheets" />
+              <Field source="ApprovalSuperior" title="Appr. by Supervisor, Time" />
+              <Field source="ApprovalProjectManager" title="Appr. by Project Manager, Time" />
+              <Field source="ApprovalSuperiorExpenses" title="Appr. by Supervisor., Exp." />
+              <Field source="ApprProjectManagerExpenses" title="Appr. by Project Manager, Exp." />
+              <Boolean source="CheckOvertime" />
+              <Boolean source="AllocateJobSales" />
+              <Boolean source="DoNotAdjustAmountActivities" />
+              <Boolean source="CreateNewOrderAtJobAssignment" />
+              <Field source="TaskApprovalRequirement" />
+              <Field source="TaskMessageType" />
+            </Group>
+            <Group title="Job Allocation Combinations">
+              <Boolean source="AllowDimensionIntervals" />
+            </Group>
+            <If condition="hasAddOn(128)">
+              <Group title="People Planner Integration">
+                <Field source="IntegrationStatusNoteType" />
+              </Group>
+            </If>
+          </Column>
+          <Column>
+            <Group title="Sales Orders{General}">
+              <Field source="MarkUpPrinciple" />
+              <Field source="BackOrderPrinciple" />
+              <Field source="ItemNumberRoundingOff" />
+              <Boolean source="IncludeBackOrderLines" />
+              <Boolean source="AutomaticBackOrderAllocation" />
+              <Boolean source="PostingPerItemGroup" />
+              <Boolean source="CreditBlocking" />
+              <Boolean source="PartDelivery" />
+              <Boolean source="PostNumberAsQuantity" />
+              <Boolean source="DeptFromPaymentCustomer" />
+              <Boolean source="InvoiceDiscFromPaymentCustomer" />
+              <Boolean source="FixPriceLevel" />
+              <Boolean source="WarnIfNoPriceList" />
+              <Boolean source="WarnIfZeroCostPrice" />
+              <Boolean source="JointPickingList" />
+              <Boolean source="OneDeclarationPerBarCodeImport" />
+              <Boolean source="RegisteredSalesForDeliveryCustomer" />
+              <Boolean source="DueDateFromPrintingDate" />
+              <Boolean source="DeliveryDateFromPreferredInvoiceDate" />
+              <Boolean source="DoNotNotifyNotAvailableItem" />
+              <Boolean source="GetInventoryFromItem" />
+            </Group>
+            <Group title="Inventory{System_Information}">
+              <Field source="InitItem" />
+              <Boolean source="AllowHistoricalItemMovement" />
+            </Group>
+            <Group title="Customer{Debitor}">
+              <Field source="InitCustomer" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="ReminderChargeVATCode" />
+                <Field source="ReminderChargeVATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="ReminderChargeVATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="ReminderChargeVATCode" title="Reminder Charge Tax Code" />
+              </Else>
+              <Boolean source="CustomersAsContactCompanys" />
+              <Boolean source="AutomaticCreditMemoReconciliation" />
+            </Group>
+            <Group title="Vendor{Creditor}">
+              <Field source="InitVendor" />
+              <Boolean source="CreatePurchaseVoucher" />
+              <Boolean source="GetEntryTextFromVendorInvoice" />
+              <Boolean source="SuggestNameAsEntryText" />
+              <Boolean source="UseNameAsEntryText" />
+              <Boolean source="ReconcileNonApprovedVendorEntry" />
+            </Group>
+            <Group title="Access Control">
+              <Boolean source="PasswordRequired" />
+            </Group>
+            <Group title="Tax Office">
+              <Field source="TaxOfficeVendorNumber" />
+            </Group>
+            <Group title="Advertisement">
+              <Field source="MaxNumberOfInsertionsPerForm" />
+            </Group>
+            <Group title="Subscription">
+              <Boolean source="ShowSubscriptionSalesOrders" />
+              <Boolean source="SeparateSubscriptionOrderNumbers" />
+            </Group>
+            <Group title="Resource Planning">
+              <Field source="OvertimeEmployees" />
+              <Field source="ExceedingTaskAllocation" />
+              <Field source="ResolveExceedingTaskAllocation" />
+              <Field source="DateHeaderFormat" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+        <If condition="hasRole('Finance Admin')" >
+        <Group title="General Ledger">
+          <Field source="YearEndResultAccount" style="highlightRow" open="true" />
+          <Field source="InitCompany" />
+          <Field source="InitAccount" />
+          <Field source="LocalChartOfAccountsDimension" />
+          <Field source="JointEntriesMade" />
+          <Field source="ReuseTransactionNumber" />
+          <Field source="CarryForwardInvertedSign" />
+        </Group>
+        </If>
+        <Else>
+        <Group title="General Ledger">
+          <Field source="YearEndResultAccount" style="highlightRow" open="false" />
+          <Field source="InitCompany" />
+          <Field source="InitAccount" />
+          <Field source="LocalChartOfAccountsDimension" />
+          <Field source="JointEntriesMade" />
+          <Field source="ReuseTransactionNumber" />
+          <Field source="CarryForwardInvertedSign" />
+        </Group>
+        </Else>
+        </Row>
+      </Form>
+      <Form name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Group title="General Ledger">
+          <Field source="YearEndResultAccount" style="highlightRow" open="true" />
+          <Field source="InitCompany" />
+          <Field source="InitAccount" />
+          <Field source="LocalChartOfAccountsDimension" />
+          <Field source="JointEntriesMade" />
+          <Field source="ReuseTransactionNumber" />
+          <Field source="CarryForwardInvertedSign" />
+        </Group>
+      </Form>
+      <Form name="GeneralLedger">
+        <Actions all="true" />
+        <Group title="General Ledger">
+          <Field source="YearEndResultAccount" />
+          <Field source="InitCompany" />
+          <Field source="InitAccount" />
+          <Field source="LocalChartOfAccountsDimension" />
+          <Field source="JointEntriesMade" />
+          <Boolean source="ReuseTransactionNumber" />
+          <Boolean source="CarryForwardInvertedSign" />
+        </Group>
+        <Group title="Tax">
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="StandardVATCode" />
+            <Field source="StandardVATCode2" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="StandardVATCode3" />
+            </If>
+          </If>
+          <Else>
+            <Field source="StandardVATCode" title="Standard Tax Code" />
+          </Else>
+          <Field source="OnAccountVATCode" />
+          <Field source="VendorDiscountItemVATCode" />
+          <Field source="StandardItemVATCode" />
+          <Boolean source="ExtendedVATReporting" />
+        </Group>
+        <Group title="Statistics to Tax Authorities">
+          <UnitField source="MaximumFileSize" unitTitle="kb" />
+          <Field source="IntrastatMaxEntriesPerDeclaration" />
+          <Field source="IntrastatSpecification" />
+          <Boolean source="EUSalesListSystemReport" />
+          <Boolean source="IntrastatImportReport" />
+          <Boolean source="IntrastatExportReport" />
+        </Group>
+        <Group title="Rounding">
+          <Boolean source="RoundingOffAmount" />
+        </Group>
+      </Form>
+      <Form name="Subscription">
+        <Actions all="true" />
+        <Group title="Subscription">
+          <Boolean source="ShowSubscriptionSalesOrders" />
+          <Boolean source="SeparateSubscriptionOrderNumbers" />
+        </Group>
+        <Group ref="UserUpdateGroup" />
+      </Form>
+      <Form name="Finance">
+        <Actions all="true" />
+        <Column>
+          <Group title="General Ledger">
+            <Field source="YearEndResultAccount" />
+            <Field source="InitCompany" />
+            <Field source="InitAccount" />
+            <Field source="LocalChartOfAccountsDimension" />
+            <Field source="JointEntriesMade" />
+            <Boolean source="ReuseTransactionNumber" />
+            <Boolean source="CarryForwardInvertedSign" />
+          </Group>
+          <Group title="Tax">
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Field source="StandardVATCode" />
+              <Field source="StandardVATCode2" />
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Field source="StandardVATCode3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="StandardVATCode" title="Standard Tax Code" />
+            </Else>
+            <Field source="OnAccountVATCode" />
+            <Field source="VendorDiscountItemVATCode" />
+            <Field source="StandardItemVATCode" />
+            <Boolean source="ExtendedVATReporting" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Statistics to Tax Authorities">
+            <UnitField source="MaximumFileSize" unitTitle="kb" />
+            <Field source="IntrastatMaxEntriesPerDeclaration" />
+            <Field source="IntrastatSpecification" />
+            <Boolean source="EUSalesListSystemReport" />
+            <Boolean source="IntrastatImportReport" />
+            <Boolean source="IntrastatExportReport" />
+          </Group>
+          <Group title="Rounding">
+            <Boolean source="RoundingOffAmount" />
+          </Group>
+          <Group title="Invoice / Credit Memo">
+            <Boolean source="IncludeVATSpecification" />
+          </Group>
+          <Group title="Tax Office">
+            <Field source="TaxOfficeVendorNumber" />
+          </Group>
+        </Column>
+        <Column>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="JobCost">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Registrations">
+              <Boolean source="PostJobJournalAmount" />
+              <Boolean source="PostJobJournalHours" />
+              <Field source="TaskApprovalRequirement" />
+            </Group>
+            <Group title="Time Sheet Registrations">
+              <Field source="AllocationPrinciple" />
+              <Boolean source="DuplicateLinesInTimeSheet" />
+              <Boolean source="PostingNonApprovedTimeSheets" />
+              <Boolean source="CheckOvertime" />
+            </Group>
+            <Group title="Approval of Registrations">
+              <Field source="ApprovalSuperior" title="Appr. by Supervisor, Time" />
+              <Field source="ApprovalProjectManager" title="Appr. by Project Manager, Time" />
+              <Field source="ApprovalSuperiorExpenses" title="Appr. by Supervisor., Exp." />
+              <Field source="ApprProjectManagerExpenses" title="Appr. by Project Manager, Exp." />
+              <Field source="TaskMessageType" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Creation">
+              <Boolean source="JobInOrderWhenCreated" />
+            </Group>
+            <Group title="Markup">
+              <Boolean source="FixedMarkUpPercentage" />
+              <Field source="MarkUpPercentage" />
+            </Group>
+            <Group title="Purchasing">
+              <Boolean source="TransferTextsToPurchaseOrder" />
+            </Group>
+            <Group title="Invoicing">
+              <Boolean source="DoNotAdjustAmountActivities" />
+              <Boolean source="AllocateJobSales" />
+            </Group>
+            <Group title="Miscellaneous">
+              <Field source="TimePricePrinciple" />
+              <Boolean source="DepartmentFromEmployee" />
+              <Boolean source="CreateNewOrderAtJobAssignment" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Job Allocation Combinations">
+              <Boolean source="AllowDimensionIntervals" />
+            </Group>
+            <Group title="Job Parameter Derivation">
+              <Boolean source="AlwaysDeriveJobParameters" title="Always Derive Job Parameters" />
+            </Group>
+            <If condition="hasAddOn(128)">
+              <Group title="People Planner Integration">
+                <Field source="IntegrationStatusNoteType" />
+              </Group>
+            </If>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="SalesOrders">
+        <Actions all="true" />
+        <Column>
+          <Group title="Sales Orders{General}">
+            <Boolean source="PostingPerItemGroup" />
+            <Boolean source="CreditBlocking" />
+            <Boolean source="PartDelivery" />
+            <Boolean source="PostNumberAsQuantity" />
+            <Boolean source="DeptFromPaymentCustomer" />
+            <Boolean source="InvoiceDiscFromPaymentCustomer" />
+            <Boolean source="JointPickingList" />
+            <Boolean source="OneDeclarationPerBarCodeImport" />
+            <Boolean source="RegisteredSalesForDeliveryCustomer" />
+            <Boolean source="DueDateFromPrintingDate" />
+            <Boolean source="DeliveryDateFromPreferredInvoiceDate" />
+            <Boolean source="DoNotNotifyNotAvailableItem" />
+            <Boolean source="GetInventoryFromItem" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Sales Orders, Prices">
+            <Field source="MarkUpPrinciple" />
+            <Field source="ItemNumberRoundingOff" />
+            <Boolean source="FixPriceLevel" />
+            <Boolean source="WarnIfNoPriceList" />
+            <Boolean source="WarnIfZeroCostPrice" />
+          </Group>
+          <Group title="Back Orders">
+            <Field source="BackOrderPrinciple" />
+            <Boolean source="IncludeBackOrderLines" />
+            <Boolean source="AutomaticBackOrderAllocation" />
+          </Group>
+          <Group title="Inventory{System_Information}">
+            <Field source="InitItem" />
+            <Boolean source="AllowHistoricalItemMovement" />
+          </Group>
+        </Column>
+        <Column>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="CustomersAndVendors">
+        <Actions all="true" />
+        <Column>
+          <Group title="Customer{Debitor}">
+            <Field source="InitCustomer" />
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Field source="ReminderChargeVATCode" />
+              <Field source="ReminderChargeVATCode2" />
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Field source="ReminderChargeVATCode3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="ReminderChargeVATCode" title="Reminder Charge Tax Code" />
+            </Else>
+            <Boolean source="CustomersAsContactCompanys" />
+            <Boolean source="AutomaticCreditMemoReconciliation" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Vendor{Creditor}">
+            <Field source="InitVendor" />
+            <Boolean source="CreatePurchaseVoucher" />
+            <Boolean source="GetEntryTextFromVendorInvoice" />
+            <Boolean source="SuggestNameAsEntryText" />
+            <Boolean source="UseNameAsEntryText" />
+            <Boolean source="ReconcileNonApprovedVendorEntry" />
+          </Group>
+        </Column>
+        <Column>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Currency">
+        <Actions all="true" />
+        <Column>
+          <Group>
+            <Field source="BaseCurrency" />
+            <Field source="EuroCurrency" />
+            <Field source="CurrencyExchangeUnit" />
+            <Boolean source="ExchangeRateGivenInBase" />
+          </Group>
+          <Group title="Exchange Rate Tables">
+            <Field source="SalesExchangeRateTableVar" title="Sales" />
+            <Field source="PurchaseExchangeRateTableVar" title="Purchasing" />
+            <Field source="DutyExchangeRateTableVar" title="Duty" />
+            <Field source="BudgetExchangeRateTableVar" title="Budget" />
+            <Field source="EnterpriseExchangeRateTableVar" title="Enterprise" />
+          </Group>
+        </Column>
+        <Column>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

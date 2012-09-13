@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- BPE, 10/09/10: Changed layout to use global definition dimensions (38827). -->
+<!-- PBO, 22/09/10: Implement conditional layout (38843).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ItemCard">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2)" arguments="ItemText1;ItemNumber" />
+        </Compact>
+        <Columns>
+          <Field source="ItemNumber" />
+          <Field source="ItemText1" />
+          <Field source="ItemText2" />
+          <Field source="ItemText3" />
+          <Field source="InternalText" />
+          <Field source="SupplementaryText1" />
+          <Field source="SupplementaryText2" />
+          <Field source="SupplementaryText3" />
+          <Field source="SupplementaryText4" />
+          <Field source="SupplementaryText5" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Wizard name="C_CreateItem" title="New Item" >
+      	<Page form="C_CreateItemWizardPage1" title="Item Creation" />
+      </Wizard> 
+      <Form name="C_CreateItemWizardPage1" >
+      <Actions>
+      	<Create />
+      </Actions>
+      <Group>
+      	<Field source="ItemNumber" />
+      	<Field source="ItemText1" />
+      	<Field source="ItemText2" />
+      	<Field source="ItemText3" />
+      	<Field source="ItemGroup" />
+      	<Field source="ItemType" />
+      	<Field source="Remark1" title="Project no. (Item owner)" />
+      	<Field source="Remark2" title="Task no. (Item revenue)" />
+      </Group>
+      </Form>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Item">
+              <Field source="ItemNumber" />
+              <Field source="ItemGroup" />
+              <Field source="AssortedGroupName" />
+              <Field source="ItemType" />
+              <Field source="Purchaser" />
+              <Boolean source="BOM" />
+              <Field source="DutyCode" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Warehouse">
+              <Boolean source="Blocked" />
+              <Field source="ItemStatus" />
+              <Field source="InventoryControl" />
+              <Boolean source="SerialNumberControl" />
+              <Boolean source="ReceiptSerialNumberRegistration" />
+              <Boolean source="ShipmentSerialNumberRegistration" />
+              <Boolean source="CompleteSerialNumberRegistration" />
+              <Field source="InventoryNumber" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Description{Item}">
+            <Field source="ItemText1" title="Description Lang. 1" />
+            <Field source="ItemText2" title="Description Lang. 2" />
+            <Field source="ItemText3" title="Description Lang. 3" />
+            <Field source="InternalText" />
+            <Field source="SupplementaryText1" />
+            <Field source="SupplementaryText2" />
+            <Field source="SupplementaryText3" />
+            <Field source="SupplementaryText4" />
+            <Field source="SupplementaryText5" />
+            <Field source="SupplementaryText6" />
+            <Field source="SupplementaryText7" />
+            <Field source="SupplementaryText8" />
+            <Field source="SupplementaryText9" />
+            <Field source="SupplementaryText10" />
+            <Field source="PictureReference" />
+          </Group>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Costs">
+              <Field source="CostPricePrinciple" />
+              <Boolean source="OrderItem" />
+              <Field source="BillingPriceSystem" />
+              <Field source="MarkUpPercentageBillingPrice" />
+              <Field source="EnterpriseCurrencyVar" title="Enterprise Currency" />
+              <Field source="InventoryValueVar" title="Total Inventory Value" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group title="Document Archive">
+              <Reference foreignKey="DocumentArchiveNumber_DocumentArchiveHeader" />
+            </Group>
+            <Group title="Template Note">
+              <Field source="TemplateNoteNumber" />
+              <Field source="TemplateNoteDescriptionVar" title="Description{0}" />
+            </Group>
+            <Group title="Dimension Combination">
+              <Field source="DimensionCombNumber" title="Dim. Comb. No." />
+            </Group>
+            <Group ref="DerivedDimensionGroup" />
+            <Group title="Service{General}">
+              <Field source="ReturnTo" />
+              <Boolean source="CanBeRepaired" />
+              <Boolean source="Obsolete" />
+            </Group>
+            <Group title="Extra Fields">
+              <Field source="ItemPopup1" />
+              <Field source="ItemPopup2" />
+              <Field source="ItemPopup3" />
+              <Field source="ItemPopup4" />
+              <Field source="ItemPopup5" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column>
+            <Group title="Units">
+              <Field source="Unit" title="Unit, Sales" />
+              <Field source="SmallestSalesUnit" title="Minimum Sales Unit" />
+              <Field source="PriceUnit" />
+              <Field source="PurchaseUnit" title="Unit, Purchase" />
+              <Field source="SmallestPurchaseUnit" title="Minimum Purchase Unit" />
+              <Field source="PurchasePriceUnit" />
+              <Field source="SalesUnitsPerPurchaseUnit" title="Sales/Purchase Unit" />
+              <Field source="SmallestProductionUnit" title="Minimum Production Unit" />
+              <Field source="Weight" />
+              <Field source="NetWeight" title="Net Weight (kg.)" />
+              <Field source="Volume" />
+            </Group>
+            <Group title="Note">
+              <Field source="NoteNumber" />
+              <Field source="NoteDescriptionVar" title="Description{0}" />
+            </Group>
+            <Group title="Sales Order">
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATCode" />
+                <Field source="VATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATCode" title="Tax Code" />
+              </Else>
+              <Field source="ItemVATCode" />
+              <Field source="MarkUpPercentageCostPrice" />
+              <Field source="SubstitutionItemNumber" />
+              <Field source="ActivityNumber" />
+              <Boolean source="GradedQuantityDiscount" />
+            </Group>
+            <Group title="Print Control">
+              <Field source="Statistic1" />
+              <Field source="Statistic2" />
+              <Field source="Statistic3" />
+              <Field source="Statistic4" />
+              <Boolean source="PrintOnPriceList" />
+              <Boolean source="StringCodePossible" />
+              <Field source="BarCode" />
+            </Group>
+            <Group title="Statistics to Tax Authorities">
+              <Boolean source="Service" />
+              <Boolean source="SalaryPreparation" />
+              <Field source="CNCode" title="CN Code" />
+              <Field source="SupplementaryUnit" />
+              <Field source="ItemDescription" title="Item Desc." />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Remarks{sg}">
+            <Field source="Remark1" appearance="maximized" />
+            <Field source="Remark2" appearance="maximized" />
+            <Field source="Remark3" appearance="maximized" />
+          </Group>
+        </Row>
+      </Form>
+            
+      <Form name="Custom">
+        <Actions all="true" >
+        	<Create wizard="C_CreateItem" />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Item">
+              <Field source="ItemNumber" />
+          	  <Field source="ItemText1" title="Description" />
+          	  <Field source="ItemText2" title="External Desc." />
+          	  <Field source="ItemText3" />
+              <Field source="PictureReference" />
+              <Field source="ItemGroup" />
+              <Field source="AssortedGroupName" />
+              <Field source="ItemType" />
+              <Field source="Purchaser" />
+              <Boolean source="BOM" />
+            </Group>
+            <Group title="Costs">
+              <Field source="CostPricePrinciple" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <!-- <Group ref="DerivedDimensionGroup" /> -->
+            <Group title="Extra Fields">
+              <Field source="ItemPopup1" />
+              <Field source="ItemPopup2" />
+              <Field source="ItemPopup3" />
+              <Field source="ItemPopup4" />
+              <Field source="ItemPopup5" />
+            </Group>
+          </Column>
+          <Column>
+          <Group title="Item Owner Information">
+            <Field source="Remark1" title="Project no. (Item owner)" size="medium" />
+            <Field source="Remark2" title="Task no. (Item revenue)" size="medium" />
+          </Group>
+            <Group title="Units">
+              <Field source="Unit" title="Sales Unit" />
+              <Field source="SmallestSalesUnit" title="Minimum Sales Unit" />
+              <Field source="PriceUnit" />
+            </Group>
+            <Group title="Sales Order">
+              <Field source="ItemVATCode" />
+              <Boolean source="ShowWhenCreating" />
+              <Boolean source="ShowOnQuotation" />
+              <Boolean source="ShowOnOrderConfirmation" />
+              <Boolean source="ShowOnDeliveryNote" />
+              <Boolean source="ShowOnInvoice" />
+            </Group>
+            <Group title="Warehouse">
+          	  <Field source="InventoryControl" />
+          	  <Field source="InventoryNumber" />
+              <Field source="ItemStatus" />
+              <Boolean source="Blocked" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Dimensions">
+              <Field source="LocationName" />
+              <Field source="EntityName" />
+              <Reference foreignKey="Specification1Name_Specification1" />
+              <Reference foreignKey="Specification2Name_Specification2" />
+              <Reference foreignKey="Specification3Name_Specification3" />
+              <Boolean source="Service" />
+            </Group>
+            <Group title="Print Control">
+              <Field source="Statistic1" />
+              <Field source="Statistic2" />
+              <Field source="Statistic3" />
+              <Field source="Statistic4" />
+              <Boolean source="PrintOnPriceList" />
+            </Group>
+            <Group ref="UserUpdateGroup" >
+            	<Field source="VersionNumber" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="InventoryNumber" />
+          <Field source="DeliveryTime" />
+          <Field source="InventoryProfile" />
+          <Field source="PurchaseControl" />
+          <Field source="Purchaser" />
+          <Field source="ReorderPoint" />
+          <Field source="MaximumInventory" />
+          <Field source="SeasonalModelNumber" />
+          <Field source="RecommendedPurchaseSize" title="Rec. Purchase" />
+          <Field source="AverageCostPriceBase" />
+          <Field source="LastCostPriceBase" />
+          <Field source="StandardCostPriceBase" />
+          <Field source="InventoryValue" title="Inventory Value" />
+          <Field source="SupplierNumber" />
+          <Field source="SupplierItemNumber" />
+          <Field source="SupplierItemText" />
+          <Field source="InventoryVolume" />
+          <Field source="QuotationVolume" />
+          <Field source="OrderVolume" />
+          <Field source="AvailableInventory" />
+          <Field source="BackOrderVolume" />
+          <Field source="PurchaseOrderVolume" />
+          <Field source="ProductionVolume" />
+          <Field source="ProductionControl" />
+          <Field source="StandardPurchaseSeriesNumber" />
+          <Field source="StandardSaleSeriesNumber" />
+          <Field source="StandardStorageLocation" title="Std. Storage Loc." />
+          <Field source="LastStorageLocation" />
+          <Field source="StandardPickingLocation" title="Std. Picking Loc." />
+          <Field source="LastPickingLocation" />
+          <Field source="DateLastReceipt" />
+          <Field source="DateLastShipment" />
+          <Field source="DateLastCount" />
+          <Field source="CostPriceOldestBatch" title="Cost, Oldest Batch" />
+          <Field source="CompanyNumber" />
+          <Field source="BaseCurrency" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

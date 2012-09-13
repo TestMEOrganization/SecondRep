@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--950189cc8f7096f769e2c09d458e74dd49d26dc2-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--6223b78bf92fa86ad753cc5c5cced1e2555f30f9-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest c3976c33dbe593ce32f7d60ae688dbc0   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:11
+  TAC*MaconomyHQ: yes
+-->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- BPE, 02/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- BPE, 08/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- PSZ, 02/08/11: Changes for Job Administration workspace (39803).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JobReallocation">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Job No. ^1, Task '^2', Empl. No. '^3', ^4, ^5" arguments="JobNumber;TaskName;EmployeeNumber;EntryDate;Text" />
+        </Compact>
+        <Columns>
+          <Field source="TransactionNumber" />
+          <Field source="EntryDate" />
+          <Field source="TypeOfEntry" />
+          <Field source="Origin" />
+          <Field source="JobNumber" />
+          <Field source="TaskName" />
+          <Field source="ActivityNumber" />
+          <Field source="EmployeeNumber" />
+          <Field source="Text" />
+          <Field source="CostPriceReg" />
+          <Field source="BillingPriceRegCurrency" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <Action source="ApproveReentry" />
+            <!-- <Action source="ApproveReallocation" /> -->
+          </Exclude>
+          <Action source="ApproveReallocation" />
+          <!-- <Action title="Approve Reallocation" source="MDK_ApproveReallocation" /> -->
+        </Actions>
+        <Column>
+          <Group title="Entry Information{3}">
+            <Reference foreignKey="JobNumber_JobHeader" descriptionSource="CardJobName" />
+            <Field source="TransactionNumber" />
+            <Field source="TypeOfEntry" />
+            <Field source="Origin" />
+            <Field source="ActivityNumber" />
+            <Field source="TaskName" />
+            <Field source="Text" />
+            <Reference foreignKey="EmployeeNumber_Employee" descriptionSource="CardEmployeeName" />
+            <Reference foreignKey="SupplierNumber_Vendor" />
+            <Field source="VendorInvoiceNumber" title="Vendor Invoice" />
+            <Field source="ItemNumber" />
+            <Field source="CardItemText" title="Description{Item}" />
+            <Field source="Remark" />
+            <Field source="DailyDescription" />
+            <Field source="ReallocatedFromJobNumber" />
+            <Field source="ReallocatedFromTaskName" />
+          </Group>
+          <Group title="G/L Accrual">
+            <Field source="AccrualType" />
+            <Field source="FromAccrualPeriod" />
+            <Field source="ToAccrualPeriod" />
+          </Group>
+          <Group title="Company">
+            <Reference foreignKey="CompanyNumber_CompanyInformation" keySource="CompanyNumber" />
+            <Field source="BaseCurrencyVar" title="Base Currency" />
+          </Group>
+          <Group title="Executing Company">
+            <Reference foreignKey="ExecutingCompanyNumber_CompanyInformation" keySource="ExecutingCompanyNumber" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Entry{Posting}" style="amountAlignment">
+            <Field source="NumberRegistered" />
+            <Field source="CostPrice" />
+            <Field source="CostPriceReg" />
+            <Field source="BillingPriceRegCurrency" />
+            <Field source="Currency" />
+            <Field source="MarkUpPercentage" title="Gross Margin %" />
+            <Field source="OvertimeType" />
+            <Field source="FromSubscriptionPeriod" />
+            <Field source="ToSubscriptionPeriod" />
+            <Field source="TransactionNumber" />
+            <Field source="TransactionType" title="Trans. Type" />
+            <Field source="EntryDate" title="Entry Date" />
+            <Field source="InvoiceNumber" />
+            <Field source="Closed" />
+            <Field source="NumberInvoiced" />
+            <Field source="BillingPriceInvoicedCurrency" />
+            <Field source="NumberUpDown" title="Quantity, Up/Down" />
+            <Field source="BillingPriceUpDownCurrency" title="Billing Price, Up/Down" />
+            <Field source="NumberTransferredTo" />
+            <Field source="CostPriceTransferredTo" />
+            <Field source="BillingPriceTransfToCurrency" />
+            <Field source="QuantityA" />
+            <Field source="QuantityB" />
+            <Field source="StdBillingPriceTotalBase" title="Standard Billing Price, Base" />
+            <Field source="StdUpDownBase" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Reallocation" style="amountAlignment">
+            <Field source="NumberReallocated" title="Amount Reallocated{Previous}" />
+            <Field source="CostPriceReallocatedVar" title="Cost Reallocated{Previous}" />
+            <Field source="QuantityAReallocated" title="Quantity Reallocated To Date" />
+            <Field source="QuantityBReallocated" title="Quantity 2 Reallocated To Date" />
+            <Field source="ReallocationDateVar" title="Reallocation Date" />
+            <Field source="NumberForReallocationVar" title="Amount to be Reallocated" />
+            <Field source="CostPriceForReallocationVar" title="Cost for Reallocation" />
+            <Field source="QuantityAForReallocationVar" title="Quantity for Reallocation" />
+            <Field source="QuantityBForReallocationVar" title="Quantity 2 for Reallocation" />
+          </Group>
+          <Group ref="DimensionGroup" />
+        </Column>
+      </Form>
+      <Form name="Custom">
+        <Actions all="true">
+          <!-- <Action title="Approve Reallocation" source="MDK_ApproveReallocation" /> -->
+        </Actions>
+        <Column>
+          <Group title="Entry Information{3}">
+            <Reference foreignKey="JobNumber_JobHeader" descriptionSource="CardJobName" />
+            <Field source="TransactionNumber" />
+            <Field source="TypeOfEntry" />
+            <Field source="Origin" />
+            <Field source="ActivityNumber" />
+            <Field source="TaskName" />
+            <Field source="Text" />
+            <Reference foreignKey="EmployeeNumber_Employee" descriptionSource="CardEmployeeName" />
+            <Reference foreignKey="SupplierNumber_Vendor" />
+            <Field source="VendorInvoiceNumber" title="Vendor Invoice" />
+            <Field source="ItemNumber" />
+            <Field source="CardItemText" title="Description{Item}" />
+            <Field source="Remark" />
+            <Field source="DailyDescription" />
+            <Field source="ReallocatedFromJobNumber" />
+            <Field source="ReallocatedFromTaskName" />
+          </Group>
+          <Group title="G/L Accrual">
+            <Field source="AccrualType" />
+            <Field source="FromAccrualPeriod" />
+            <Field source="ToAccrualPeriod" />
+          </Group>
+          <Group title="Company">
+            <Reference foreignKey="CompanyNumber_CompanyInformation" keySource="CompanyNumber" />
+            <Field source="BaseCurrencyVar" title="Base Currency" />
+          </Group>
+          <Group title="Executing Company">
+            <Reference foreignKey="ExecutingCompanyNumber_CompanyInformation" keySource="ExecutingCompanyNumber" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Entry{Posting}" style="amountAlignment">
+            <Field source="NumberRegistered" />
+            <Field source="CostPrice" />
+            <Field source="CostPriceReg" />
+            <Field source="BillingPriceRegCurrency" />
+            <Field source="Currency" />
+            <Field source="MarkUpPercentage" title="Gross Margin %" />
+            <Field source="OvertimeType" />
+            <Field source="FromSubscriptionPeriod" />
+            <Field source="ToSubscriptionPeriod" />
+            <Field source="TransactionNumber" />
+            <Field source="TransactionType" title="Trans. Type" />
+            <Field source="EntryDate" title="Entry Date" />
+            <Field source="InvoiceNumber" />
+            <Field source="Closed" />
+            <Field source="NumberInvoiced" />
+            <Field source="BillingPriceInvoicedCurrency" />
+            <Field source="NumberUpDown" title="Quantity, Up/Down" />
+            <Field source="BillingPriceUpDownCurrency" title="Billing Price, Up/Down" />
+            <Field source="NumberTransferredTo" />
+            <Field source="CostPriceTransferredTo" />
+            <Field source="BillingPriceTransfToCurrency" />
+            <Field source="QuantityA" />
+            <Field source="QuantityB" />
+            <Field source="StdBillingPriceTotalBase" title="Standard Billing Price, Base" />
+            <Field source="StdUpDownBase" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Reallocation" style="amountAlignment">
+            <Field source="NumberReallocated" title="Amount Reallocated{Previous}" />
+            <Field source="CostPriceReallocatedVar" title="Cost Reallocated{Previous}" />
+            <Field source="QuantityAReallocated" title="Quantity Reallocated To Date" />
+            <Field source="QuantityBReallocated" title="Quantity 2 Reallocated To Date" />
+            <Field source="ReallocationDateVar" title="Reallocation Date" />
+            <Field source="NumberForReallocationVar" title="Amount to be Reallocated" />
+            <Field source="CostPriceForReallocationVar" title="Cost for Reallocation" />
+            <Field source="QuantityAForReallocationVar" title="Quantity for Reallocation" />
+            <Field source="QuantityBForReallocationVar" title="Quantity 2 for Reallocation" />
+          </Group>
+          <Group ref="DimensionGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" >
+        <Exclude>
+            <Action source="ApproveReentry" />
+          </Exclude>
+            <Action source="ApproveReallocation" />
+        </Actions>
+        <!--         <Exclude> -->
+        <!--         <Action name="ApproveReentry"/> -->
+        <!--         </Exclude> -->
+        <!--         <Action title="(MDK) Approve Reallocation"  name="MDK_ApproveReallocation"/> -->
+        <!--         </Actions> -->
+        <Columns>
+          <!--         searchOption="parent.jobnumber"  -->
+          <If condition="hasRole('ReallocateAll')">
+            <Field source="JobNumber" title="Job No.!" searchView="ReallocationUnlimited" searchOption="MineOnly" suggestions="onDemand" />
+          </If>
+          <Else>
+            <Field source="JobNumber" title="Job No.!" searchView="Reallocation" searchOption="MineOnly" suggestions="onDemand" />
+          </Else>
+          <Field source="TaskName" title="Task" />
+          <Field source="ActivityNumber" title="Act. No." />
+          <Field source="ItemNumber" title="Item No." />
+          <Field source="EmployeeNumber" title="Empl." />
+          <Field source="Text" title="Description{Text}" />
+          <Field source="NumberOriginalEntry" title="Quantity{Number}" />
+          <Field source="CostPriceTotalOriginalEntry" title="Total Cost" />
+          <Field source="OriginalBillingPriceTotalVar" title="Billing Price Total" />
+          <Field source="NumberOf" title="New Quantity" />
+          <Field source="CostPrice" title="New Cost Price" />
+          <Field source="CostPriceTotal" title="New cost price Total" />
+          <Field source="LineBaseCurrencyVar" title="Base Currency" />
+          <Field source="BillingPriceCurrency" title="New Sales Price" />
+          <Field source="BillingPriceTotalCurrency" title="New Sales Price Total" />
+          <Field source="Currency" title="Currency" />
+          <Field source="ExecutingCompanyNumber" title="Exec. Company No." />
+          <Field source="ExecutingCompanyName2Var" title="Executing Company Name" />
+          <Field source="StdBillingPriceBase" />
+          <Field source="StdBillingPriceTotalBase" />
+          <Field source="CompanyNumber" title="Company No." />
+          <Field source="CompanyName2Var" title="Company Name" />
+          <Columns ref="DimensionColumns" />
+          <Field source="StdBillingPriceCurrency" />
+          <Field source="StdBillingPriceTotalCurrency" />
+          <Field source="LineJobName" title="Job Name" />
+          <Field source="ActivityText" title="Activity Name" />
+          <Field source="TaskTextVar" title="Task Description{1}" />
+          <Field source="LineEmployeeName" title="Employee Name" />
+          <Field source="LineItemText" title="Description{Item}" />
+          <Field source="QuantityAOriginalEntry" title="Quantity{Amount}" />
+          <Field source="QuantityA" title="New Quantity" />
+          <Field source="QuantityBOriginalEntry" title="Quantity 2" />
+          <Field source="QuantityB" title="New Quantity 2" />
+          <Field source="Remark" title="Remarks{sg}" />
+          <Field source="OvertimeType" />
+          <Field source="DailyDescription" />
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+          <Field source="FromSubscriptionPeriod" />
+          <Field source="ToSubscriptionPeriod" />
+          <Field source="TransactionType" />
+        </Columns>
+      </Table>
+      <Table name="Custom">
+        <Actions all="true" >
+        <Exclude>
+            <Action source="ApproveReentry" />
+          </Exclude>
+            <Action source="ApproveReallocation" />
+        </Actions>
+        <!--         <Exclude> -->
+        <!--         <Action name="ApproveReentry"/> -->
+        <!--         </Exclude> -->
+        <!--         <Action title="(MDK) Approve Reallocation"  name="MDK_ApproveReallocation"/> -->
+        <!--         </Actions> -->
+        <Columns>
+          <!--         searchOption="parent.jobnumber"  -->
+          <Field source="JobNumber" title="Job No." searchView="Reallocation" searchOption="MineOnly" suggestions="onDemand" />
+          <Field source="TaskName" title="Task" />
+          <Field source="ActivityNumber" title="Act. No." />
+          <Field source="ItemNumber" title="Item No." />
+          <Field source="EmployeeNumber" title="Empl." />
+          <Field source="Text" title="Description{Text}" />
+          <Field source="NumberOriginalEntry" title="Quantity{Number}" />
+          <Field source="CostPriceTotalOriginalEntry" title="Total Cost" />
+          <Field source="OriginalBillingPriceTotalVar" title="Billing Price Total" />
+          <Field source="NumberOf" title="New Quantity" />
+          <Field source="CostPrice" title="New Cost Price" />
+          <Field source="CostPriceTotal" title="New cost price Total" />
+          <Field source="LineBaseCurrencyVar" title="Base Currency" />
+          <Field source="BillingPriceCurrency" title="New Sales Price" />
+          <Field source="BillingPriceTotalCurrency" title="New Sales Price Total" />
+          <Field source="Currency" title="Currency" />
+          <Field source="ExecutingCompanyNumber" title="Exec. Company No." />
+          <Field source="ExecutingCompanyName2Var" title="Executing Company Name" />
+          <Field source="StdBillingPriceBase" />
+          <Field source="StdBillingPriceTotalBase" />
+          <Field source="CompanyNumber" title="Company No." />
+          <Field source="CompanyName2Var" title="Company Name" />
+          <Columns ref="DimensionColumnsReadOnly" />
+          <Field source="StdBillingPriceCurrency" />
+          <Field source="StdBillingPriceTotalCurrency" />
+          <Field source="LineJobName" title="Job Name" />
+          <Field source="ActivityText" title="Activity Name" />
+          <Field source="TaskTextVar" title="Task Description{1}" />
+          <Field source="LineEmployeeName" title="Employee Name" />
+          <Field source="LineItemText" title="Description{Item}" />
+          <Field source="QuantityAOriginalEntry" title="Quantity{Amount}" />
+          <Field source="QuantityA" title="New Quantity" />
+          <Field source="QuantityBOriginalEntry" title="Quantity 2" />
+          <Field source="QuantityB" title="New Quantity 2" />
+          <Field source="Remark" title="Remarks{sg}" />
+          <Field source="OvertimeType" />
+          <Field source="DailyDescription" />
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+          <Field source="FromSubscriptionPeriod" />
+          <Field source="ToSubscriptionPeriod" />
+          <Field source="TransactionType" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- AMC, 12/06/09: Job Invoice History workspace (37774).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- AMC, 15/01/10: Remove JobInvoiceOverview layout (37999).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- CSK, 02/08/10: Demo_InvoicesInJournal filter view added for tracing journals (38705).-->
+<!-- BPE, 07/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- MJA, 09/09/10: Added demo layout for job invoice history (38816). -->
+<!-- JSV, 14/09/10: Removing the filter view Demo_InvoicesInJournal (38848).-->
+<!-- CSK, 21/09/10: EntryOriginLine view added for showing the lines related to an entry (38884).-->
+<!-- PBO, 22/09/10: Implement conditional layout (38843).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- MJA, 31/03/11: Show numbers invoiced in table views (39355).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 21/06/11: Set size to small on some fields in table Demo (39464).-->
+<!-- SBA, 15/07/11: Adding views for Job Invoices workspace (39489). -->
+<!-- JSV, 23/08/11: Rename foreign key EmployeeNumber_Employee to project manager (39874).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- SBA, 26/08/11: Removing duplicate FK reference (39489). -->
+<!-- CSK, 11/11/11: Parent reference changed in EntryOriginLine table (40151).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JobInvoiceOverview">
+    <FilterPane>
+      <Define>
+        <Function name="IsCreditMemo" value="DebitCredit like 'Credit'" />
+        <Function name="InvoiceOrCreditMemo" value="if(DebitCredit like 'Credit') then 'Credit Memo No.' else 'Invoice No.'" type="string" parameters="DebitCredit" />
+        <Style name="HighlightCreditMemo" ref="highlightOppositeSign" condition="IsCreditMemo()" />
+      </Define>
+      <Filter name="Standard" style="HighlightCreditMemo">
+      	<ControlBar>
+      		<Selection>
+      			<Option title="My Invoices" name="MyInvoices" restriction="ProjectManagerNumber like userEmployeeNumber()" />
+      			<Option title="Department Invoices" name="DptInvoices" restriction="LocationName like locationName()" />
+      			<Option title="All Invoices" name="AllInvoices" />
+      			<!-- <Option title="My Draft Invoices" name="MyDraftInvoices" restriction="ProjectManagerNumber like userEmployeeNumber() and DraftCreatedByVar != '' and ApprovedbyVar != ''" />
+      			<Option title="Department Draft Invoices" name="DptDraftInvoices" restriction="LocationName like locationName() and DraftCreatedByVar != '' and ApprovedbyVar != ''" />
+      			<Option title="All Draft Invoices" name="AllDraftInvoices" restriction="DraftCreatedByVar != '' and ApprovedbyVar != ''" /> -->
+      		</Selection>
+      	</ControlBar>
+        <Compact>
+          <Description template="^1 ^2, Job: ^3 (^4), ^5" arguments="InvoiceOrCreditMemo(DebitCredit);InvoiceNumber;JobName;JobNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="InvoiceNumber" />
+          <Field source="DebitCredit" />
+          <Field source="InvoiceOnAccount" />
+          <Field source="InvoiceDate" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="CustomerNumber" />
+          <Field source="Name1" title="Customer Name" />
+          <Field source="Currency" size="tiny" />
+          <UnitField source="ItemSumCurrency" unitSource="Currency" size="small" />
+          <UnitField source="InvoiceDiscountCurrency" unitSource="Currency" size="small" />
+          <UnitField source="VatCurrency" unitSource="Currency" title="Tax" size="small" />
+          <UnitField source="OnAccountItemSumCurrency" unitSource="Currency" title="Net on Account" size="small" />
+          <UnitField source="OnAccountVATCurrency" unitSource="Currency" title="Tax on Account" size="small" />
+          <UnitField source="TotalCurrency" unitSource="Currency" size="small" />
+          <Field source="BasedOnInvoiceNumber" style="zeroSuppression" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+        <Function name="IsOverdue" value="PaymentStatusVar = 'Overdue'" />
+        <Function name="IsSettled" value="PaymentStatusVar = 'Reconciled'" />
+        <Function name="IsOpen" value="PaymentStatusVar = 'Due' or PaymentStatusVar = 'Not Reconciled'" />
+        <Style name="AlertOverdue" ref="trafficlightRed" condition="IsOverdue()" />
+        <Style name="AlertSettled" ref="trafficlightGreen" condition="IsSettled()" />
+        <Style name="AlertOpen" ref="trafficlightYellow" condition="IsOpen()" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Billing Address">
+              <Reference foreignKey="PaymentCustomer_Customer" />
+              <Field source="PayerName2" appearance="maximized" />
+              <Field source="PayerName3" appearance="maximized" />
+              <ZipCity citySource="PayerPostalDistrict" zipSource="PayerZipCode" appearance="maximized" />
+              <Field source="PayerName4" appearance="maximized" />
+              <Field source="PayerName5" appearance="maximized" />
+              <Field source="PayerAttention" title="Attn." />
+              <Field source="PayerCountry" title="Country" />
+              <Field source="PayerElectronicMailAddress" title="E-mail{native}" />
+              <Field source="PayerTelephone" title="Phone" />
+              <Field source="PayerTelefax" title="Fax" />
+              <Field source="PayerTelex" title="Telex" />
+              <Field source="PaymentCustomerDepartment" title="Department" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Price">
+              <!-- Invoice-->
+              <Field source="Currency" title="Invoice Currency" />
+              <Field source="ItemSumCurrency" title="Billing Price Total" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATCurrency" title="Total Tax" />
+                <Field source="VAT1InvoiceCurrencyVar" title="Tax 1" />
+                <Field source="VAT2InvoiceCurrencyVar" title="Tax 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3InvoiceCurrencyVar" title="Tax 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATCurrency" title="Tax{VAT}" />
+              </Else>
+              <Field source="OnAccountItemSumCurrency" title="Net on Account" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="OnAccountVATCurrency" title="Total Tax on Account, Currency" />
+                <Field source="OnAccountVAT1CurrencyVar" title="Tax 1 on Account, Currency" />
+                <Field source="OnAccountVAT2CurrencyVar" title="Tax 2 on Account, Currency" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="OnAccountVAT3CurrencyVar" title="Tax 3 on Account, Currency" />
+                </If>
+              </If>
+              <Else>
+                <Field source="OnAccountVATCurrency" />
+              </Else>
+              <Field source="TotalCurrency" />
+              <Field source="VATExemptItemSumCurrency" />
+              <Field source="InvoiceDiscountCurrency" />
+              <Field source="JobInvoiceExchangeRate" />
+              <!-- Job-->
+              <Field source="JobCurrency" />
+              <Field source="ItemSumJobCurrency" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATJobCurrency" title="Total Tax" />
+                <Field source="VAT1CurrencyVar" title="Tax 1" />
+                <Field source="VAT2CurrencyVar" title="Tax 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3CurrencyVar" title="Tax 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATJobCurrency" title="Tax{VAT}" />
+              </Else>
+              <Field source="TotalJobCurrency" />
+              <Field source="JobInvoicedTimeJobCurrency" />
+              <Field source="JobInvoicedAmountJobCurrency" />
+              <!-- Basis-->
+              <Field source="BaseCurrency" />
+              <Field source="CostOfSales" title="Total Cost" />
+              <Field source="ItemSumBase" title="Sales Price Total, Base" />
+              <Field source="InvoiceDiscountBase" />
+              <Field source="TotalBase" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATBase" title="Total Tax, Base" />
+                <Field source="VAT1BaseVar" title="Tax 1, Base" />
+                <Field source="VAT2BaseVar" title="Tax 2, Base" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3BaseVar" title="Tax 3, Base" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATBase" />
+              </Else>
+              <Field source="VATExemptItemSumBase" />
+              <Field source="OnAccountItemSumBase" title="Net on Account, Base" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="OnAccountVATBase" title="Total Tax on Account, Base" />
+                <Field source="OnAccountVAT1BaseVar" title="Tax 1 on Account, Base" />
+                <Field source="OnAccountVAT2BaseVar" title="Tax 2 on Account, Base" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="OnAccountVAT3BaseVar" title="Tax 3 on Account, Base" />
+                </If>
+              </If>
+              <Else>
+                <Field source="OnAccountVATBase" />
+              </Else>
+              <Field source="AmountRoundingBase" />
+              <Field source="ExchangeRateVarianceBase" />
+              <!-- Enterprise-->
+              <Field source="CostOfSalesEnterprise" title="Total Cost, Enterprise" />
+              <Field source="ItemSumEnterprise" title="Billing Price Total, Enterprise" />
+              <Field source="InvoiceDiscountEnterprise" />
+              <Field source="TotalEnterprise" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATEnterprise" title="Total Tax, Enterprise" />
+                <Field source="VAT1EnterpriseVar" title="Tax 1, Enterprise" />
+                <Field source="VAT2EnterpriseVar" title="Tax 2, Enterprise" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VAT3EnterpriseVar" title="Tax 3, Enterprise" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATEnterprise" />
+              </Else>
+              <Field source="OnAccountItemSumEnterprise" title="Net On Account, Enterprise" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="OnAccountVATEnterprise" title="Total Tax on Account, Enterprise" />
+                <Field source="OnAccountVAT1EnterpriseVar" title="Tax 1 on Account, Enterprise" />
+                <Field source="OnAccountVAT2EnterpriseVar" title="Tax 2 on Account, Enterprise" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="OnAccountVAT3EnterpriseVar" title="Tax 3 on Account, Enterprise" />
+                </If>
+              </If>
+              <Else>
+                <Field source="OnAccountVATEnterprise" />
+              </Else>
+              <Field source="AmountRoundingEnterprise" />
+              <Field source="ExchangeRateVarianceBalancingEnterprise" />
+              <Field source="ExchangeRateVarianceEnterprise" />
+              <Field source="VATExemptItemSumEnterprise" title="Total Tax Exempt Billing Price, Enterprise" />
+              <!-- Standard-->
+              <Field source="TotalStandard" />
+              <Field source="ExchangeRateVarianceStandardCurrency" />
+              <Field source="InvoiceDiscountPercentage" />
+              <Boolean source="VAT" />
+              <Field source="ExchangeRateDate" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Ship to Address">
+              <Reference foreignKey="CustomerNumber_Customer" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Country" />
+              <Field source="ElectronicMailAddress" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompany_CompanyInformation" />
+            </Group>
+            <Group title="Invoice{noun}">
+              <Field source="InvoiceNumber" />
+              <Field source="JobNumber" />
+              <Field source="JobName" />
+              <Field source="InvoiceName" />
+              <Field source="InvoiceDate" />
+              <Field source="DueDate" />
+              <Field source="DepartmentNumber" />
+              <Field source="Reference" />
+              <Field source="VATNumber" />
+              <Field source="CustomerGroup" />
+              <Field source="EndCustomerNumber" />
+              <Field source="ActivityNumber" />
+              <Field source="TaskName" />
+              <Field source="Enterprise" />
+              <Field source="Segment" />
+              <Field source="Area" />
+              <Field source="InternalRemark1" />
+              <Field source="InternalRemark2" />
+              <Field source="InternalRemark3" />
+              <Field source="Appropriation" />
+              <Field source="SalesPerson" />
+              <Field source="SalesPersonNumber" />
+              <Field source="PaymentTerms" />
+              <Field source="ToBeBlanketInvoiced" />
+              <Field source="CustomerPaymentMode" />
+              <Field source="InvoiceOnAccount" />
+              <Field source="LastDeliveryNoteNumber" />
+              <Field source="BasedOnInvoiceNumber" />
+              <Field source="Origin" />
+              <Field source="CompanyVATCode" />
+              <Field source="DebitCredit" />
+              <Field source="Posted" />
+              <Field source="InvoiceManualApproved" />
+              <Boolean source="Printed" />
+              <Field source="PrintedBy" />
+              <Field source="PrintingDate" />
+              <Field source="VersionNumber" />
+            </Group>
+            <Group ref="DimensionGroup" />
+            <Group title="Customer{Debitor}">
+              <Field source="CustomerPopup1" />
+              <Field source="CustomerPopup2" />
+              <Field source="CustomerPopup3" />
+              <Field source="CustomerPopup4" />
+              <Field source="CustomerPopup5" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Overview" title="Invoice">
+        <Actions all="true" />
+        <Column>
+          <If condition="DebitCredit like 'Credit'">
+            <Group title="Credit Memo" style="textAlignment">
+              <Field source="InvoiceNumber" />
+              <Field source="InvoiceDate" />
+              <Field source="DueDate" />
+              <Field source="DebitCredit" style="highlightOppositeSign" />
+              <Field source="InvoiceTypeVar" />
+              <Field source="ToBeBlanketInvoiced" />
+            </Group>
+          </If>
+          <Else>
+            <Group title="Invoice" style="textAlignment">
+              <Field source="InvoiceNumber" />
+              <Field source="InvoiceDate" />
+              <Field source="DueDate" />
+              <Field source="DebitCredit" />
+              <Field source="InvoiceTypeVar" />
+              <Field source="ToBeBlanketInvoiced" />
+            </Group>
+          </Else>
+          <Group title="Job" style="textAlignment">
+            <Reference foreignKey="JobNumber_JobHeader" />
+            <Reference foreignKey="ProjectManager_Employee" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Price Breakdown" style="compact_amountAlignment">
+            <Field source="PaymentStatusVar" style="AlertOverdue,AlertSettled,AlertOpen" />
+            <Field source="Currency" />
+            <Field source="ItemSumCurrency" />
+            <If condition="not InvoiceOnAccount">
+              <Field source="InvoiceDiscountCurrency" />
+            </If>
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Field source="VATCurrency" title="Total Tax" />
+              <Field source="VAT1InvoiceCurrencyVar" title="Tax 1" />
+              <Field source="VAT2InvoiceCurrencyVar" title="Tax 2" />
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Field source="VAT3InvoiceCurrencyVar" title="Tax 3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="VATCurrency" title="Tax{VAT}" />
+            </Else>
+            <If condition="InvoiceOnAccount">
+              <Field source="ReconciledAmountCurrencyVar" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="ReconciledVATCurrencyVar" />
+                <Field source="ReconciledVAT1CurrencyVar" />
+                <Field source="ReconciledVAT2CurrencyVar" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="ReconciledVAT3CurrencyVar" />
+                </If>
+              </If>
+              <Else>
+                <Field source="ReconciledVATCurrencyVar" />
+              </Else>
+              <Field source="ReconciledVar" />
+            </If>
+            <Else>
+              <Field source="OnAccountItemSumCurrency" title="Net on Account" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="OnAccountVATCurrency" title="Total Tax on Account, Currency" />
+                <Field source="OnAccountVAT1CurrencyVar" title="Tax 1 on Account, Currency" />
+                <Field source="OnAccountVAT2CurrencyVar" title="Tax 2 on Account, Currency" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="OnAccountVAT3CurrencyVar" title="Tax 3 on Account, Currency" />
+                </If>
+              </If>
+              <Else>
+                <Field source="OnAccountVATCurrency" title="Tax on Account" />
+              </Else>
+            </Else>
+            <Field source="TotalCurrency" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Workflow">
+            <Description title="Draft Created" template="^1 by ^2" arguments="DraftCreatedDateVar;DraftCreatedByVar" />
+            <Description title="Invoice Approved" template="^1 by ^2" arguments="ApprovalDateVar;ApprovedByVar" />
+            <Description title="Invoice Printed" template="^1 by ^2" arguments="PrintingDate;PrintedBy" />
+          </Group>
+          <Group title="Contact Information">
+            <Field source="PayerAttention" title="Name" />
+            <Field source="PayerElectronicMailAddress" title="E-mail" />
+            <Field source="PayerTelephone" title="Phone" />
+            <Field source="PayerTelefax" title="Fax" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Billing Address">
+            <Reference foreignKey="PaymentCustomer_Customer" />
+            <Field source="PayerName2" title="Address" />
+            <Field source="PayerName3" title="" />
+            <ZipCity citySource="PayerPostalDistrict" zipSource="PayerZipCode" title="" />
+            <Field source="PayerAttention" title="Attn." />
+            <Field source="PayerCountry" title="Country" />
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+        <Function name="IsWrittenUp" value="BillingPriceUpDownCurrency gt 0" />
+        <Function name="IsWrittenDown" value="BillingPriceUpDownCurrency lt 0" />
+        <Style name="AlertWriteUp" ref="trafficlightGreen" condition="IsWrittenUp()" />
+        <Style name="AlertWriteDown" ref="trafficlightRed" condition="IsWrittenDown()" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumberVar" title="Job No." />
+          <Field source="EntryNumberVar" title="Entry No." />
+          <Field source="JournalNumberVar" title="Journal No." />
+          <Field source="JournalLineNumberVar" title="Journal Line No." />
+          <Field source="PostingDateVar" title="Date Posted" />
+          <Field source="TransactionNumberVar" title="Trans. No." />
+          <Field source="TransactionTypeVar" title="Trans. Type" />
+          <Field source="EntryDateVar" title="Date" />
+          <Field source="ActivityNumberVar" title="Activity No." />
+          <Field source="ActivityTypeVar" title="Activity Type" />
+          <Field source="ActivityTextVar" title="Activity Name" />
+          <Field source="TaskNameVar" title="Task" />
+          <Field source="TextVar" title="Description{Text}" />
+          <Field source="EmployeeNumberVar" title="Employee No." />
+          <Field source="CurrencyVar" title="Currency" />
+          <Field source="OriginalCurrencyVar" title="Original Currency" />
+          <Field source="BillingPriceCurrencyVar" title="Billing Price, Curr." />
+          <Field source="BillingPriceRegCurrencyVar" title="Billing Price, Reg., Currency" />
+          <Field source="BillingPriceOpenCurrencyVar" title="Open Sales Price, Currency" />
+          <Field source="BillingPriceInvoicedCurrencyVar" title="Billing Price, Inv., Currency" />
+          <Field source="BillingPriceTotalCurrencyVar" title="Billing Price, Total, Currency" />
+          <Field source="BillingPriceForInvoicingCurrencyVar" title="Billing Price for Inv., Currency" />
+          <Field source="BillingPriceUpDownCurrencyVar" title="Billing Price, Up/Down, Currency" />
+          <Field source="BillingPriceUpDownUponCloseCurrencyVar" title="Billing Price Up/Down Upon Cl., Currency" />
+          <Field source="CostPriceVar" title="Cost, Base" />
+          <Field source="CostPriceRegVar" title="Cost, Reg. Base" />
+          <Field source="CostPriceOpenVar" title="Open Cost, Base" />
+          <Field source="CostPriceInvoicedVar" title="Cost, Inv., Base" />
+          <Field source="CostPriceTotalVar" title="Cost, Total, Base" />
+          <Field source="CostPriceForInvoicingVar" title="Cost for Inv., Base" />
+          <Field source="IncomingCostPriceExclVATVar" title="Receivable Cost Excl. Tax, Base" />
+          <Field source="IncomingCostPriceInclVATVar" title="Receivable Cost Incl. Tax, Base" />
+          <Field source="BillingPriceBaseVar" title="Billing Price, Base" />
+          <Field source="BillingPriceRegBaseVar" title="Billing Price, Reg., Base" />
+          <Field source="BillingPriceOpenBaseVar" title="Open Sales Price, Base" />
+          <Field source="BillingPriceInvoicedBaseVar" title="Billing Price, Inv., Base" />
+          <Field source="BillingPriceTotalBaseVar" title="Billing Price, Total, Base" />
+          <Field source="BillingPriceForInvoicingBaseVar" title="Billing Price for Inv., Base" />
+          <Field source="BillingPriceUpDownBaseVar" title="Billing Price, Up/Down, Base" />
+          <Field source="BillingPriceUpDownUponCloseBaseVar" title="Billing Price Up/Down Upon Cl., Base" />
+          <Field source="CostPriceEnterpriseVar" title="Cost, Enterprise" />
+          <Field source="CostPriceRegEnterpriseVar" title="Cost, Reg. Enterprise" />
+          <Field source="CostPriceOpenEnterpriseVar" title="Open Cost, Enterprise" />
+          <Field source="CostPriceForInvoicingEnterpriseVar" title="Cost for Inv., Enterprise" />
+          <Field source="CostPriceInvoicedEnterpriseVar" title="Cost, Inv. Enterprise" />
+          <Field source="CostPriceExecCompanyEnterpriseVar" title="Cost, Exec. Company, Enterprise" />
+          <Field source="IncomingCostPriceEVATEnterpriseVar" title="Receivable Cost Excl. Tax, Enterprise" />
+          <Field source="IncomingCostPriceIVATEnterpriseVar" title="Receivable Cost Incl. Tax, Enterprise" />
+          <Field source="BillingPriceEnterpriseVar" title="Billing Price, Enterprise" />
+          <Field source="BillingPriceRegEnterpriseVar" title="Billing Price, Reg., Enterprise" />
+          <Field source="BillingPriceOpenEnterpriseVar" title="Open Billing Price, Enterprise" />
+          <Field source="BillingPriceInvoicedEnterpriseVar" title="Billing Price, Inv., Enterprise" />
+          <Field source="BillingPriceUpDownEnterpriseVar" title="Billing Price Up/Down, Enterprise" />
+          <Field source="BillingPriceForInvoicingEnterpriseVar" title="Billing Price for Inv., Enterprise" />
+          <Field source="BillingPriceUpDownUponCloseEnterpriseVar" title="Billing Price Up/Down Upon Cl., Enterprise" />
+          <Field source="OriginalCostPriceVar" title="Original Cost" />
+          <Field source="NumberOpenVar" title="Quantity Open" />
+          <Field source="NumberInvoicedVar" title="Quantity Inv." />
+          <Field source="NumberForInvoicingVar" title="Invoice Quantity" />
+          <Field source="NumberUpDownVar" title="Quantity, Up/Down." />
+          <Field source="NumberRegisteredVar" title="Quantity, Reg." />
+          <Field source="NumberOfUpDownUponClosingVar" title="Quantity, Up/Down at Closing" />
+          <Field source="BillingPriceExecutingCompanyVar" title="Billing Price, Exec. Company" />
+          <Field source="BillingPriceExecCompanyEnterpriseVar" title="Billing Price, Exec. Company, Enterprise" />
+          <Field source="CompanyNumberVar" title="Company No." />
+          <Field source="ExecutingCompanyNumberVar" title="Exec. Company No." />
+          <Field source="CostPriceExecutingCompanyVar" title="Cost, Exec. Company" />
+          <Field source="BaseCurrencyExecutingCompanyVar" title="Base Currency, Exec. Company" />
+          <Field source="StdBillingPriceCurrencyVar" title="Standard Billing Price, Currency" />
+          <Field source="StdBillingPriceBaseVar" title="Standard Billing Price, Base" />
+          <Field source="StdBillingPriceEnterpriseVar" title="Standard Billing Price, Enterprise" />
+          <Field source="StdBillingPriceTotalCurrencyVar" title="Total Standard Billing Price, Currency{1}" />
+          <Field source="StdBillingPriceTotalBaseVar" title="Standard Billing Price Total, Base" />
+          <Field source="StdBillingPriceTotalEnterpriseVar" title="Standard Billing Price Total, Enterprise" />
+          <Field source="StdUpDownCurrencyVar" title="Standard Up/Down, Currency" />
+          <Field source="StdUpDownBaseVar" title="Standard Up/Down, Base" />
+          <Field source="StdUpDownEnterpriseVar" title="Standard Up/Down, Enterprise" />
+          <Field source="AccrualEnterpriseVar" title="Accrual, Enterprise" />
+          <Field source="TypeOfEntryVar" title="Entry Type{Posting}" />
+          <Field source="MarkUpPercentageVar" title="Markup %" />
+          <Field source="ToBeClosedVar" title="Close{Finish}" />
+          <Field source="ClosedVar" title="Closed{Finish}" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATCodeVar" title="Tax Code 1" />
+            <Field source="VATCode2Var" title="Tax Code 2" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="VATCode3Var" title="Tax Code 3" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATCodeVar" title="Tax Code" />
+          </Else>
+          <Columns ref="DimensionVarColumns" />
+          <Field source="SupplierNumberVar" title="Vendor{No.}" />
+          <Field source="VendorInvoiceNumberVar" title="Vendor Invoice No." />
+          <Field source="ApprovedForInvoicingVar" title="Approved for Inv." />
+          <Field source="ItemNumberVar" title="Item No." />
+          <Field source="AccrualBaseVar" title="Accrual, Base" />
+          <Field source="NumberReallocatedVar" title="Amount Reallocated" />
+          <Field source="ReallocationDateVar" title="Date Reallocated" />
+          <Field source="ItemVATCodeVar" title="Item Tax Code" />
+          <Field source="DirectInvoicingVar" title="Direct Inv." />
+          <Field source="BeingReopenedVar" title="Being Reopened" />
+          <Field source="RemarkVar" title="Remarks{sg}" />
+          <Field source="QuantityAVar" title="Quantity{Amount}" />
+          <Field source="QuantityBVar" title="Quantity 2" />
+          <Field source="JobSurchargeEntryVar" title="Job Surcharge Entry" />
+          <Field source="OverInvoicingEntryVar" title="Over Invoicing Entry" />
+          <Field source="BasisUnitPriceVar" title="Base Price, Pc." />
+          <Field source="JobSurchargeAmountCurrencyVar" title="Job Surcharge Amount" />
+          <Field source="JobSurchargeAmountBaseVar" title="Job Surcharge Amount, Base" />
+          <Field source="ReallocateVar" title="Reallocate" />
+          <Field source="CostTypeVar" title="Cost Type" />
+          <Field source="PurchaseOrderNumberVar" title="Purch. Order No." />
+          <Field source="PurchaseOrderLineNumberVar" title="Purchase Order Line No." />
+          <Field source="AccrualEntryVar" title="Accrual Entry" />
+          <Field source="FinanceEntryDateVar" title="G/L Entry Date" />
+          <Field source="IncomingFinanceVATCodeVar" title="Receivable G/L Tax Code" />
+          <Field source="OverrunAdjustmentVar" title="Overrun Adjustment" />
+          <Field source="SelectedForInvoicingVar" title="Invoice{pass}" />
+          <Field source="InvoicingJobNumberVar" title="Invoicing Job No." />
+          <Field source="IntercompanyPriceBaseVar" title="Intercompany Price, Base" />
+          <Field source="OriginVar" title="Origin" />
+          <Field source="IncludedInFixedPriceVar" title="Incl. in Fixed Price" />
+          <Field source="JobSurchargeAmountEnterpriseVar" title="Job Surcharge Amount, Enterprise" />
+          <Field source="LastReallocationNumberVar" title="Latest Reallocation Number" />
+          <Field source="RevenueRecognizedCurrencyVar" title="Amount Recognized, Currency" />
+          <Field source="RevenueRecognizedBaseVar" title="Amount Recognized, Base" />
+          <Field source="RevenueRecognizedEnterpriseVar" title="Revenue Recognized, Enterprise" />
+          <Field source="TransferredVar" title="Moved" />
+          <Field source="TransferDateVar" title="Transfer Date{move}" />
+          <Field source="TransferredToEntryNumberVar" title="Moved to Entry No." />
+          <Field source="TransferredFinanceEntryDateVar" title="Moved G/L entry date" />
+          <Field source="NumberTransferredToVar" title="Quantity, Transferred To" />
+          <Field source="CostPriceTransferredToVar" title="Cost, Transferred To, Base" />
+          <Field source="CostPriceTransferredToEnterpriseVar" title="Cost, Transferred To, Enterprise" />
+          <Field source="BillingPriceTransfToCurrencyVar" title="Billing Price, Transferred To, Currency" />
+          <Field source="BillingPriceTransfToBaseVar" title="Billing Price, Transferred To, Base" />
+          <Field source="BillingPriceTransfToEnterpriseVar" title="Billing Price, Transferred To, Enterprise" />
+          <Field source="NumberTransferredFromVar" title="Quantity, Transferred From" />
+          <Field source="CostPriceTransferredFromVar" title="Cost, Transferred From, Base" />
+          <Field source="CostPriceTransferredFromEnterpriseVar" title="Cost, Transferred From, Enterprise" />
+          <Field source="BillingPriceTransfFromCurrencyVar" title="Billing Price, Tranferred From, Currency" />
+          <Field source="BillingPriceTransfFromBaseVar" title="Billing Price, Tranferred From, Base" />
+          <Field source="BillingPriceTransfFromEnterpriseVar" title="Billing Price, Tranferred From, Enterprise" />
+          <Field source="EarliestJobInvoiceLineVar" title="Earliest Job Invoice Line" />
+          <Field source="LatestJobInvoiceLineVar" title="Latest Job Invoice Line" />
+          <Field source="OrigRevenueRecognizedCurrencyVar" title="Orig. Revenue Recognized, Currency" />
+          <Field source="OrigRevenueRecognizedBaseVar" title="Orig. Revenue Recognized, Base" />
+          <Field source="OrigRevenueRecognizedEnterpriseVar" title="Orig. Revenue Recognized, Enterprise" />
+          <Field source="InvoicingActionVar" title="Action{Action}" />
+          <Field source="ReallocateFromInvoiceSelectionVar" title="Reallocate" />
+          <Field source="SelectedForReallocationVar" title="Selected" />
+          <Field source="OvertimeTypeVar" title="Overtime Spec." />
+          <Field source="ExportModeNumberVar" title="Run No., Export" />
+          <Field source="RevenueRecognitionGroupKeyVar" title="Revenue Recognition Group Key" />
+          <Field source="AccrualTypeVar" title="Accrual Type" />
+          <Field source="FromAccrualPeriodVar" title="Accrual Period From" />
+          <Field source="ToAccrualPeriodVar" title="Accrual Period To" />
+          <Field source="AccruedAtRegistrationVar" title="Accrued at registration" />
+          <Field source="MainEntryNumberVar" title="Main Entry Number" />
+          <Field source="FromSubscriptionPeriodVar" title="Subscription Period From" />
+          <Field source="ToSubscriptionPeriodVar" title="Subscription Period To" />
+          <Field source="LineNumber" />
+          <Field source="DebitCredit" />
+          <Field source="ToBePrinted" />
+          <Field source="BillingPriceCurrency" />
+          <Field source="BillingPriceUpDownCurrency" />
+          <Field source="BillingPriceBase" />
+          <Field source="CostPriceTotalEnterprise" />
+          <Field source="BillingPriceUpDownEnterprise" />
+          <Field source="BillingPriceTotalEnterprise" />
+          <Field source="BillingPriceTotalExecutingCompany" />
+          <Field source="BillingPriceTotalExecCompanyEnterprise" />
+          <Field source="CostPriceTotalExecutingCompany" />
+          <Field source="CostPriceTotalExecCompanyEnterprise" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATBase" title="Total Tax, Base" />
+            <Field source="LineVAT1BaseVar" title="Tax 1, Base" />
+            <Field source="LineVAT2BaseVar" title="Tax 2, Base" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="LineVAT3BaseVar" title="Tax 3, Base" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATBase" />
+          </Else>
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATCurrency" title="Total Tax, Currency" />
+            <Field source="LineVAT1CurrencyVar" title="Tax 1, Currency" />
+            <Field source="LineVAT2CurrencyVar" title="Tax 2, Currency" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="LineVAT3CurrencyVar" title="Tax 3, Currency" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATCurrency" />
+          </Else>
+          <Field source="CustomerNumber" />
+          <Field source="CustomerGroup" />
+          <Field source="Responsible" />
+          <Field source="PostingDepartment" />
+          <Field source="NumberOf" />
+          <Field source="DeactivatedBase" />
+          <Field source="ClosedBillingPriceBase" />
+          <Field source="InvoiceDate" />
+          <Field source="FinanceEntryDate" />
+          <Field source="InternalJob" />
+          <Field source="NumberUpDown" />
+          <Field source="LineInvoiceDiscountCurrency" />
+          <Field source="LineInvoiceDiscountBase" />
+          <Field source="TaskName" />
+          <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="VATEnterprise" title="Total Tax, Enterprise" />
+            <Field source="LineVAT1EnterpriseVar" title="Tax 1, Enterprise" />
+            <Field source="LineVAT2EnterpriseVar" title="Tax 2, Enterprise" />
+            <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+              <Field source="LineVAT3EnterpriseVar" title="Tax 3, Enterprise" />
+            </If>
+          </If>
+          <Else>
+            <Field source="VATEnterprise" />
+          </Else>
+          <Field source="LineInvoiceDiscountEnterprise" />
+          <Field source="DeactivatedEnterprise" />
+          <Field source="RevenueRecognizedCurrency" />
+          <Field source="RevenueRecognizedBase" />
+          <Field source="RevenueRecognizedEnterprise" />
+          <Field source="DeactivatedCostBase" />
+          <Field source="DeactivatedCostEnterprise" />
+          <Field source="NumberMoved" />
+          <Field source="BillingPriceTransfCurrency" />
+          <Field source="BillingPriceTransfBase" />
+          <Field source="BillingPriceTransfEnterprise" />
+          <Field source="PaymentCustomer" />
+          <Field source="Appropriation" />
+          <Field source="ReferenceInvoiceNumber" />
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+        </Columns>
+      </Table>
+      <Table name="Demo">
+        <Actions all="true" />
+        <Columns>
+          <If condition="parent.ToBeBlanketInvoiced = true">
+            <Field source="JobNumberVar" title="Job No." />
+          </If>
+          <Field source="EntryDateVar" title="Date" />
+          <Field source="BillingPriceUpDownCurrencyVar" title="Billing Price, Up/Down, Currency" style="AlertWriteDown,AlertWriteUp" />
+          <Field source="BillingPriceInvoicedCurrencyVar" title="Billing Price Inv., Currency" />
+          <Field source="TaskNameVar" title="Task" />
+          <Field source="NumberUpDownVar" title="Quantity, Up/Down." size="small" />
+          <Field source="NumberInvoicedVar" title="Quantity Inv." size="small" />
+          <Field source="EmployeeNumberVar" title="Employee No." size="small" />
+          <Field source="ActivityNumberVar" title="Activity No." size="small" />
+          <Field source="ActivityTypeVar" title="Activity Type" />
+          <Field source="ActivityTextVar" title="Activity Name" />
+          <Field source="TransactionNumberVar" title="Trans. No." />
+          <Field source="TextVar" title="Description{Text}" />
+        </Columns>
+      </Table>
+      <Table name="EntryOriginLine">
+        <Actions all="true" />
+        <Columns>
+          <Style ref="highlightRow" condition="InstanceKey=Parent.Parent.Parent.Parent.OriginLineInstanceKey" />
+          <Field source="JobNumberVar" title="Job No." />
+          <Field source="EntryDateVar" title="Date" />
+          <Field source="BillingPriceUpDownCurrencyVar" title="Billing Price, Up/Down, Currency" />
+          <Field source="BillingPriceInvoicedCurrencyVar" title="Billing Price Inv., Currency" />
+          <Field source="TaskNameVar" title="Task" />
+          <Field source="NumberUpDownVar" title="Quantity, Up/Down." />
+          <Field source="NumberInvoicedVar" title="Quantity Inv." />
+          <Field source="EmployeeNumberVar" title="Employee No." />
+          <Field source="ActivityNumberVar" title="Activity No." />
+          <Field source="ActivityTypeVar" title="Activity Type" />
+          <Field source="ActivityTextVar" title="Activity Name" />
+          <Field source="TransactionNumberVar" title="Trans. No." />
+          <Field source="TextVar" title="Description{Text}" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

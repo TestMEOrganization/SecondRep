@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SBA, 08/11/10: Create layout for dialog (39067).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ShowCurrentUserNotifications">
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Username">
+              <Field source="NameOfUser" title="Name" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="NotificationType" />
+          <Field source="NotificationTypeName" />
+          <Field source="NotificationText" />
+          <Field source="EffectiveFromDate" />
+          <Field source="EffectiveFromTime" />
+          <Field source="PriorityType" />
+          <Field source="Priority" />
+          <Field source="CreatedDate" />
+          <Field source="CreationTime" />
+          <Field source="ConfirmedDate" />
+          <Field source="ConfirmedTime" />
+          <Field source="Closed" />
+          <Field source="InternalRelationName" />
+          <Field source="ObjectInstanceKey" />
+          <Field source="AllowNoReceiver" />
+          <Field source="MonitorNumber" />
+          <Field source="CreatedBy" />
+          <Field source="ChangedBy" />
+          <Field source="ChangedDate" />
+          <Field source="VersionNumber" />
+          <Field source="Remark1" />
+          <Field source="Remark2" />
+          <Field source="Remark3" />
+          <Field source="Text1" />
+          <Field source="Text2" />
+          <Field source="Text3" />
+          <Field source="Text4" />
+          <Field source="Text5" />
+          <Field source="Text6" />
+          <Field source="Text7" />
+          <Field source="Text8" />
+          <Field source="Text9" />
+          <Field source="Text10" />
+          <Field source="Argument1" />
+          <Field source="Argument2" />
+          <Field source="Argument3" />
+          <Field source="Argument4" />
+          <Field source="Argument5" />
+          <Field source="TargetFocusKey1" />
+          <Field source="WaypointFocusKey11" />
+          <Field source="WaypointFocusKey12" />
+          <Field source="WaypointFocusKey13" />
+          <Field source="WaypointFocusKey14" />
+          <Field source="TargetFocusKey2" />
+          <Field source="WaypointFocusKey21" />
+          <Field source="WaypointFocusKey22" />
+          <Field source="WaypointFocusKey23" />
+          <Field source="WaypointFocusKey24" />
+          <Field source="TargetFocusKey3" />
+          <Field source="WaypointFocusKey31" />
+          <Field source="WaypointFocusKey32" />
+          <Field source="WaypointFocusKey33" />
+          <Field source="WaypointFocusKey34" />
+          <Field source="TargetFocusKey4" />
+          <Field source="WaypointFocusKey41" />
+          <Field source="WaypointFocusKey42" />
+          <Field source="WaypointFocusKey43" />
+          <Field source="WaypointFocusKey44" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

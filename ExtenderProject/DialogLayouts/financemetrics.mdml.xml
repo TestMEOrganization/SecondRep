@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 31/03/10: Original layouts added (38409).-->
+<!-- CSK, 23/04/10: Assistant and Minimal views added for Companies workspace (37818).-->
+<!-- JSV, 02/06/10: Rename reference to FinanceReportNumber_FinanceReport (38482).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- CSK, 17/11/10: Original_Vertical view added for Financial Reporting (39062).-->
+<!-- CSK, 17/11/10: Improved search dialogs for report lines and columns in metrics (39055).-->
+<!-- JSV, 01/12/10: Compact block in Original filter (39106).-->
+<!-- CSK, 29/11/10: Various layout improvements (39093).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- CSK, 16/12/10: Compact block in Minimal filter (37654).-->
+<!-- PSZ, 22/06/11: Original layout should be placed as the first layout (39299).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="FinanceMetrics">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name;MetricNumber" />
+        </Compact>
+        <Columns>
+          <Field source="MetricNumber" />
+          <Field source="Name" />
+        </Columns>
+      </Filter>
+      <Filter name="Minimal">
+        <Compact>
+          <Description template="^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <Pane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Metric">
+            <Field source="MetricNumber" />
+            <Field source="Name" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Definition">
+            <Reference foreignKey="FinanceReportNumber_FinanceReport" title="Report" />
+            <Reference foreignKey="FinanceReportLineNumber_FinanceReportLine" title="Line" />
+            <Reference foreignKey="FinanceReportColumnNumber_ColumnDescriptionLine" title="Column" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Access Level">
+            <Field source="AccessLevelName" title="Name" />
+            <Field source="AccessLevelDescriptionVar" title="Description{0}" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Custom_RoleRestricted_Assistant" open="hasRole('Finance Admin')" >
+        <Column>
+          <Style ref="fullWidth" justify="left" />
+          <Group title="Metric">
+            <Field source="MetricNumber" />
+            <Field source="Name" />
+            <Field source="Description" />
+          </Group>
+          <Group title="G/L Report">
+            <Field source="FinanceReportNumber" />
+            <Field source="FinanceReportNameVar" title="Name" />
+          </Group>
+          <Group title="G/L Report Column">
+            <Field source="FinanceReportColumnNumber" />
+            <Field source="FinanceReportColumnHeadingVar" title="Title" />
+          </Group>
+          <Group title="G/L Report Line">
+            <Field source="FinanceReportLineNumber" />
+            <Field source="FinanceReportLineDescriptionVar" title="Title" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Assistant">
+        <Column>
+          <Style ref="fullWidth" justify="left" />
+          <Group title="Metric">
+            <Field source="MetricNumber" />
+            <Field source="Name" />
+            <Field source="Description" />
+          </Group>
+          <Group title="G/L Report">
+            <Field source="FinanceReportNumber" />
+            <Field source="FinanceReportNameVar" title="Name" />
+          </Group>
+          <Group title="G/L Report Column">
+            <Field source="FinanceReportColumnNumber" />
+            <Field source="FinanceReportColumnHeadingVar" title="Title" />
+          </Group>
+          <Group title="G/L Report Line">
+            <Field source="FinanceReportLineNumber" />
+            <Field source="FinanceReportLineDescriptionVar" title="Title" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Original_Vertical">
+        <Actions all="true" />
+        <Column style="fullWidth">
+          <Group title="Metric">
+            <Field source="MetricNumber">
+              <Style justify="left" />
+            </Field>
+            <Field source="Name" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Definition">
+            <Reference foreignKey="FinanceReportNumber_FinanceReport" title="Report" />
+            <Reference foreignKey="FinanceReportLineNumber_FinanceReportLine" title="Line" descriptionSearchView="ReportLineInFinanceMetric" keySearchView="ReportLineInFinanceMetric" />
+            <Reference foreignKey="FinanceReportColumnNumber_ColumnDescriptionLine" title="Column" descriptionSearchView="ReportColumnInFinanceMetric" keySearchView="ReportColumnInFinanceMetric" />
+            <Field source="FinanceReportColumnDescriptionName" />
+          </Group>
+          <Group title="Access Level">
+            <Field source="AccessLevelName" title="Name" />
+            <Field source="AccessLevelDescriptionVar" title="Description{0}" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </Pane>
+  </Layout>
+</MDML>
+

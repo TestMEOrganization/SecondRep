@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 28/07/11: New workspace Fixed Assets (39789).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="FixedAssets" title="Fixed Assets">
+    <Formation>
+      <Section title="Home">
+        <Mount>
+          <Filter source="Assets" view="Home">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Home" title="Overview">
+                  <Expansions parentSize="medium">
+                    <Restrict reversedForeignKey="AssetNumber_Asset">
+                      <Filter source="ShowAssetEntries" view="AssetLedgerCard" title="Entries">
+                        <Expansions minimized="true">
+                          <With>
+                            <Card view="InAssetContext" title="Details" />
+                          </With>
+                        </Expansions>
+                      </Filter>
+                    </Restrict>
+                    <Bind foreignKey="primary">
+                      <Card source="AssetHistories" view="SelectionCriteria" title="History">
+                        <Expansions parentSize="tiny">
+                          <With>
+                            <Table view="Full" title="Changes" />
+                          </With>
+                        </Expansions>
+                      </Card>
+                    </Bind>
+                  </Expansions>
+                  <Assistants parentSize="huge">
+                    <Bind foreignKey="CompanyNumber_CompanyInformation">
+                      <Card source="CompanyInfo" view="Overview_Vertical" title="Company" />
+                    </Bind>
+                  </Assistants>
+                </Card>
+                <Card view="Full" title="Information" />
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Registrations">
+        <Mount>
+          <Filter source="AssetAdjustment" view="Custom" title="Adjustments">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Standard" title="Adjustment">
+                  <Expansions parentSize="small">
+                    <With>
+                      <Table view="Full" title="Entries" />
+                    </With>
+                  </Expansions>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="AssetSale" view="Standard" title="Disposals">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Custom" title="Disposal">
+                  <Assistants parentSize="large">
+                    <Bind foreignKey="primary">
+                      <Card source="Assets" view="Overview" title="Asset" />
+                    </Bind>
+                  </Assistants>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Card source="AssetRelocation" view="Custom" title="Relocation" />
+          <Card source="AssetInternalSale" view="Custom" title="Internal Sales" />
+          <Card source="DepreciationAdjustment" view="Custom" title="Depreciations" />
+        </Mount>
+      </Section>
+      <Section title="Lookup">
+        <Mount>
+          <Filter source="ShowAssetAdjustments" view="Home" title="Adjustments">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Adjustment">
+                  <Expansions parentSize="small">
+                    <With>
+                      <Table view="Full" title="Entries" />
+                    </With>
+                  </Expansions>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Card source="P_AssetList" view="Full" title="Asset Listing" />
+        </Mount>
+      </Section>
+      <Section title="Setup" hidden="not hasRole('Superuser')">
+        <Mount>
+          <Filter source="AssetGroups" view="Standard" title="Groups">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Group" />
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="PopupFields" view="FixedAssets" title="System">
+            <Expansions minimized="false" parentSize="small">
+              <With>
+                <Card view="Full">
+                  <Expansions parentSize="small">
+                    <With>
+                      <Table view="Full" />
+                    </With>
+                  </Expansions>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+    </Formation>
+  </Workspace>
+</MWSL>
+

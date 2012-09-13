@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- CSK, 24/04/09: Original layout added (37668).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 07/07/09: Standard views deleted (37668).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 05/04/11: Original layouts improved (39492).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="PostingDescriptions">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+          <Columns ref="UserUpdateColumns" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Custom_RoleRestricted_Full">
+        <Actions all="true" >
+          <Exclude>
+            <If condition="not hasRole('Finance Admin')">
+              <Create />
+              <Update />
+              <Delete />
+            </If>
+          </Exclude>
+        </Actions>
+        <Column>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Custom_RoleRestricted_Full">
+        <Actions all="true" >
+          <Exclude>
+            <If condition="not hasRole('Finance Admin')">
+              <Create />
+              <Update />
+              <Delete />
+            </If>
+          </Exclude>
+        </Actions>
+        <Columns>
+          <Field source="TypeOfEntry" size="huge" />
+          <Field source="Text" size="huge" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="TypeOfEntry" size="huge" />
+          <Field source="Text" size="huge" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 30/03/11: System setup workspace (39512).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="SystemNumbers">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name1;CompanyNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CompanyNumber" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Name3" />
+          <Field source="ZipCode" />
+          <Field source="PostalDistrict" />
+          <Field source="Name4" />
+          <Field source="Name5" />
+          <Field source="Country" />
+          <Field source="Telephone" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Company">
+            <Field source="CompanyNumber" />
+            <Field source="Name1" title="Name" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Prefix Specification">
+            <Field source="SystemNumberPrefix" />
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Custom_RoleRestricted_Full" open="hasRole('Finance Admin')" >
+        <Actions all="true" />
+        <Columns>
+          <Field source="NumberName" />
+          <Field source="Prefix" />
+          <Field source="TheNumber" />
+          <Field source="Suffix" />
+          <Field source="LastNumber" />
+          <Field source="NumberOfDigits" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="NumberName" />
+          <Field source="Prefix" />
+          <Field source="TheNumber" />
+          <Field source="Suffix" />
+          <Field source="LastNumber" />
+          <Field source="NumberOfDigits" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

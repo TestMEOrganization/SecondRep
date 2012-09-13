@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- BPE, 02/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- JSV, 22/06/11: New field ItemNumber (39696).-->
+<!-- PSZ, 02/08/11: Changes for Job Administration workspace (39803).-->
+<!-- CSK, 10/10/11: Job journal cannot be created in Financial Operations (39452).-->
+<!-- CSK, 19/10/11: New removed from creation wizard title (40064).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JobJournal">
+    <FilterPane>
+      <Filter name="Standard">
+        <Actions>
+          <If condition="hasWorkspace('JobAdministration')">
+            <Action source="with.Create" wizard="CreateJournalWizard" />
+          </If>
+        </Actions>
+        <ControlBar>
+          <Selection default="MyJournals">
+            <Option title="My Open Journals" name="MyJournals" restriction="NameOfUser = username()" />
+            <Option title="All Open Journals" name="AllJournals" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Journal No. ^1, ^2" arguments="JournalNumber;NameOfUser" />
+        </Compact>
+        <Columns>
+          <Field source="JournalNumber" />
+          <Field source="NameOfUser" />
+          <Field source="CreatedDate" />
+          <Field source="CompanyNumber" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Wizard name="CreateJournalWizard" title="Create Job Journal">
+        <Page form="CreateJournalWizardPage" title="Job Journal" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('JobAdministration') or hasWorkspace('FinancialOperations')">
+              <Create />
+            </If>
+          </Exclude>
+        </Actions>
+        <Row>
+          <Group title="Journal{Draft}">
+            <Field source="JournalNumber" />
+            <If condition="NameOfUser != ''">
+              <Description template="^1 by ^2" arguments="CreatedDate;NameOfUser" title="Created" />
+            </If>
+            <Else>
+              <Description template="" title="Created" />
+            </Else>
+            <If condition="SubmittedBy != ''">
+              <Description template="^1 by ^2" arguments="DateSubmitted;SubmittedBy" title="Submitted" />
+            </If>
+            <Else>
+              <Description template="" title="Submitted" />
+            </Else>
+            <Boolean source="RepeatAutomaticVar" title="Repeat Auto." />
+            <Boolean source="ToBePosted" />
+          </Group>
+          <Group title="Time, Base">
+            <Field source="NumberOfHoursVar" title="No. Hours" />
+            <Field source="CostPriceTimeVar" title="Cost{Price}" />
+            <Field source="BillingPriceTimeVar" title="Billing Price" />
+            <Field source="StandardBillingPriceTimeVar" title="Standard Billing Price" />
+          </Group>
+          <Group title="Amount, Base">
+            <Field source="CostPriceAmountVar" title="Cost{Price}" />
+            <Field source="BillingPriceAmountVar" title="Billing Price" />
+            <Field source="OfWhichOutlaysCostAndSalesVar" title="Hereof Outlays" />
+            <Field source="StandardBillingPriceAmountVar" title="Standard Billing Price" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Company">
+            <If condition="hasWorkspace('JobAdministration')">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" keySource="CompanyNumber" open="false" />
+            </If>
+            <Else>
+              <Reference foreignKey="CompanyNumber_CompanyInformation" keySource="CompanyNumber" />
+            </Else>
+            <Field source="BaseCurrency" />
+          </Group>
+          <Group title="Entries{Posting}">
+            <Field source="FirstTransactionNumber" title="Trans. No." />
+            <Field source="DefaultTransactionType" title="Trans. Type" />
+          </Group>
+          <Group title="Posting">
+            <Field source="LayoutNameVar" title="Layout" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CreateJournalWizardPage">
+        <Actions>
+          <Create />
+        </Actions>
+        <Group>
+          <Reference foreignKey="CompanyNumber_CompanyInformation" keySource="CompanyNumber" />
+        </Group>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="EntryDate" />
+          <Field source="EntryText" />
+          <Field source="JobNumber" searchView="For_JobJournal" />
+          <Field source="TaskName" />
+          <Field source="ActivityNumber" />
+          <Field source="EmployeeNumber" />
+          <Field source="EntryText" title="Description{Text}" />
+          <Field source="NumberOf" />
+          <Field source="BaseCurrency" title="Base Currency" />
+          <Field source="CostPrice" />
+          <Field source="Currency" title="Sales Currency" />
+          <Field source="BillingPriceCurrency" />
+          <Field source="MarkUpPercentage" />
+          <Field source="StdBillingPriceCurrency" />
+          <Field source="CompanyNumber" title="Company No." />
+          <Field source="ResponsibleEmplCompanyNameVar" title="Company Name" />
+          <Field source="ExecutingCompanyNumber" title="Exec. Company No." />
+          <Field source="ExecutingCompanyNameVar" title="Name" />
+          <Field source="BaseCurrencyExecutingCompany" title="Base Currency, Exec.Company" />
+          <Field source="CostPriceExecutingCompany" title="Cost, Exec. Company" />
+          <Columns ref="DimensionColumns" />
+          <Field source="Accrual" />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="Name" title="Employee Name" />
+          <Field source="ActivityText" title="Activity Name" />
+          <Field source="TaskTextVar" title="Task Description{1}" />
+          <Field source="ItemNumber" />
+          <Field source="StartingTime" />
+          <Field source="ClosingTime" />
+          <Field source="Remark" />
+          <Field source="QuantityA" title="Quantity{Amount}" />
+          <Field source="QuantityB" />
+          <Field source="OvertimeType" />
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+          <Field source="TransactionType" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

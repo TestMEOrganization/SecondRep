@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--47c0fa6ddc8ce91fa565f01d1f5dfc522143126a-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--9c8a435b2d5830d97e9ea47321286a403bf27fe6-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest c17639073eab6933d15e09796cbca54d   3 _ _   213
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 28.10.2011
+  TAC_CreationTime: 14:31:39
+  TAC*MaconomyHQ: yes
+-->
+<!-- AMC, 23/02/09: JobPurchasing (37480).-->
+<!-- KRN, 16/03/09: Job Purchase Process (37560).-->
+<!-- MJA, 13/03/09: Job Subscriptions (37561).-->
+<!-- SJK, 20/04/09: Job Estimating (37651).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- AMC, 29/05/09: Job Invoicing T&M and Fixed Price workspaces (37772).-->
+<!-- SJK, 08/07/09: Job Estimating renamed to Job Budgeting (37823).-->
+<!-- KRN, 03/09/09: Removed Purchasing workspace (37560).-->
+<!-- MJA, 23/10/09: Job Progress workspace added (38067).-->
+<!-- SBA, 13/11/09: Removed minimized="false" for the formation (38115).-->
+<!-- KRN, 17/11/09: Job Purchase Process Lines (38120).-->
+<!-- KRN, 22/03/10: Job purchase from budget (38381).-->
+<!-- KRN, 21/05/10: Workspace structure updated (38501). -->
+<!-- JSV, 05/07/10: Set name on filter for use in notification (38620).-->
+<!-- KRN, 08/07/10: Moved Subscriptions to tab (38608). -->
+<!-- KRN, 08/07/10: Reports section for Analytix reports (38609).-->
+<!-- KRN, 12/07/10: Time and Expense Approval section (38648).-->
+<!-- KRN, 29/11/10: Job Reports removed until actually reports exists (39157).-->
+<!-- SBA, 22/12/10: Adding &amp; instead of 'and' (38648).-->
+<!-- KUN, 19/01/11: Added name to budget section so that we can link to that section (39353).-->
+<!-- PSZ, 11/07/11: PSO Jobs workspace changes (39759).-->
+<!-- SBA, 09/08/11: Using solutionconfiguration propertied (39759). -->
+<!-- PSZ, 15/08/11: Rename Execution to Job Activities, Close Job to Closing (39850).-->
+<!-- PSZ, 26/10/11: Improve performance of dynamic workspace (40098).-->
+<!-- SBA, 21/11/11: Use of defaultTo for hidden expression (40189).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_Jobs_PC" title="Jobs">
+    <Filter name="Jobs_Filter" source="Jobs" title="Job List" view="JobHome">
+      <Formation>
+        <Section title="Home">
+          <Bind foreignKey="primary">
+            <Workspace source="C_JobHome_PC" />
+          </Bind>
+         
+          <!-- <Restrict reversedForeignKey="JobNumber_JobHeader">
+            <Filter source="JobReallocation" title="Reallocate Job Entries">
+              <With>
+               <Card title="Reallocation">
+		         <With>
+			    	<Table title="Reallocate to..." />
+			    </With>
+		      </Card>
+		      </With>
+            </Filter>
+          </Restrict> -->
+        </Section>
+        <Section title="Budgeting" name="Budgeting_Section">
+          <Bind foreignKey="primary">
+            <Workspace source="C_JobBudgeting_PC" />
+          </Bind>
+        </Section>
+        <!-- <Section title="Job Activities" name="Execution_Section">
+					<Bind foreignKey="primary">
+						<Workspace source="JobExecution" />
+					</Bind>
+          <Bind foreignKey="primary">
+            <Workspace source="JobPurchaseProcess" />
+          </Bind>
+          <Restrict reversedForeignKey="JobNumber_SimpleJobHeader">
+            <Workspace source="JobPurchaseProcessLines" />
+          </Restrict>
+          <Bind foreignKey="CurrentBudgetType_JobBudget">
+            <Workspace source="JobPurchaseFromBudget" />
+          </Bind>
+        </Section>-->
+        <Section title="Progress Evaluation" hidden="(isEnvVarDefined('solutionconfiguration.UseJobProgress') and not booleanEnvVar('solutionconfiguration.UseJobProgress')) or (parent.JobGroup=jobgrouptype'\internal\ and parent.NotInvoiceable)">
+          <Bind foreignKey="primary">
+            <Workspace source="JobProgress" />
+          </Bind>
+        </Section>
+        <Section title="Invoicing" hidden="parent.NotInvoiceable defaultTo false">
+          <Bind foreignKey="primary">
+            <Workspace source="C_JobInvoicing_PC" />
+          </Bind>
+	    <Mount>
+	    	<Workspace source="SD_InvoiceDraftStatus" />
+	    </Mount>
+	    <Mount>
+		    <Filter source="BlanketInvoicingOverview" view="Standard" hidden="not hasRole('Projects - Controllers')" >
+		      <Expansions minimized="false">
+		        <With>
+		          <Card view="Full">
+		            <Expansions>
+		              <With>
+		                <Table />
+		              </With>
+		            </Expansions>
+		          </Card>
+		        </With>
+		      </Expansions>
+		    </Filter>
+	    </Mount>
+	    <Bind foreignKey="primary">
+          <Card source="JobInvoiceAllocation" view="Full" hidden="hasNoRecords() or not hasRole('Projects - Controllers')">
+            <Expansions>
+              <With>
+                <Table />
+              </With>
+            </Expansions>
+          </Card>
+	    </Bind>
+	    <Mount>
+	    	<Workspace source="SD_ItemizeJobInvoiceAllocation" />
+	    </Mount>
+        </Section>
+        <Section title="Closing">
+          <Bind foreignKey="primary">
+            <Card source="PendingJobActions" view="Standard">
+              <With>
+                <Table view="Full" />
+              </With>
+            </Card>
+          </Bind>
+        </Section>
+        <Section title="Lookup">
+          <Bind foreignKey="primary">
+            <Workspace source="C_JobLookup_PC" />
+          </Bind>
+        </Section>
+        <Section title="Setup" hidden="not hasRole('Project Admin') and not hasRole('Superuser')" >
+          <Bind foreignKey="primary">
+            <Workspace source="C_JobSetup_PC" />
+          </Bind>
+        </Section>
+      </Formation>
+    </Filter>
+  </Workspace>
+</MWSL>
+

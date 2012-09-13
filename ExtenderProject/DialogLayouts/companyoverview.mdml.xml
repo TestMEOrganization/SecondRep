@@ -1,0 +1,863 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 23/04/10: Original and Demo layouts added (37818).-->
+<!-- CSK, 23/04/10: Refresh action removed from Demo view (37818).-->
+<!-- CSK, 14/06/10: Correction for empty strings (38539).-->
+<!-- CSK, 12/07/10: Use description element for calculation date and time (38636).-->
+<!-- CSK, 04/11/10: Fields removed, action renamed  (38462).-->
+<!-- CSK, 26/11/10: Analytix reports and browsers added (38925).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 26/11/10: Minimal filter deleted, Demo view renamed to Extended (39093).-->
+<!-- CSK, 03/12/10: Original view simplified (39071).-->
+<!-- CSK, 09/12/10: urlEncode strings in links (39203).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- CSK, 20/12/10: Case sensitivity for pane() (39091).-->
+<!-- CSK, 07/01/11: Do not format dates in reports (39284).-->
+<!-- CSK, 18/01/11: Exchange rate table must be specified for balance sheet -->
+<!--                Analytix reports (39290).-->
+<!-- CSK, 19/01/11: Add metric value variables of type real (39291).-->
+<!-- CSK, 20/01/11: Always show the string type metric values (39291).-->
+<!-- CSK, 22/02/11: Improved login when using Browser (39382).-->
+<!-- PSZ, 22/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 28/06/11: New syntax for links (39747).-->
+<!-- CSK, 05/08/11: Create Report views for all Browser views (39820).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- CSK, 05/09/11: ProfitAndLossPeriodic view added and-->
+<!-- 							  new Analytix reports starting on a drill-level (39821).-->
+<!-- CSK, 08/09/11: Hide all actions on embedded report panes (39820).-->
+<!-- CSK, 09/09/11: Link target restriction removed (39747).-->
+<!-- CSK, 12/09/11: Correction for workspace link (39747).-->
+<!-- CSK, 19/09/11: Minor layout improvements (39918).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="CompanyOverview">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name1;CompanyNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CompanyNumber" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Name3" />
+          <Field source="ZipCode" />
+          <Field source="PostalDistrict" />
+          <Field source="Name4" />
+          <Field source="Name5" />
+          <Field source="Country" />
+          <Field source="Telephone" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <Pane>
+      <Define>
+        <Style name="AROverdue" ref="trafficlightRed" condition="TotalOverdueARVar gt 0" />
+        <Style name="APOverdue" ref="trafficlightRed" condition="TotalOverdueAPVar gt 0" />
+        <Function name="BalanceSheet" value="reportFolder()+'Balance Sheet'" type="string" />
+        <Function name="TrialBalance" value="reportFolder()+'Trial Balance'" type="string" />
+        <Function name="ProfitAndLossPeriodic" value="reportFolder()+'Profit and Loss, Periodic'" type="string" />
+        <Function name="CustomerProfitability" value="reportFolder()+'Customer Profitability, by Customer'" type="string" />
+        <Function name="RevenueAnalysis" value="reportFolder()+'Revenue Analysis, by Customer'" type="string" />
+        <Function name="JobProfitability" value="reportFolder()+'Job Profitability Summary, by Job'" type="string" />
+        <Function name="Utilization" value="reportFolder()+'Utilization, by Employee'" type="string" />
+        <Function name="Realization" value="reportFolder()+'Realization, by Employee'" type="string" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Row>
+            <Group title="Company">
+              <Column>
+                <Field source="CompanyNumber" />
+                <Field source="Name1" appearance="maximized" />
+                <Field source="Name2" appearance="maximized" />
+                <Field source="Name3" appearance="maximized" />
+                <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+                <Field source="Name4" appearance="maximized" />
+                <Field source="Name5" appearance="maximized" />
+                <Field source="Country" />
+                <Field source="Telephone" />
+                <Field source="Telefax" />
+                <Field source="Telex" />
+                <Field source="Giro" />
+                <Field source="Bank" />
+                <Field source="CompanyRegistrationNumber" />
+                <Field source="PaymentServiceNumber" />
+                <Field source="VATNumber" />
+              </Column>
+            </Group>
+          </Row>
+        </Column>
+        <Column>
+          <Row>
+            <If condition="Metric1NameVar = ''">
+              <Column>
+                <Group title=" ">
+                  <PeriodYearInterval firstPeriodSource="FromPeriodMonthVar" firstYearSource="FromPeriodYearVar" lastPeriodSource="ToPeriodMonthVar" lastYearSource="ToPeriodYearVar" title="Fiscal Year" />
+                  <Field source="Currency" />
+                </Group>
+              </Column>
+            </If>
+            <Else>
+              <Column>
+                <Group title="Currency">
+                  <Field source="Currency" />
+                </Group>
+              </Column>
+              <Column>
+                <Group title="Fiscal Year">
+                  <PeriodYearInterval firstPeriodSource="FromPeriodMonthVar" firstYearSource="FromPeriodYearVar" lastPeriodSource="ToPeriodMonthVar" lastYearSource="ToPeriodYearVar" title="Month/Year" />
+                </Group>
+              </Column>
+            </Else>
+          </Row>
+          <Row>
+            <Column>
+              <Group title="Accounts Receivable">
+                <Field source="TotalOutstandingARVar" />
+                <Field source="TotalOverdueARVar" />
+              </Group>
+              <Group title="Accounts Payable">
+                <Field source="TotalOutstandingAPVar" />
+                <Field source="TotalOverdueAPVar" />
+              </Group>
+              <Group title="Contact Management">
+                <Field source="LeadsVar" />
+                <Field source="CampaignsVar" />
+              </Group>
+              <Group title="Human Resources">
+                <Field source="EmployeesVar" />
+                <Field source="OpenPositionsVar" />
+              </Group>
+            </Column>
+            <Column>
+              <Group title="Finance">
+                <If condition="Metric1NameVar != ''">
+                  <Field source="Metric1StringValueVar" titleValue="Metric1NameVar" />
+                </If>
+                <If condition="Metric2NameVar != ''">
+                  <Field source="Metric2StringValueVar" titleValue="Metric2NameVar" />
+                </If>
+                <If condition="Metric3NameVar != ''">
+                  <Field source="Metric3StringValueVar" titleValue="Metric3NameVar" />
+                </If>
+                <If condition="Metric4NameVar != ''">
+                  <Field source="Metric4StringValueVar" titleValue="Metric4NameVar" />
+                </If>
+                <If condition="Metric5NameVar != ''">
+                  <Field source="Metric5StringValueVar" titleValue="Metric5NameVar" />
+                </If>
+                <If condition="Metric6NameVar != ''">
+                  <Field source="Metric6StringValueVar" titleValue="Metric6NameVar" />
+                </If>
+                <If condition="Metric7NameVar != ''">
+                  <Field source="Metric7StringValueVar" titleValue="Metric7NameVar" />
+                </If>
+                <If condition="Metric8NameVar != ''">
+                  <Field source="Metric8StringValueVar" titleValue="Metric8NameVar" />
+                </If>
+                <If condition="Metric9NameVar != ''">
+                  <Field source="Metric9StringValueVar" titleValue="Metric9NameVar" />
+                </If>
+                <If condition="Metric10NameVar != ''">
+                  <Field source="Metric10StringValueVar" titleValue="Metric10NameVar" />
+                </If>
+                <If condition="Metric11NameVar != ''">
+                  <Field source="Metric11StringValueVar" titleValue="Metric11NameVar" />
+                </If>
+                <If condition="Metric12NameVar != ''">
+                  <Field source="Metric12StringValueVar" titleValue="Metric12NameVar" />
+                </If>
+                <If condition="Metric13NameVar != ''">
+                  <Field source="Metric13StringValueVar" titleValue="Metric13NameVar" />
+                </If>
+                <If condition="Metric14NameVar != ''">
+                  <Field source="Metric14StringValueVar" titleValue="Metric14NameVar" />
+                </If>
+                <If condition="Metric15NameVar != ''">
+                  <Field source="Metric15StringValueVar" titleValue="Metric15NameVar" />
+                </If>
+                <If condition="Metric16NameVar != ''">
+                  <Field source="Metric16StringValueVar" titleValue="Metric16NameVar" />
+                </If>
+                <If condition="Metric17NameVar != ''">
+                  <Field source="Metric17StringValueVar" titleValue="Metric17NameVar" />
+                </If>
+                <If condition="Metric18NameVar != ''">
+                  <Field source="Metric18StringValueVar" titleValue="Metric18NameVar" />
+                </If>
+                <If condition="Metric19NameVar != ''">
+                  <Field source="Metric19StringValueVar" titleValue="Metric19NameVar" />
+                </If>
+                <If condition="Metric20NameVar != ''">
+                  <Field source="Metric20StringValueVar" titleValue="Metric20NameVar" />
+                </If>
+              </Group>
+            </Column>
+          </Row>
+        </Column>
+      </Form>
+      <Form name="Custom_RoleRestricted_Extended" open="hasRole('Finance Admin')">
+        <Actions>
+          <If condition="Metric1NameVar != ''              or Metric1NameVar != ''              or Metric2NameVar != ''              or Metric3NameVar != ''              or Metric4NameVar != ''              or Metric5NameVar != ''              or Metric9NameVar != ''              or Metric10NameVar != ''              or Metric11NameVar != ''              or Metric12NameVar != ''              or Metric13NameVar != ''              or Metric14NameVar != ''              or Metric15NameVar != ''              or Metric16NameVar != ''              or Metric17NameVar != ''              or Metric18NameVar != ''              or Metric19NameVar != ''              or Metric20NameVar != ''">
+            <Action source="RecalculateFinanceMetrics" />
+          </If>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Company Profile" style="fullWidth">
+              <Field source="CompanyNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Giro" />
+              <Field source="Bank" />
+              <Field source="CompanyRegistrationNumber" />
+              <Field source="PaymentServiceNumber" />
+              <Field source="VATNumber" />
+            </Group>
+          </Column>
+          <Column>
+            <Row>
+              <If condition="Metric1NameVar = ''">
+                <Column>
+                  <Group title=" ">
+                    <PeriodYear periodSource="FromPeriodMonthVar" yearSource="FromPeriodYearVar" title="From Month/Year" />
+                    <PeriodYear periodSource="ToPeriodMonthVar" yearSource="ToPeriodYearVar" title="To Month/Year" />
+                    <Field source="Currency" />
+                  </Group>
+                </Column>
+              </If>
+              <Else>
+                <Column>
+                  <Group title="Currency">
+                    <Field source="Currency">
+                      <Style justify="right" size="small" />
+                    </Field>
+                  </Group>
+                </Column>
+                <Column>
+                  <Group title="Fiscal Year">
+                    <PeriodYear periodSource="FromPeriodMonthVar" yearSource="FromPeriodYearVar" title="From Month/Year" />
+                    <PeriodYear periodSource="ToPeriodMonthVar" yearSource="ToPeriodYearVar" title="To Month/Year" />
+                  </Group>
+                </Column>
+              </Else>
+            </Row>
+            <Row>
+              <Column>
+                <Group title="Customers">
+                  <Field source="TotalOutstandingARVar" />
+                  <Field source="TotalOverdueARVar" style="AROverdue" />
+                </Group>
+                <Group title="Vendors">
+                  <Field source="TotalOutstandingAPVar" />
+                  <Field source="TotalOverdueAPVar" style="APOverdue" />
+                </Group>
+                <Group title="Contacts" style="compact_amountAlignment">
+                  <Field source="LeadsVar" />
+                  <Field source="CampaignsVar" />
+                  <Field source="EmployeesVar" />
+                  <Field source="OpenPositionsVar" />
+                </Group>
+              </Column>
+              <Column>
+                <Style justify="right" size="small" />
+                <If condition="Metric1NameVar != ''                or Metric1NameVar != ''                or Metric2NameVar != ''                or Metric3NameVar != ''                or Metric4NameVar != ''                or Metric5NameVar != ''                or Metric9NameVar != ''                or Metric10NameVar != ''                or Metric11NameVar != ''                or Metric12NameVar != ''                or Metric13NameVar != ''                or Metric14NameVar != ''                or Metric15NameVar != ''                or Metric16NameVar != ''                or Metric17NameVar != ''                or Metric18NameVar != ''                or Metric19NameVar != ''                or Metric20NameVar != ''">
+                  <Group title="Finance">
+                    <If condition="Metric1NameVar != ''">
+                      <Field source="Metric1StringValueVar" titleValue="Metric1NameVar" />
+                    </If>
+                    <If condition="Metric2NameVar != ''">
+                      <Field source="Metric2StringValueVar" titleValue="Metric2NameVar" />
+                    </If>
+                    <If condition="Metric3NameVar != ''">
+                      <Field source="Metric3StringValueVar" titleValue="Metric3NameVar" />
+                    </If>
+                    <If condition="Metric4NameVar != ''">
+                      <Field source="Metric4StringValueVar" titleValue="Metric4NameVar" />
+                    </If>
+                    <If condition="Metric5NameVar != ''">
+                      <Field source="Metric5StringValueVar" titleValue="Metric5NameVar" />
+                    </If>
+                    <If condition="Metric9NameVar != ''">
+                      <Field source="Metric9StringValueVar" titleValue="Metric9NameVar" />
+                    </If>
+                    <If condition="Metric10NameVar != ''">
+                      <Field source="Metric10StringValueVar" titleValue="Metric10NameVar" />
+                    </If>
+                    <If condition="Metric11NameVar != ''">
+                      <Field source="Metric11StringValueVar" titleValue="Metric11NameVar" />
+                    </If>
+                    <If condition="Metric12NameVar != ''">
+                      <Field source="Metric12StringValueVar" titleValue="Metric12NameVar" />
+                    </If>
+                    <If condition="Metric13NameVar != ''">
+                      <Field source="Metric13StringValueVar" titleValue="Metric13NameVar" />
+                    </If>
+                    <If condition="Metric14NameVar != ''">
+                      <Field source="Metric14StringValueVar" titleValue="Metric14NameVar" />
+                    </If>
+                    <If condition="Metric15NameVar != ''">
+                      <Field source="Metric15StringValueVar" titleValue="Metric15NameVar" />
+                    </If>
+                    <If condition="Metric16NameVar != ''">
+                      <Field source="Metric16StringValueVar" titleValue="Metric16NameVar" />
+                    </If>
+                    <If condition="Metric17NameVar != ''">
+                      <Field source="Metric17StringValueVar" titleValue="Metric17NameVar" />
+                    </If>
+                    <If condition="Metric18NameVar != ''">
+                      <Field source="Metric18StringValueVar" titleValue="Metric18NameVar" />
+                    </If>
+                    <If condition="Metric19NameVar != ''">
+                      <Field source="Metric19StringValueVar" titleValue="Metric19NameVar" />
+                    </If>
+                    <If condition="Metric20NameVar != ''">
+                      <Field source="Metric20StringValueVar" titleValue="Metric20NameVar" />
+                    </If>
+                    <If condition="(Metric1CalcDateVar = Metric2CalcDateVar or Metric2NameVar = '')                   and (Metric2CalcDateVar = Metric3CalcDateVar or Metric3NameVar = '')                   and (Metric3CalcDateVar = Metric4CalcDateVar or Metric4NameVar = '')                  and (Metric4CalcDateVar = Metric5CalcDateVar or Metric5NameVar = '')                  and Metric1StringValueVar != 'N/A'">
+                      <Description template="* Calculated on ^1 ^2" arguments="Metric1CalcDateVar;Metric1CalcTimeVar" appearance="maximized">
+                        <Style ref="noteText" justify="left" size="standard" />
+                      </Description>
+                    </If>
+                  </Group>
+                </If>
+                <If condition="Metric6NameVar != ''                or Metric7NameVar != ''                or Metric8NameVar != ''">
+                  <Group title="Jobs">
+                    <If condition="Metric6NameVar != ''">
+                      <Field source="Metric6StringValueVar" titleValue="Metric6NameVar" />
+                    </If>
+                    <If condition="Metric7NameVar != ''">
+                      <Field source="Metric7StringValueVar" titleValue="Metric7NameVar" />
+                    </If>
+                    <If condition="Metric8NameVar != ''">
+                      <Field source="Metric8StringValueVar" titleValue="Metric8NameVar" />
+                    </If>
+                    <If condition="(Metric6CalcDateVar = Metric7CalcDateVar or Metric7NameVar = '')                   and (Metric7CalcDateVar = Metric8CalcDateVar or Metric8NameVar = '')                  and Metric6StringValueVar != 'N/A'">
+                      <Description template="* Calculated on ^1 ^2" arguments="Metric6CalcDateVar;Metric6CalcTimeVar" appearance="maximized">
+                        <Style ref="noteText" justify="left" size="standard" />
+                      </Description>
+                    </If>
+                  </Group>
+                </If>
+              </Column>
+            </Row>
+          </Column>
+        </Row>
+        <If condition="EmployeeNumber1 != '' or EmployeeNumber2 != '' or EmployeeNumber3 != '' or EmployeeNumber4 != '' or EmployeeNumber5 != ''">
+          <Row>
+            <Group title="Key Executives">
+              <Grid>
+                <Style size="medium" />
+                <Header cells="|Name|;|Role|;|Phone|;|Email|" title="" />
+                <If condition="EmployeeNumber1 != ''">
+                  <Row cells="EmployeeNumber1_Employee.Name1;EmployeeNumber1_Employee.Profession;EmployeeNumber1_Employee.Telephone;EmployeeNumber1_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber2 != ''">
+                  <Row cells="EmployeeNumber2_Employee.Name1;EmployeeNumber2_Employee.Profession;EmployeeNumber2_Employee.Telephone;EmployeeNumber2_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber3 != ''">
+                  <Row cells="EmployeeNumber3_Employee.Name1;EmployeeNumber3_Employee.Profession;EmployeeNumber3_Employee.Telephone;EmployeeNumber3_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber4 != ''">
+                  <Row cells="EmployeeNumber4_Employee.Name1;EmployeeNumber4_Employee.Profession;EmployeeNumber4_Employee.Telephone;EmployeeNumber4_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber5 != ''">
+                  <Row cells="EmployeeNumber5_Employee.Name1;EmployeeNumber5_Employee.Profession;EmployeeNumber5_Employee.Telephone;EmployeeNumber5_Employee.ElectronicMailAddress" />
+                </If>
+              </Grid>
+            </Group>
+          </Row>
+        </If>
+        <If condition="pane() like 'Main'">
+          <Row>
+            <Group title="Related Workspaces">
+              <Link workspace="FinancialAnalysis" title="Detailed financial analysis" template="Financial Analysis" tooltip="Detailed analysis of financial statements, accounts, entries and journals" appearance="maximized" icon="AnalyzeEntry" />
+              <Link workspace="FinancialReporting" title="Detailed financial reporting" template="Financial Reporting" tooltip="Print financial reports" appearance="maximized" icon="ReportLink" />
+            </Group>
+          </Row>
+        </If>
+        <If condition="pane() like 'Sub'">
+          <Group>
+            <Link workspace="CompanyHome" template="More details..." title=" " appearance="maximized" icon="WorkspaceLink">
+              <Waypoint pane="CompanyInfo">
+                <Restriction template="Selected Company" expression="CompanyNumber=target.CompanyNumber" />
+                <Focus>
+                  <Match field="CompanyNumber" value="CompanyNumber" />
+                </Focus>
+              </Waypoint>
+              <Target pane="main" />
+            </Link>
+          </Group>
+        </If>
+      </Form>
+      <Form name="Extended">
+        <Actions>
+          <If condition="Metric1NameVar != ''              or Metric1NameVar != ''              or Metric2NameVar != ''              or Metric3NameVar != ''              or Metric4NameVar != ''              or Metric5NameVar != ''              or Metric9NameVar != ''              or Metric10NameVar != ''              or Metric11NameVar != ''              or Metric12NameVar != ''              or Metric13NameVar != ''              or Metric14NameVar != ''              or Metric15NameVar != ''              or Metric16NameVar != ''              or Metric17NameVar != ''              or Metric18NameVar != ''              or Metric19NameVar != ''              or Metric20NameVar != ''">
+            <Action source="RecalculateFinanceMetrics" />
+          </If>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Company Profile" style="fullWidth">
+              <Field source="CompanyNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Giro" />
+              <Field source="Bank" />
+              <Field source="CompanyRegistrationNumber" />
+              <Field source="PaymentServiceNumber" />
+              <Field source="VATNumber" />
+            </Group>
+          </Column>
+          <Column>
+            <Row>
+              <If condition="Metric1NameVar = ''">
+                <Column>
+                  <Group title=" ">
+                    <PeriodYear periodSource="FromPeriodMonthVar" yearSource="FromPeriodYearVar" title="From Month/Year" />
+                    <PeriodYear periodSource="ToPeriodMonthVar" yearSource="ToPeriodYearVar" title="To Month/Year" />
+                    <Field source="Currency" />
+                  </Group>
+                </Column>
+              </If>
+              <Else>
+                <Column>
+                  <Group title="Currency">
+                    <Field source="Currency">
+                      <Style justify="right" size="small" />
+                    </Field>
+                  </Group>
+                </Column>
+                <Column>
+                  <Group title="Fiscal Year">
+                    <PeriodYear periodSource="FromPeriodMonthVar" yearSource="FromPeriodYearVar" title="From Month/Year" />
+                    <PeriodYear periodSource="ToPeriodMonthVar" yearSource="ToPeriodYearVar" title="To Month/Year" />
+                  </Group>
+                </Column>
+              </Else>
+            </Row>
+            <Row>
+              <Column>
+                <Group title="Customers">
+                  <Field source="TotalOutstandingARVar" />
+                  <Field source="TotalOverdueARVar" style="AROverdue" />
+                </Group>
+                <Group title="Vendors">
+                  <Field source="TotalOutstandingAPVar" />
+                  <Field source="TotalOverdueAPVar" style="APOverdue" />
+                </Group>
+                <Group title="Contacts" style="compact_amountAlignment">
+                  <Field source="LeadsVar" />
+                  <Field source="CampaignsVar" />
+                  <Field source="EmployeesVar" />
+                  <Field source="OpenPositionsVar" />
+                </Group>
+              </Column>
+              <Column>
+                <Style justify="right" size="small" />
+                <If condition="Metric1NameVar != ''                or Metric1NameVar != ''                or Metric2NameVar != ''                or Metric3NameVar != ''                or Metric4NameVar != ''                or Metric5NameVar != ''                or Metric9NameVar != ''                or Metric10NameVar != ''                or Metric11NameVar != ''                or Metric12NameVar != ''                or Metric13NameVar != ''                or Metric14NameVar != ''                or Metric15NameVar != ''                or Metric16NameVar != ''                or Metric17NameVar != ''                or Metric18NameVar != ''                or Metric19NameVar != ''                or Metric20NameVar != ''">
+                  <Group title="Finance">
+                    <If condition="Metric1NameVar != ''">
+                      <Field source="Metric1StringValueVar" titleValue="Metric1NameVar" />
+                    </If>
+                    <If condition="Metric2NameVar != ''">
+                      <Field source="Metric2StringValueVar" titleValue="Metric2NameVar" />
+                    </If>
+                    <If condition="Metric3NameVar != ''">
+                      <Field source="Metric3StringValueVar" titleValue="Metric3NameVar" />
+                    </If>
+                    <If condition="Metric4NameVar != ''">
+                      <Field source="Metric4StringValueVar" titleValue="Metric4NameVar" />
+                    </If>
+                    <If condition="Metric5NameVar != ''">
+                      <Field source="Metric5StringValueVar" titleValue="Metric5NameVar" />
+                    </If>
+                    <If condition="Metric9NameVar != ''">
+                      <Field source="Metric9StringValueVar" titleValue="Metric9NameVar" />
+                    </If>
+                    <If condition="Metric10NameVar != ''">
+                      <Field source="Metric10StringValueVar" titleValue="Metric10NameVar" />
+                    </If>
+                    <If condition="Metric11NameVar != ''">
+                      <Field source="Metric11StringValueVar" titleValue="Metric11NameVar" />
+                    </If>
+                    <If condition="Metric12NameVar != ''">
+                      <Field source="Metric12StringValueVar" titleValue="Metric12NameVar" />
+                    </If>
+                    <If condition="Metric13NameVar != ''">
+                      <Field source="Metric13StringValueVar" titleValue="Metric13NameVar" />
+                    </If>
+                    <If condition="Metric14NameVar != ''">
+                      <Field source="Metric14StringValueVar" titleValue="Metric14NameVar" />
+                    </If>
+                    <If condition="Metric15NameVar != ''">
+                      <Field source="Metric15StringValueVar" titleValue="Metric15NameVar" />
+                    </If>
+                    <If condition="Metric16NameVar != ''">
+                      <Field source="Metric16StringValueVar" titleValue="Metric16NameVar" />
+                    </If>
+                    <If condition="Metric17NameVar != ''">
+                      <Field source="Metric17StringValueVar" titleValue="Metric17NameVar" />
+                    </If>
+                    <If condition="Metric18NameVar != ''">
+                      <Field source="Metric18StringValueVar" titleValue="Metric18NameVar" />
+                    </If>
+                    <If condition="Metric19NameVar != ''">
+                      <Field source="Metric19StringValueVar" titleValue="Metric19NameVar" />
+                    </If>
+                    <If condition="Metric20NameVar != ''">
+                      <Field source="Metric20StringValueVar" titleValue="Metric20NameVar" />
+                    </If>
+                    <If condition="(Metric1CalcDateVar = Metric2CalcDateVar or Metric2NameVar = '')                   and (Metric2CalcDateVar = Metric3CalcDateVar or Metric3NameVar = '')                   and (Metric3CalcDateVar = Metric4CalcDateVar or Metric4NameVar = '')                  and (Metric4CalcDateVar = Metric5CalcDateVar or Metric5NameVar = '')                  and Metric1StringValueVar != 'N/A'">
+                      <Description template="* Calculated on ^1 ^2" arguments="Metric1CalcDateVar;Metric1CalcTimeVar" appearance="maximized">
+                        <Style ref="noteText" justify="left" size="standard" />
+                      </Description>
+                    </If>
+                  </Group>
+                </If>
+                <If condition="Metric6NameVar != ''                or Metric7NameVar != ''                or Metric8NameVar != ''">
+                  <Group title="Jobs">
+                    <If condition="Metric6NameVar != ''">
+                      <Field source="Metric6StringValueVar" titleValue="Metric6NameVar" />
+                    </If>
+                    <If condition="Metric7NameVar != ''">
+                      <Field source="Metric7StringValueVar" titleValue="Metric7NameVar" />
+                    </If>
+                    <If condition="Metric8NameVar != ''">
+                      <Field source="Metric8StringValueVar" titleValue="Metric8NameVar" />
+                    </If>
+                    <If condition="(Metric6CalcDateVar = Metric7CalcDateVar or Metric7NameVar = '')                   and (Metric7CalcDateVar = Metric8CalcDateVar or Metric8NameVar = '')                  and Metric6StringValueVar != 'N/A'">
+                      <Description template="* Calculated on ^1 ^2" arguments="Metric6CalcDateVar;Metric6CalcTimeVar" appearance="maximized">
+                        <Style ref="noteText" justify="left" size="standard" />
+                      </Description>
+                    </If>
+                  </Group>
+                </If>
+              </Column>
+            </Row>
+          </Column>
+        </Row>
+        <If condition="EmployeeNumber1 != '' or EmployeeNumber2 != '' or EmployeeNumber3 != '' or EmployeeNumber4 != '' or EmployeeNumber5 != ''">
+          <Row>
+            <Group title="Key Executives">
+              <Grid>
+                <Style size="medium" />
+                <Header cells="|Name|;|Role|;|Phone|;|Email|" title="" />
+                <If condition="EmployeeNumber1 != ''">
+                  <Row cells="EmployeeNumber1_Employee.Name1;EmployeeNumber1_Employee.Profession;EmployeeNumber1_Employee.Telephone;EmployeeNumber1_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber2 != ''">
+                  <Row cells="EmployeeNumber2_Employee.Name1;EmployeeNumber2_Employee.Profession;EmployeeNumber2_Employee.Telephone;EmployeeNumber2_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber3 != ''">
+                  <Row cells="EmployeeNumber3_Employee.Name1;EmployeeNumber3_Employee.Profession;EmployeeNumber3_Employee.Telephone;EmployeeNumber3_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber4 != ''">
+                  <Row cells="EmployeeNumber4_Employee.Name1;EmployeeNumber4_Employee.Profession;EmployeeNumber4_Employee.Telephone;EmployeeNumber4_Employee.ElectronicMailAddress" />
+                </If>
+                <If condition="EmployeeNumber5 != ''">
+                  <Row cells="EmployeeNumber5_Employee.Name1;EmployeeNumber5_Employee.Profession;EmployeeNumber5_Employee.Telephone;EmployeeNumber5_Employee.ElectronicMailAddress" />
+                </If>
+              </Grid>
+            </Group>
+          </Row>
+        </If>
+        <If condition="pane() like 'Main'">
+          <Row>
+            <Group title="Related Workspaces">
+              <Link workspace="FinancialAnalysis" title="Detailed financial analysis" template="Financial Analysis" tooltip="Detailed analysis of financial statements, accounts, entries and journals" appearance="maximized" icon="AnalyzeEntry" />
+              <Link workspace="FinancialReporting" title="Detailed financial reporting" template="Financial Reporting" tooltip="Print financial reports" appearance="maximized" icon="ReportLink" />
+            </Group>
+          </Row>
+        </If>
+        <If condition="pane() like 'Sub'">
+          <Group>
+            <Link workspace="CompanyHome" template="More details..." title=" " appearance="maximized" icon="WorkspaceLink">
+              <Waypoint pane="CompanyInfo">
+                <Restriction template="Selected Company" expression="CompanyNumber=target.CompanyNumber" />
+                <Focus>
+                  <Match field="CompanyNumber" value="CompanyNumber" />
+                </Focus>
+              </Waypoint>
+              <Target pane="main" />
+            </Link>
+          </Group>
+        </If>
+      </Form>
+      <Report name="BalanceSheet" source="BalanceSheet()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="Currency Type:" value="'Company'" />
+          <Argument parameter="Show Zero Lines (Yes/No):" value="'No'" />
+          <Argument parameter="Fiscal Year-Period, From (YYYY-MM):" value="FromPeriodYearVar+'-'+format(FromPeriodMonthVar, '00')" />
+          <Argument parameter="Fiscal Year-Period, To (YYYY-MM):" value="ToPeriodYearVar+'-'+format(ToPeriodMonthVar, '00')" />
+          <Argument parameter="Compare Fiscal Year-Period, From (YYYY-MM):" value="FromPeriodYearVar+'-'+format(FromPeriodMonthVar, '00')" />
+          <Argument parameter="Compare Fiscal Year-Period, To (YYYY-MM):" value="ToPeriodYearVar+'-'+format(ToPeriodMonthVar, '00')" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+          <Argument parameter="Use Reporting Currency:" value="'Yes'" />
+          <Argument parameter="Report Currency:" value="Currency" />
+          <Argument parameter="Exchange Rate Date:" value="userDate()" />
+          <Argument parameter="Exchange Rate Table:" value="popupSysInfo('EnterpriseExchangeRateTable')" />
+        </Query>
+      </Report>
+      <Report name="TrialBalance" source="TrialBalance()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="Currency Type:" value="'Company'" />
+          <Argument parameter="Show Zero Lines (Yes/No):" value="'No'" />
+          <Argument parameter="Fiscal Year-Period, From (YYYY-MM):" value="FromPeriodYearVar+'-'+format(FromPeriodMonthVar, '00')" />
+          <Argument parameter="Fiscal Year-Period, To (YYYY-MM):" value="ToPeriodYearVar+'-'+format(ToPeriodMonthVar, '00')" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+          <Argument parameter="Use Reporting Currency:" value="'Yes'" />
+          <Argument parameter="Report Currency:" value="Currency" />
+          <Argument parameter="Exchange Rate Date:" value="userDate()" />
+          <Argument parameter="Exchange Rate Table:" value="popupSysInfo('EnterpriseExchangeRateTable')" />
+        </Query>
+      </Report>
+      <Report name="ProfitAndLossPeriodic" source="ProfitAndLossPeriodic()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="Show Zero Lines (Yes/No):" value="'No'" />
+          <Argument parameter="Fiscal Year-Period, From (YYYY-MM):" value="FromPeriodYearVar+'-'+format(FromPeriodMonthVar, '00')" />
+          <Argument parameter="Fiscal Year-Period, To (YYYY-MM):" value="ToPeriodYearVar+'-'+format(ToPeriodMonthVar, '00')" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+          <Argument parameter="Use Reporting Currency:" value="'Yes'" />
+          <Argument parameter="Report Currency:" value="Currency" />
+          <Argument parameter="Exchange Rate Date:" value="userDate()" />
+          <Argument parameter="Exchange Rate Table:" value="popupSysInfo('EnterpriseExchangeRateTable')" />
+        </Query>
+      </Report>
+      <Report name="CustomerProfitability" source="CustomerProfitability()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="Number to show" value="'10'" />
+          <Argument parameter="Include closed jobs (Yes/No):" value="'Yes'" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+        </Query>
+      </Report>
+      <Browser name="Analytix_CustomerProfitability" loginRules="loginAnalytix()">
+        <Actions>
+          <Exclude>
+            <Refresh />
+          </Exclude>
+        </Actions>
+        <If condition="not inEmpty()">
+          <Url value="urlOpenReport()">
+            <Query field="sType" value="wid" />
+            <Query field="token" value="^1" arguments="bo:getToken()" />
+            <Query field="sPath" value="^1" arguments="reportFolderInUrl()" />
+            <Query field="sDocName" value="Customer Profitability" />
+            <Query field="NAII" value="Y" />
+            <Query field="sOutputFormat" value="H" />
+            <Query field="sRefresh" value="N" />
+            <Query field="lsSNumber to show" value="10" />
+            <Query field="lsSInclude closed jobs (Yes/No):" value="Yes" />
+            <Query field="lsSCompany No:" value="^1" arguments="CompanyNumber" />
+          </Url>
+        </If>
+        <Else>
+          <Url value="''" />
+        </Else>
+      </Browser>
+      <Report name="RevenueAnalysis" source="RevenueAnalysis()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="Number to show" value="'10'" />
+          <Argument parameter="Include closed jobs (Yes/No):" value="'Yes'" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+          <Argument parameter="Budget Type:" value="'0'" />
+        </Query>
+      </Report>
+      <Browser name="Analytix_RevenueAnalysis" loginRules="loginAnalytix()">
+        <Actions>
+          <Exclude>
+            <Refresh />
+          </Exclude>
+        </Actions>
+        <If condition="not inEmpty()">
+          <Url value="urlOpenReport()">
+            <Query field="sType" value="wid" />
+            <Query field="token" value="^1" arguments="bo:getToken()" />
+            <Query field="sPath" value="^1" arguments="reportFolderInUrl()" />
+            <Query field="sDocName" value="Revenue Analysis" />
+            <Query field="NAII" value="Y" />
+            <Query field="sOutputFormat" value="H" />
+            <Query field="sRefresh" value="N" />
+            <Query field="lsSBudget Type:" value="0" />
+            <Query field="lsSNumber to show" value="10" />
+            <Query field="lsSInclude closed jobs (Yes/No):" value="Yes" />
+            <Query field="lsSCompany No:" value="^1" arguments="CompanyNumber" />
+          </Url>
+        </If>
+        <Else>
+          <Url value="''" />
+        </Else>
+      </Browser>
+      <Report name="JobProfitability" source="JobProfitability()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="Number to show" value="'10'" />
+          <Argument parameter="Include closed jobs (Yes/No):" value="'Yes'" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+          <Argument parameter="Budget Type:" value="'0'" />
+        </Query>
+      </Report>
+      <Browser name="Analytix_JobProfitability" loginRules="loginAnalytix()">
+        <Actions>
+          <Exclude>
+            <Refresh />
+          </Exclude>
+        </Actions>
+        <If condition="not inEmpty()">
+          <Url value="urlOpenReport()">
+            <Query field="sType" value="wid" />
+            <Query field="token" value="^1" arguments="bo:getToken()" />
+            <Query field="sPath" value="^1" arguments="reportFolderInUrl()" />
+            <Query field="sDocName" value="Job Profitability, Summary" />
+            <Query field="NAII" value="Y" />
+            <Query field="sOutputFormat" value="H" />
+            <Query field="sRefresh" value="N" />
+            <Query field="lsSNumber to show" value="10" />
+            <Query field="lsSBudget Type:" value="0" />
+            <Query field="lsSInclude closed jobs (Yes/No):" value="Yes" />
+            <Query field="lsSCompany No:" value="^1" arguments="CompanyNumber" />
+          </Url>
+        </If>
+        <Else>
+          <Url value="''" />
+        </Else>
+      </Browser>
+      <Report name="Utilization" source="Utilization()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="From Date:" value="FiscalYear" />
+          <Argument parameter="To Date:" value="userDate()" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+        </Query>
+      </Report>
+      <Browser name="Analytix_Utilization" loginRules="loginAnalytix()">
+        <Actions>
+          <Exclude>
+            <Refresh />
+          </Exclude>
+        </Actions>
+        <If condition="not inEmpty()">
+          <Url value="urlOpenReport()">
+            <Query field="sType" value="wid" />
+            <Query field="token" value="^1" arguments="bo:getToken()" />
+            <Query field="sPath" value="^1" arguments="reportFolderInUrl()" />
+            <Query field="sDocName" value="Utilization" />
+            <Query field="NAII" value="Y" />
+            <Query field="sOutputFormat" value="H" />
+            <Query field="sRefresh" value="N" />
+            <Query field="lsSCompany No:" value="^1" arguments="CompanyNumber" />
+            <!-- To avoid the Analytix prompt for the dates, please uncomment the following code,
+			but make sure that the date format is correct (e.g. 'dd-MM-yyyy') -->
+            <!--				  <Query field="lsSFrom Date:"  value="^1" arguments="format(FiscalYear,'dd-MM-yyyy')" /> -->
+            <!--				  <Query field="lsSTo Date:"  value="^1" arguments="format(userDate(),'dd-MM-yyyy')" /> -->
+          </Url>
+        </If>
+        <Else>
+          <Url value="''" />
+        </Else>
+      </Browser>
+      <Report name="Realization" source="Realization()" output="pdf" autorun="true">
+        <Actions all="false">
+          <Exclude>
+            <Refresh />
+            <Revert />
+          </Exclude>
+        </Actions>
+        <ControlBar />
+        <Query>
+          <Argument parameter="From Date:" value="FiscalYear" />
+          <Argument parameter="To Date:" value="userDate()" />
+          <Argument parameter="Company No:" value="CompanyNumber" />
+        </Query>
+      </Report>
+      <Browser name="Analytix_Realization" loginRules="loginAnalytix()">
+        <Actions>
+          <Exclude>
+            <Refresh />
+          </Exclude>
+        </Actions>
+        <If condition="not inEmpty()">
+          <Url value="urlOpenReport()">
+            <Query field="sType" value="wid" />
+            <Query field="token" value="^1" arguments="bo:getToken()" />
+            <Query field="sPath" value="^1" arguments="reportFolderInUrl()" />
+            <Query field="sDocName" value="Realization" />
+            <Query field="NAII" value="Y" />
+            <Query field="sOutputFormat" value="H" />
+            <Query field="sRefresh" value="N" />
+            <Query field="lsSCompany No:" value="^1" arguments="CompanyNumber" />
+            <!-- To avoid the Analytix prompt for the dates, please uncomment the following code,
+			but make sure that the date format is correct (e.g. 'dd-MM-yyyy') -->
+            <!--				  <Query field="lsSFrom Date:"  value="^1" arguments="format(FiscalYear,'dd-MM-yyyy')" /> -->
+            <!--				  <Query field="lsSTo Date:"  value="^1" arguments="format(userDate(),'dd-MM-yyyy')" /> -->
+          </Url>
+        </If>
+        <Else>
+          <Url value="''" />
+        </Else>
+      </Browser>
+    </Pane>
+  </Layout>
+</MDML>
+

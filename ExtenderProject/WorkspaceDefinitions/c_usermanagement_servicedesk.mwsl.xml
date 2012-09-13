@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #Message-digest 0645c2eaaa0d51e397bd957838649595   3 _ _   211
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 15.6.2012
+  TAC_CreationTime: 17:11:8
+  TAC*MaconomyHQ: yes
+-->
+<!-- PSZ, 04/03/11: New workspace for user management (39462).-->
+<!-- PSZ, 13/07/11: Move LayoutGroups from Layouts workspace to User Management (39512).-->
+<!-- PSZ, 03/08/11: Workspace title changed to Access Control (39807).-->
+<!-- PSZ, 13/09/11: Added hidden panes for new actions (39473).-->
+<!-- PSZ, 15/09/11: Name for Users filter (39939).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+	<Workspace name="C_UserManagement_ServiceDesk" title="Users">
+		<Formation>
+			<Section title="Users Management">
+				<Mount>
+					<Filter source="Users" title="Users" view="Custom" name="Users_Filter">
+						<Expansions>
+							<With>
+								<Card title="User Information" view="Custom">
+									<Assistants>
+										<Bind foreignKey="primary">
+											<Hidden source="ResetPassword" />
+										</Bind>
+									</Assistants>
+								</Card>
+							</With>
+						</Expansions>
+					</Filter>
+				</Mount>
+			</Section>
+		</Formation>
+	</Workspace>
+</MWSL>

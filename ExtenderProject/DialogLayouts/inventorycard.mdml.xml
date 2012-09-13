@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="InventoryCard">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1" arguments="InventoryName" />
+        </Compact>
+        <Columns>
+          <Field source="InventoryName" />
+          <Field source="Address1" />
+          <Field source="Address2" />
+          <Field source="Address3" />
+          <Field source="Address4" />
+          <Field source="AttPerson" />
+          <Field source="Telephone" />
+          <Field source="Telefax" />
+          <Field source="Telex" />
+          <Field source="AccessLevelName" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Function name="isAccount" parameters="FieldPar" value="FieldPar=Parent.DimensionCombNumber" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Group title="Warehouse">
+            <Column>
+              <Field source="InventoryName" title="Name" />
+              <Field source="Address1" title="Address" />
+              <Field source="Address2" title="" />
+              <Field source="Address3" title="" />
+              <Field source="Address4" title="" />
+            </Column>
+            <Column>
+              <Field source="AttPerson" title="Attn." />
+              <Field source="Telephone" title="Phone" />
+              <Field source="Telefax" title="Fax" />
+              <Field source="Telex" title="Telex" />
+            </Column>
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Selection Criteria">
+            <Boolean source="ShowLocationsVar" title="Show Stock Locations" />
+            <Range firstSource="FromLocationNumberVar" lastSource="ToLocationNumberVar" title="Stock Location No." />
+            <Field source="StorageLocationNumberVar" title="Storage Locations" />
+            <Field source="PickingLocationsVar" title="Picking Locations" />
+            <Field source="BlockedForReceptionVar" title="Blocked for Receipt" />
+            <Field source="BlockedForPickingVar" title="Blocked for Picking" />
+            <Field source="EmptyLocationsVar" title="Empty Locations" />
+          </Group>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Standard Locations">
+              <Field source="StandardReceptionDock" title="Receipt Loc." />
+              <Field source="StandardShippingDock" title="Shipment Loc." />
+              <Field source="StandardStorageLocation" title="Storage Loc." />
+              <Field source="StandardPickingLocation" title="Picking Loc." />
+              <Field source="StandardProductionLocation" title="Production Loc." />
+              <Field source="InventoryCountBalancingLocation" />
+            </Group>
+            <Group title="Production">
+              <Field source="ProductionAccount" title="Balance{Difference}" />
+            </Group>
+            <Group title="Auto. Write Up/Down">
+              <Field source="UpAndDownWritingShipmentAccount" title="For Sale" />
+              <Field source="UpAndDownWritingReceiptAccount" title="For Purchase{When Purchasing}" />
+              <Field source="UpAndDownWritingProductionAccount" title="For Production" />
+            </Group>
+            <Group title="Invoice Reconciliation">
+              <Field source="InvoiceReconciliationAccount" title="Balance{Difference}" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Control Principles">
+              <Boolean source="OneLocation" />
+              <Boolean source="FixedPicking" />
+              <Boolean source="AvoidAutoWarehouseTrans" title="Implicit Warehouse Trans." />
+              <Boolean source="IncompletePickingListsAllowed" />
+            </Group>
+            <Group title="Posting References">
+              <Field source="InventoryValueAccount" />
+              <Field source="NotInvoicedAccount" />
+            </Group>
+            <Group title="Manual Inventory Value Changes">
+              <Field source="ManualAccount" />
+              <Field source="CostPriceAdjustmentAccount" />
+              <Field source="InventoryCountAccount" />
+              <Field source="MiscLossesAccount" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrency" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_DimensionOrigin" style="fullWidth" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+          <Group title="Warehouse">
+            <Column>
+              <Field source="InventoryName" title="Name" />
+              <Field source="Address1" title="Address" />
+              <Field source="Address2" title="" />
+              <Field source="Address3" title="" />
+              <Field source="Address4" title="" />
+            </Column>
+            <Column>
+              <Field source="AttPerson" title="Attn." />
+              <Field source="Telephone" title="Phone" />
+              <Field source="Telefax" title="Fax" />
+              <Field source="Telex" title="Telex" />
+            </Column>
+          </Group>
+        </Row>
+        <Row>
+        <If condition="hasRole('Finance Admin')" >
+          <Column>
+            <Group title="Standard Locations">
+              <Field source="StandardReceptionDock" title="Receipt Loc." />
+              <Field source="StandardShippingDock" title="Shipment Loc." />
+              <Field source="StandardStorageLocation" title="Storage Loc." />
+              <Field source="StandardPickingLocation" title="Picking Loc." />
+              <Field source="StandardProductionLocation" title="Production Loc." />
+              <Field source="InventoryCountBalancingLocation" />
+            </Group>
+            <Group title="Production">
+              <If condition="isAccount(ProductionAccount)">
+                <Field source="ProductionAccount" title="Balance{Difference}" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="ProductionAccount" title="Balance{Difference}" />
+              </Else>
+            </Group>
+            <Group title="Auto. Write Up/Down">
+              <If condition="isAccount(UpAndDownWritingShipmentAccount)">
+                <Field source="UpAndDownWritingShipmentAccount" title="For Sale" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingShipmentAccount" title="For Sale" />
+              </Else>
+              <If condition="isAccount(UpAndDownWritingReceiptAccount)">
+                <Field source="UpAndDownWritingReceiptAccount" title="For Purchase{When Purchasing}" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingReceiptAccount" title="For Purchase{When Purchasing}" />
+              </Else>
+              <If condition="isAccount(UpAndDownWritingProductionAccount)">
+                <Field source="UpAndDownWritingProductionAccount" title="For Production" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingProductionAccount" title="For Production" />
+              </Else>
+            </Group>
+            <Group title="Invoice Reconciliation">
+              <If condition="isAccount(InvoiceReconciliationAccount)">
+                <Field source="InvoiceReconciliationAccount" title="Balance{Difference}" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InvoiceReconciliationAccount" title="Balance{Difference}" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Control Principles">
+              <Field source="OneLocation" />
+              <Field source="FixedPicking" />
+              <Field source="AvoidAutoWarehouseTrans" title="Implicit Warehouse Trans." />
+              <Field source="IncompletePickingListsAllowed" />
+            </Group>
+            <Group title="Posting References">
+              <If condition="isAccount(InventoryValueAccount)">
+                <Field source="InventoryValueAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InventoryValueAccount" />
+              </Else>
+              <If condition="isAccount(NotInvoicedAccount)">
+                <Field source="NotInvoicedAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="NotInvoicedAccount" />
+              </Else>
+            </Group>
+            <Group title="Manual Inventory Value Changes">
+              <If condition="isAccount(ManualAccount)">
+                <Field source="ManualAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="ManualAccount" />
+              </Else>
+              <If condition="isAccount(CostPriceAdjustmentAccount)">
+                <Field source="CostPriceAdjustmentAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="CostPriceAdjustmentAccount" />
+              </Else>
+              <If condition="isAccount(InventoryCountAccount)">
+                <Field source="InventoryCountAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InventoryCountAccount" />
+              </Else>
+              <If condition="isAccount(MiscLossesAccount)">
+                <Field source="MiscLossesAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="MiscLossesAccount" />
+              </Else>
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrency" />
+            </Group>
+          </Column>
+        </If>
+        <Else>
+          <Column>
+            <Group title="Standard Locations">
+              <Field source="StandardReceptionDock" title="Receipt Loc." />
+              <Field source="StandardShippingDock" title="Shipment Loc." />
+              <Field source="StandardStorageLocation" title="Storage Loc." />
+              <Field source="StandardPickingLocation" title="Picking Loc." />
+              <Field source="StandardProductionLocation" title="Production Loc." />
+              <Field source="InventoryCountBalancingLocation" />
+            </Group>
+            <Group title="Production">
+              <If condition="isAccount(ProductionAccount)">
+                <Field source="ProductionAccount" title="Balance{Difference}" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="ProductionAccount" title="Balance{Difference}" />
+              </Else>
+            </Group>
+            <Group title="Auto. Write Up/Down">
+              <If condition="isAccount(UpAndDownWritingShipmentAccount)">
+                <Field source="UpAndDownWritingShipmentAccount" title="For Sale" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingShipmentAccount" title="For Sale" />
+              </Else>
+              <If condition="isAccount(UpAndDownWritingReceiptAccount)">
+                <Field source="UpAndDownWritingReceiptAccount" title="For Purchase{When Purchasing}" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingReceiptAccount" title="For Purchase{When Purchasing}" />
+              </Else>
+              <If condition="isAccount(UpAndDownWritingProductionAccount)">
+                <Field source="UpAndDownWritingProductionAccount" title="For Production" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingProductionAccount" title="For Production" />
+              </Else>
+            </Group>
+            <Group title="Invoice Reconciliation">
+              <If condition="isAccount(InvoiceReconciliationAccount)">
+                <Field source="InvoiceReconciliationAccount" title="Balance{Difference}" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InvoiceReconciliationAccount" title="Balance{Difference}" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Control Principles">
+              <Field source="OneLocation" />
+              <Field source="FixedPicking" />
+              <Field source="AvoidAutoWarehouseTrans" title="Implicit Warehouse Trans." />
+              <Field source="IncompletePickingListsAllowed" />
+            </Group>
+            <Group title="Posting References">
+              <If condition="isAccount(InventoryValueAccount)">
+                <Field source="InventoryValueAccount" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InventoryValueAccount" />
+              </Else>
+              <If condition="isAccount(NotInvoicedAccount)">
+                <Field source="NotInvoicedAccount" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="NotInvoicedAccount" />
+              </Else>
+            </Group>
+            <Group title="Manual Inventory Value Changes">
+              <If condition="isAccount(ManualAccount)">
+                <Field source="ManualAccount" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="ManualAccount" />
+              </Else>
+              <If condition="isAccount(CostPriceAdjustmentAccount)">
+                <Field source="CostPriceAdjustmentAccount" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="CostPriceAdjustmentAccount" />
+              </Else>
+              <If condition="isAccount(InventoryCountAccount)">
+                <Field source="InventoryCountAccount" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InventoryCountAccount" />
+              </Else>
+              <If condition="isAccount(MiscLossesAccount)">
+                <Field source="MiscLossesAccount" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="MiscLossesAccount" />
+              </Else>
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrency" />
+            </Group>
+          </Column>
+        </Else>
+        </Row>
+      </Form>
+      <Form name="DimensionOrigin" style="fullWidth" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+          <Group title="Warehouse">
+            <Column>
+              <Field source="InventoryName" title="Name" />
+              <Field source="Address1" title="Address" />
+              <Field source="Address2" title="" />
+              <Field source="Address3" title="" />
+              <Field source="Address4" title="" />
+            </Column>
+            <Column>
+              <Field source="AttPerson" title="Attn." />
+              <Field source="Telephone" title="Phone" />
+              <Field source="Telefax" title="Fax" />
+              <Field source="Telex" title="Telex" />
+            </Column>
+          </Group>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Standard Locations">
+              <Field source="StandardReceptionDock" title="Receipt Loc." />
+              <Field source="StandardShippingDock" title="Shipment Loc." />
+              <Field source="StandardStorageLocation" title="Storage Loc." />
+              <Field source="StandardPickingLocation" title="Picking Loc." />
+              <Field source="StandardProductionLocation" title="Production Loc." />
+              <Field source="InventoryCountBalancingLocation" />
+            </Group>
+            <Group title="Production">
+              <If condition="isAccount(ProductionAccount)">
+                <Field source="ProductionAccount" title="Balance{Difference}" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="ProductionAccount" title="Balance{Difference}" />
+              </Else>
+            </Group>
+            <Group title="Auto. Write Up/Down">
+              <If condition="isAccount(UpAndDownWritingShipmentAccount)">
+                <Field source="UpAndDownWritingShipmentAccount" title="For Sale" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingShipmentAccount" title="For Sale" />
+              </Else>
+              <If condition="isAccount(UpAndDownWritingReceiptAccount)">
+                <Field source="UpAndDownWritingReceiptAccount" title="For Purchase{When Purchasing}" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingReceiptAccount" title="For Purchase{When Purchasing}" />
+              </Else>
+              <If condition="isAccount(UpAndDownWritingProductionAccount)">
+                <Field source="UpAndDownWritingProductionAccount" title="For Production" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="UpAndDownWritingProductionAccount" title="For Production" />
+              </Else>
+            </Group>
+            <Group title="Invoice Reconciliation">
+              <If condition="isAccount(InvoiceReconciliationAccount)">
+                <Field source="InvoiceReconciliationAccount" title="Balance{Difference}" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InvoiceReconciliationAccount" title="Balance{Difference}" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Control Principles">
+              <Field source="OneLocation" />
+              <Field source="FixedPicking" />
+              <Field source="AvoidAutoWarehouseTrans" title="Implicit Warehouse Trans." />
+              <Field source="IncompletePickingListsAllowed" />
+            </Group>
+            <Group title="Posting References">
+              <If condition="isAccount(InventoryValueAccount)">
+                <Field source="InventoryValueAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InventoryValueAccount" />
+              </Else>
+              <If condition="isAccount(NotInvoicedAccount)">
+                <Field source="NotInvoicedAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="NotInvoicedAccount" />
+              </Else>
+            </Group>
+            <Group title="Manual Inventory Value Changes">
+              <If condition="isAccount(ManualAccount)">
+                <Field source="ManualAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="ManualAccount" />
+              </Else>
+              <If condition="isAccount(CostPriceAdjustmentAccount)">
+                <Field source="CostPriceAdjustmentAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="CostPriceAdjustmentAccount" />
+              </Else>
+              <If condition="isAccount(InventoryCountAccount)">
+                <Field source="InventoryCountAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="InventoryCountAccount" />
+              </Else>
+              <If condition="isAccount(MiscLossesAccount)">
+                <Field source="MiscLossesAccount" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Field source="MiscLossesAccount" />
+              </Else>
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrency" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="LocationNumber" />
+          <Field source="StorageLocation" />
+          <Field source="PickingLocation" />
+          <Field source="ShippingLocation" />
+          <Field source="ReceptionLocation" />
+          <Field source="BlockedForPicking" />
+          <Field source="BlockedForReception" />
+          <Field source="EmptyLocation" title="Empty Loc." />
+          <Field source="Text1" />
+          <Field source="Text2" />
+          <Field source="Text3" />
+          <Field source="Text4" />
+          <Field source="Text5" />
+          <Field source="Weight" />
+          <Field source="Volume" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

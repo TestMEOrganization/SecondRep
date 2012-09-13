@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 23/02/11: New workspace Financial Operations (39452).-->
+<!-- KUN, 22/03/11: Improved tax settlement (39491).-->
+<!-- KUN, 11/04/11: Added create wizard (39545). -->
+<!-- KUN, 22/03/11: Improved tax settlement (39491).-->
+<!-- CSK, 07/10/11: More details about intercompany entries (39452).-->
+<!-- CSK, 27/10/11: Inline creation of general journals added (40104).-->
+<!-- CSK, 11/11/11: Improved hiding of panes (40104).-->
+<!-- KUN, 22/11/11: Improved hiding of panes on VAT settlement pane (40166). -->
+<!-- KUN, 02/12/11: Hide "Tax Finance Entry" if empty (40260). -->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="FinancialOperations" title="Financial Operations">
+    <Formation>
+      <Section title="General Journal">
+        <Mount>
+          <Filter source="Journals" view="GeneralJournals" title="General Journals">
+            <Expansions minimized="true">
+              <With>
+                <Hidden>
+                  <!-- Necessary for the actions on the previous filter -->
+                  <Bind foreignKey="primary">
+                    <Card source="GeneralJournal" view="QuickRegistration" hidden="Parent.Parent.Posted or Parent.Parent.BeingPosted">
+                      <Expansions>
+                        <With>
+                          <Table view="C_Full" title="All Registrations" />
+                          <Table view="C_Account" title="Finance Registrations" />
+                          <Table view="C_Customer" title="Customer Payments" />
+                          <Table view="C_Vendor" title="Vendor Payments" />
+                        </With>
+                      </Expansions>
+                      <Assistants parentSize="huge">
+                        <With>
+                          <Card view="Offset" title="Offset" />
+                          <Card view="BatchTotal" title="Batch Total" />
+                          <Card view="Template" title="Template" />
+                          <Card view="ReverseJournal" title="Journal Reversion" />
+                        </With>
+                      </Assistants>
+                    </Card>
+                    <Card source="GeneralJournalTemplates" view="Full" title="General Journal Template" hidden="not Parent.Parent.Posted or not Parent.Parent.KeepLinesWhenPosting">
+                      <With>
+                        <Table view="Full" title="Registrations" />
+                      </With>
+                    </Card>
+                    <Card source="ShowGeneralJournals" view="Full" title="General Journal" hidden="not Parent.Parent.Posted or Parent.Parent.KeepLinesWhenPosting or Parent.Parent.IntercompanyBalance">
+                      <With>
+                        <Table view="Full" title="Registrations" />
+                      </With>
+                    </Card>
+                  </Bind>
+                </Hidden>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="ShowGeneralJournalLines" view="Operations" title="General Journal Lines">
+            <Expansions minimized="true">
+              <Bind foreignKey="JournalNumber_Journal">
+                <Hidden source="Journals">
+                  <!-- Necessary for hiding the panes  -->
+                  <Bind foreignKey="primary">
+                    <Card source="GeneralJournal" view="QuickRegistration" hidden="Parent.Posted or Parent.BeingPosted">
+                      <Expansions>
+                        <With>
+                          <Table view="Operations" title="Registrations" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                    <Card source="GeneralJournalTemplates" view="Full" title="General Journal Template" hidden="not Parent.Posted or not Parent.KeepLinesWhenPosting">
+                      <With>
+                        <Table view="Operations" title="Registrations" />
+                      </With>
+                    </Card>
+                    <Card source="ShowGeneralJournals" view="Full" title="General Journal" hidden="not Parent.Posted or Parent.KeepLinesWhenPosting or Parent.IntercompanyBalance">
+                      <With>
+                        <Table view="Operations" title="Registrations" />
+                      </With>
+                    </Card>
+                  </Bind>
+                </Hidden>
+              </Bind>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Posting">
+        <Mount>
+          <Card source="Posting" view="Standard" title="Post">
+            <Expansions parentSize="small">
+              <With>
+                <Table view="Full">
+                  <Assistants>
+                    <Bind foreignKey="primary">
+                      <Workspace source="NotPostedJournal" />
+                    </Bind>
+                  </Assistants>
+                </Table>
+              </With>
+            </Expansions>
+          </Card>
+          <Filter source="ShowJournals" view="PostedJournals" title="History">
+            <Expansions minimized="true">
+              <With>
+                <Card view="PostedJournal" title="Journal" />
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Reconciliation">
+        <Mount>
+          <Card source="FinanceReconciliation" view="Full" title="Reconcile">
+            <Expansions parentSize="large">
+              <With>
+                <Table view="Full" />
+              </With>
+            </Expansions>
+          </Card>
+          <Filter source="ShowFinanceReconciliation" view="Standard" title="History">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Reconciliation">
+                  <Expansions parentSize="small">
+                    <With>
+                      <Table view="Full" title="Entries" />
+                    </With>
+                  </Expansions>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Reallocation">
+        <Mount>
+          <Card source="FinanceReallocation" view="Full" title="Reallocate">
+            <Expansions parentSize="large">
+              <With>
+                <Table view="Full" />
+              </With>
+            </Expansions>
+          </Card>
+          <Filter source="ShowJournalFoundation" view="FinanceReallocationJournals" title="History">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="General Journal">
+                  <With>
+                    <Table view="FinanceReallocation" title="Registrations" />
+                  </With>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Intercompany Invoicing">
+        <Mount>
+          <Filter source="IntercompanyInvoicing" view="Standard" title="Invoice">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Custom">
+                  <With>
+                    <Table view="Custom" />
+                  </With>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+          <Filter source="ShowIntercompanyInvoiceDetails" view="Standard" title="History">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="Intercompany Invoice">
+                  <With>
+                    <Table view="Minimal">
+                      <Assistants>
+                        <Bind foreignKey="primary">
+                          <Card source="ShowIntercompanyEntries" view="Analysis" title="Details" hidden="Parent.InstanceKey=''" />
+                        </Bind>
+                      </Assistants>
+                    </Table>
+                  </With>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Currency Reevaluation">
+        <Mount>
+          <Card source="P_CurrencyReport" view="Full">
+            <Assistants parentSize="large">
+              <Bind foreignKey="Card_GlobalSalesExchangeRateTableVar_ExchangeRateTable">
+                <Card source="ExchangeRateTables" view="ReadOnly" title="Sales Exchange Rate Table">
+                  <With>
+                    <Table view="ReadOnly" />
+                  </With>
+                </Card>
+              </Bind>
+              <Bind foreignKey="Card_GlobalPurchaseExchangeRateTableVar_ExchangeRateTable">
+                <Card source="ExchangeRateTables" view="ReadOnly" title="Purchase Exchange Rate Table">
+                  <With>
+                    <Table view="ReadOnly" />
+                  </With>
+                </Card>
+              </Bind>
+            </Assistants>
+          </Card>
+          <Filter source="ShowJournalFoundation" view="ExchangeRateJournals" title="History">
+            <Expansions minimized="true">
+              <With>
+                <Card view="Full" title="General Journal">
+                  <With>
+                    <Table view="CurrencyReevaluation" title="Registrations" />
+                  </With>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Tax">
+        <Mount>
+          <Filter source="VATReporingUnits" view="Standard">
+            <Expansions>
+              <With>
+                <Hidden>
+                  <!-- Necessary for binding between VATReporingUnits filter and VATSettlement card -->
+                  <Expansions>
+                    <Bind foreignKey="CurrentVATInformation">
+                      <Card source="VATSettlement" view="Custom_RoleRestricted_VATSettlement">
+                        <Expansions horizontal="true" minimized="true" parentSize="large">
+                          <Restrict reversedForeignKey="VATInformation">
+                            <Filter source="ShowVATCalculations" title="Details" view="VATSettlement">
+                              <Expansions>
+                                <Restrict reversedForeignKey="VATCalculation">
+                                  <Filter source="ShowVATSpecificationLines" title="Tax Specifications" view="VATSettlement">
+                                    <Restrict reversedForeignKey="VATSpecificationLine">
+                                      <Filter source="ShowVATSettlementEntries" title="Tax Entries" view="VATSettlement">
+                                        <Expansions minimized="true">
+                                          <With>
+                                            <Card view="Custom_RoleRestricted_VATSettlement" title="Tax Entry" />
+                                          </With>
+                                          <Bind foreignKey="BasisFinanceEntryKey_FinanceEntry">
+                                            <Card source="ShowFinanceEntry" view="Custom_RoleRestricted_VATSettlement" title="Basis Finance Entry" hidden="parent.BasisFinanceEntryKey='' or parent.BasisFinanceEntryKey=parent.VATFinanceEntryKey" />
+                                          </Bind>
+                                          <Bind foreignKey="VATFinanceEntryKey_FinanceEntry">
+                                            <Card source="ShowFinanceEntry" view="Custom_RoleRestricted_VATSettlement" title="Tax Finance Entry" hidden="parent.VATFinanceEntryKey=''" />
+                                          </Bind>
+                                        </Expansions>
+                                      </Filter>
+                                    </Restrict>
+                                  </Filter>
+                                </Restrict>
+                              </Expansions>
+                            </Filter>
+                          </Restrict>
+                          <Restrict reversedForeignKey="Name_VATReportingUnit">
+                            <Filter source="VATSettlement" view="ApprovedSamePeriod" title="Previous Settlements for the Same Period" hidden="not parent.ExistsSettlementForSamePeriodVar">
+                              <Expansions>
+                                <With>
+                                  <Card view="Custom_RoleRestricted_VATSettlement">
+                                    <Expansions>
+                                      <Restrict reversedForeignKey="VATInformation">
+                                        <Filter source="ShowVATCalculations" title="Details" view="VATSettlement">
+                                          <Expansions minimized="true">
+                                            <Restrict reversedForeignKey="VATCalculation">
+                                              <Filter source="ShowVATSpecificationLines" title="Tax Specifications" view="VATSettlement">
+                                                <Restrict reversedForeignKey="VATSpecificationLine">
+                                                  <Filter source="ShowVATSettlementEntries" title="Tax Entries" view="VATSettlement">
+                                                    <Expansions minimized="true">
+                                                      <With>
+                                                        <Card view="Custom_RoleRestricted_VATSettlement" title="Tax Entry" />
+                                                      </With>
+                                                      <Bind foreignKey="BasisFinanceEntryKey_FinanceEntry">
+                                                        <Card source="ShowFinanceEntry" view="Custom_RoleRestricted_VATSettlement" title="Basis Finance Entry" hidden="parent.BasisFinanceEntryKey='' or parent.BasisFinanceEntryKey=parent.VATFinanceEntryKey" />
+                                                      </Bind>
+                                                      <Bind foreignKey="VATFinanceEntryKey_FinanceEntry">
+                                                        <Card source="ShowFinanceEntry" view="Custom_RoleRestricted_VATSettlement" title="Tax Finance Entry" hidden="parent.VATFinanceEntryKey=''" />
+                                                      </Bind>
+                                                    </Expansions>
+                                                  </Filter>
+                                                </Restrict>
+                                              </Filter>
+                                            </Restrict>
+                                          </Expansions>
+                                        </Filter>
+                                      </Restrict>
+                                    </Expansions>
+                                  </Card>
+                                </With>
+                              </Expansions>
+                            </Filter>
+                          </Restrict>
+                        </Expansions>
+                        <Assistants horizontal="false" parentSize="large">
+                          <Bind foreignKey="Name_VATReportingUnit">
+                            <Card source="VATReporingUnits" title="Tax Reporting Unit" view="Custom_RoleRestricted_VATSettlement" />
+                          </Bind>
+                        </Assistants>
+                      </Card>
+                    </Bind>
+                  </Expansions>
+                </Hidden>
+              </With>
+              <Restrict reversedForeignKey="Name_VATReportingUnit">
+                <Filter source="VATSettlement" view="Approved" title="History">
+                  <Expansions>
+                    <With>
+                      <Card view="Custom_RoleRestricted_VATSettlement">
+                        <Expansions horizontal="true" minimized="true">
+                          <Restrict reversedForeignKey="VATInformation">
+                            <Filter source="ShowVATCalculations" title="Details" view="VATSettlement">
+                              <Expansions>
+                                <Restrict reversedForeignKey="VATCalculation">
+                                  <Filter source="ShowVATSpecificationLines" title="Tax Specifications" view="VATSettlement">
+                                    <Restrict reversedForeignKey="VATSpecificationLine">
+                                      <Filter source="ShowVATSettlementEntries" title="Tax Entries" view="VATSettlement">
+                                        <Expansions minimized="true">
+                                          <With>
+                                            <Card view="Custom_RoleRestricted_VATSettlement" title="Tax Entry" />
+                                          </With>
+                                          <Bind foreignKey="BasisFinanceEntryKey_FinanceEntry">
+                                            <Card source="ShowFinanceEntry" view="Custom_RoleRestricted_VATSettlement" title="Basis Finance Entry" hidden="parent.BasisFinanceEntryKey='' or parent.BasisFinanceEntryKey=parent.VATFinanceEntryKey" />
+                                          </Bind>
+                                          <Bind foreignKey="VATFinanceEntryKey_FinanceEntry">
+                                            <Card source="ShowFinanceEntry" view="Custom_RoleRestricted_VATSettlement" title="Tax Finance Entry" hidden="parent.VATFinanceEntryKey=''" />
+                                          </Bind>
+                                        </Expansions>
+                                      </Filter>
+                                    </Restrict>
+                                  </Filter>
+                                </Restrict>
+                              </Expansions>
+                            </Filter>
+                          </Restrict>
+                        </Expansions>
+                        <Assistants horizontal="false" parentSize="large">
+                          <Bind foreignKey="Name_VATReportingUnit">
+                            <Card source="VATReporingUnits" title="Tax Reporting Unit" view="Custom_RoleRestricted_VATSettlement" />
+                          </Bind>
+                          <Restrict reversedForeignKey="VATInformation_1">
+                            <Filter source="ShowFinanceEntry" view="Custom_RoleRestricted_VATSettlement" title="Tax Settlement Posting" />
+                          </Restrict>
+                        </Assistants>
+                      </Card>
+                    </With>
+                  </Expansions>
+                </Filter>
+              </Restrict>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Year End Closing" hidden="not hasRole('Finance Admin')">
+        <Mount>
+          <Card source="YearEndClosing" view="Full" title="Close Year" />
+          <Filter source="ShowYearEndClosing" view="Standard" title="History">
+            <Expansions minimized="true">
+              <With>
+                <Card view="ReadOnly" title="Year End Closing">
+                  <Expansions parentSize="small">
+                    <Restrict reversedForeignKey="ClosingId_ClosingVoucher">
+                      <Filter source="ShowClosingEntry" view="Standard" title="Balances" />
+                    </Restrict>
+                  </Expansions>
+                </Card>
+              </With>
+            </Expansions>
+          </Filter>
+        </Mount>
+      </Section>
+    </Formation>
+  </Workspace>
+</MWSL>
+

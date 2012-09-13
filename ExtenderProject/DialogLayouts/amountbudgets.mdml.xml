@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SJK, 15/02/10: New window amount budgets (38201). -->
+<!-- SJK, 08/03/10: Add variable JobIsClosedVar (38201).-->
+<!-- KRN, 22/03/10: JobPurchase table layout (38381).-->
+<!-- KRN, 15/07/10: Create actions in card part (38381).-->
+<!-- BPE, 31/08/10: Changed layout to use global definition dimensions (38745). -->
+<!-- KRN, 03/09/10: Add wizards to table part and remove card part layout (38671).-->
+<!-- PBO, 22/09/10: Implement conditional layout (38843).-->
+<!-- SJK, 23/09/10: LineTypeVar is used instead of LineType (38887).-->
+<!-- SBA, 27/09/10: Summary lines in tree-structure should be bold face (38908).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- PBO, 13/12/10: Implement conditional layout (38843).-->
+<!-- PSZ, 11/07/11: PSO Jobs workspace changes (39759).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- SBA, 20/09/11: Close cells conditionally (39955). -->
+<!-- SJK, 09/11/11: Table is only editable if budget has been created (40131).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="AmountBudgets">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Job No. ^1, ^2" arguments="JobNumber;BudgetType" />
+        </Compact>
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="JobGroup" />
+          <Field source="BudgetType" />
+          <Field source="Responsible" />
+          <Field source="SubmittedBy" />
+          <Field source="DateSubmitted" />
+          <Field source="ApprovedBy" />
+          <Field source="ApprovalDate" />
+          <Field source="ReopenedBy" />
+          <Field source="DateReopened" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Job">
+            <Reference foreignKey="JobNumber_JobHeader" />
+            <Field source="JobIsClosedVar" />
+          </Group>
+          <Group title="Budget">
+            <Field source="BudgetType" />
+            <Field source="RevisionNumber" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Status">
+            <Pair firstSource="SubmittedBy" secondSource="DateSubmitted" title="Submitted" />
+            <Pair firstSource="ApprovedBy" secondSource="ApprovalDate" title="Approved" />
+            <Pair firstSource="ReopenedBy" secondSource="DateReopened" title="Reopened" />
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+        <Function name="sumLine" value="LineType=JobBudgetLineTypeType'\Sum/Text\ and NumberOfSubordinateLines gt 0" />
+        
+        <Trigger name="CreateLinePostInitTrigger">
+			<Assign source="NumberOf" value="1.0" />
+		</Trigger>
+		<Trigger name="CreateLinePreTrigger">
+	      <Assign source="NumberOf" value="if LineType=JobBudgetLineTypeType'\Milestone\ or LineType=JobBudgetLineTypeType'\Sum/Text\ or LineType=JobBudgetLineTypeType'nil and TaskName = '' and Activitynumber = '' then 0.0 else 1.0" />
+		</Trigger>
+		
+      </Define>
+      <Table name="Full">
+        <Actions all="true">
+        <Create preTrigger="CreateLinePreTrigger" initPostTrigger="CreateLinePostInit"/>
+        </Actions>
+        <Columns>
+          <Style ref="treeStructureSummaryLine" condition="NumberOfSubordinateLines gt 0" />
+          <Field source="Text"/>
+          <Field  source="LineTypeVar" open="not sumLine()" />
+          <Field source="TaskName" open="not sumLine()" />
+          <Field source="NumberOf" open="not sumLine()" />
+          <Field source="ActivityNumber" open="not sumLine()" />
+          <Field source="ShownCostPriceVar" open="not sumLine()" />
+          <Field source="BillingPriceCurrency" open="not sumLine()" />
+          <Field source="ShownMarkupPercentageVar" open="not sumLine()" />
+          <Field source="LineSpecificBillingPrice" open="not sumLine()" />
+          <Field source="ShownCostPriceTotalVar" open="not sumLine()" />
+          <Field source="BillingPriceTotalCurrency" />
+          <Field source="PurchasingCurrency" open="not sumLine()" />
+          <Field source="ShownCostPricePurchasingCurrencyVar" open="not sumLine()" />
+          <Field source="ShownCostPriceTotalPurchCurrencyVar" open="not sumLine()" />
+          <Field source="BillingPricePurchasingCurrency" open="not sumLine()" />
+          <Field source="BillingPriceTotalPurchasingCurrency" />
+          <Field source="CostType" />
+          <Field source="IncludedInFixedPrice" open="not sumLine()" />
+          <Field source="DeliveryRemark" />
+          <Field source="BillingPriceBase" />
+          <Field source="BillingPriceTotalBase" />
+          <Field source="StdBillingPriceBase" />
+          <Field source="StdBillingPriceTotalBase" />
+          <Field source="SupplierNumber" open="not sumLine()" />
+          <Field source="SupplierNameVar" open="not sumLine()" />
+          <Field source="YourReference" />
+          <Field source="CreateSalesOrder" open="not sumLine()" />
+          <Field source="CreatePurchaseOrder" open="not sumLine()" />
+          <Field source="PurchaseOrderCurrency" open="not sumLine()" />
+          <Field source="NumberOfPurchaseOrders" />
+          <Field source="NumberOfRequisitions" />
+          <Field source="PurchaseOrderNumber" />
+          <Field source="PurchaseOrderSumBase" />
+          <Field source="ExecutingCompanyNumber" />
+          <Field source="ExecutingCompanyNameVar" />
+          <Columns ref="DimensionColumns" />
+          <If condition="not maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="ShownNetCostPriceVar" />
+            <Field source="FinanceVATCode" />
+          </If>
+          <Field source="ActivityTextVar" open="not sumLine()" />
+          <Field source="TaskDescriptionVar" open="not sumLine()" />
+          <Field source="JobBudgetTextAssignedVar" />
+          <Field source="StdBillingPriceCurrency" />
+          <Field source="StdBillingPriceTotalCurrency" />
+          <Field source="Remark" />
+          <Field source="Remark2" />
+          <Field source="Remark3" />
+          <Field source="Remark4" />
+          <Field source="Remark5" />
+          <Field source="Remark6" />
+          <Field source="Remark7" />
+          <Field source="Remark8" />
+          <Field source="Remark9" />
+          <Field source="Remark10" />
+          <Field source="NumberPlanned" />
+          <Field source="ChangedInRevisionNumber" />
+        </Columns>
+      </Table>
+      <Table name="JobPurchase">
+        <Actions all="true">
+          <Action source="parent.CreateRequisitions" />
+          <Action source="parent.CreatePurchaseOrders" />
+          <Create preTrigger="CreateLinePreTrigger" initPostTrigger="CreateLinePostInit"/>
+        </Actions>
+        
+        <Columns>
+          <Style ref="treeStructureSummaryLine" condition="NumberOfSubordinateLines gt 0" />
+          <Field   source="LineTypeVar" open="not sumLine()" />
+          <Field source="CreatePurchaseOrder" />
+          <Field source="Text"  />
+          <Field source="TaskName" open="not sumLine()" />
+          <Field source="TaskDescriptionVar" title="Task Description{1}" open="not sumLine()" />
+          <Field source="ActivityNumber" title="Act. No." open="not sumLine()" />
+          <Field source="ActivityTextVar" title="Activity Name" open="not sumLine()" />
+          <Field source="NumberOf" open="not sumLine()" />
+          <Field source="ShownCostPriceTotalVar" open="not sumLine()" />
+          <Field source="SupplierNumber" open="not sumLine()" />
+          <Field source="SupplierNameVar" title="Vendor Name" open="not sumLine()" />
+          <Field source="PurchaseOrderSumBase" title="Purchase Order Total" />
+          <Field source="YourReference" title="Your Reference" />
+          <Field source="NumberOfPurchaseOrders" title="Number of Purchase Orders" />
+          <Field source="PurchaseOrderNumber" title="Last Purchase Order No." />
+          <Field source="NumberOfRequisitions" title="Number of Requisitions" />
+          <Field source="PurchasingCurrency" open="not sumLine()" />
+          <Field source="PurchaseOrderCurrency" open="not sumLine()" />
+          <Field source="BillingPriceTotalCurrency" />
+          <Field source="BillingPricePurchasingCurrency" title="Billing Price, Purchase Currency" open="not sumLine()" />
+          <Field source="BillingPriceTotalPurchasingCurrency" title="Billing Price Total, Purchase Currency" />
+          <Columns ref="DimensionColumns" />
+          <Field source="IncludedInFixedPrice" open="not sumLine()" />
+          <Field source="CostType" />
+          <If condition="not maconomy:booleanSysPar('UseMultipleVATLevels')">
+            <Field source="FinanceVATCode" />
+          </If>
+        </Columns>
+      </Table>
+      <Table name="Standard">
+        <Actions all="not hasWorkspace('OpportunityBudgeting') or parent.BudgetCreatedVar" >
+        <Create preTrigger="CreateLinePreTrigger" initPostTrigger="CreateLinePostInit"/>
+        </Actions>
+        
+        <Columns>
+          <Style ref="treeStructureSummaryLine" condition="NumberOfSubordinateLines gt 0" />
+          <Field source="Text" />
+          <Field source="LineTypeVar" open="not sumLine()" />
+          <Field source="TaskName" open="not sumLine()" />
+          <Field source="NumberOf" open="not sumLine()" />
+          <Field source="BillingPriceCurrency" open="not sumLine()" />
+          <Field source="ShownCostPriceVar" open="not sumLine()" />
+          <Field source="BillingPriceTotalCurrency" />
+          <Field source="ShownCostPriceTotalVar" open="not sumLine()" />
+          <Field source="ShownMarkupBaseVar" />
+        </Columns>
+      </Table>
+      <Table name="Work_Cont">
+        <Actions all="true">
+        <Create preTrigger="CreateLinePreTrigger" initPostTrigger="CreateLinePostInit"/>
+        </Actions>
+        <Columns>
+          <Style ref="treeStructureSummaryLine" condition="NumberOfSubordinateLines gt 0" />
+          <Field source="Text" title="Budget Line Description" />
+          <Field source="TaskDescriptionVar" open="false" />
+          <Field source="TaskName" size="small" open="not sumLine()" searchView="CustomNonBlocked" searchOption="taskNonBlocked" />
+          <Field source="NumberOf" />
+          <Field source="ShownCostPriceVar" title="Cost, Base" open="true" />
+          <Field source="ShownCostPriceTotalVar" title="Total Cost, Base" open="true" />
+          <If condition="parent.ShowBudgetTypeVar=jobbudgettypetype'\contract budget\">
+            <Field source="BillingPriceCurrency" open="true" />
+            <Field source="BillingPriceTotalCurrency" />
+          </If>
+          <Field source="PurchasingCurrency" />
+          <Field source="ShownCostPricePurchasingCurrencyVar" />
+          <Field source="ShownCostPriceTotalPurchCurrencyVar" />
+          <If condition="parent.parent.ShowBudgetTypeVar=jobbudgettypetype'\contract budget\">
+          	<Field source="BillingPriceTotalPurchasingCurrency" />
+          </If>
+          <Field source="ActivityNumber" />
+          <Field source="LineTypeVar" mandatory="true" open="not sumLine()" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

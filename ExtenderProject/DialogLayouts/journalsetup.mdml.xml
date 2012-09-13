@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- CSK, 24/04/09: Original layout added (37665).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 07/07/09: Standard views deleted (37665).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 29/01/10: Changes to the original layout regarding the user island and no card actions in the table part (37818).-->
+<!-- CSK, 19/02/10: CompanySpecific view added for illustrating shared setup (37818).-->
+<!-- CSK, 01/07/10: Changes related to shared setup warnings (38612).-->
+<!-- CSK, 02/07/10: sharedSetup style renamed to attentionText (38612).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 02/12/10: Various layout enhancements (39093).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- CSK, 06/04/11: Original layouts improved (39498).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 19/10/11: Wizard title improved (40064).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JournalSetup">
+    <FilterPane>
+      <Filter name="Standard">
+        <Actions>
+          <If condition="hasWorkspace('TransactionTypes')">
+            <Action source="with.Create" wizard="CreateJournalSetup" title="New Journal Setup" />
+          </If>
+        </Actions>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name;JournalSetupNumber" />
+        </Compact>
+        <Columns>
+          <Field source="JournalSetupNumber" size="large" />
+          <Field source="Name" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Wizard name="CreateJournalSetup" title="Create Journal Setup">
+        <Page form="CreateJournalSetup" title="Journal Setup" description="Please enter the journal setup number" />
+      </Wizard>
+      <Wizard name="CopyJournalSetup" title="Copy Journal Setup">
+        <Page form="CopyJournalSetupPage1" title="Journal Setup" description="Please enter the journal setup to copy the lines from" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('TransactionTypes')">
+              <Create />
+            </If>
+          </Exclude>
+          <Action source="CopyJournalSetup" wizard="CopyJournalSetup" />
+        </Actions>
+        <Row>
+          <Column style="fullWidth">
+            <Group title="Journal Setup">
+              <Field source="JournalSetupNumber" />
+              <Field source="Name" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+          </Column>
+          <Column>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CreateJournalSetup">
+        <Actions all="true" />
+        <Row>
+          <Group title="" style="fullWidth">
+            <Field source="JournalSetupNumber" />
+            <Field source="Name" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CopyJournalSetupPage1">
+        <Actions all="true" />
+        <Group title="">
+          <Field source="FromJournalSetupNumberVar" mandatory="true" title="From Journal Setup" />
+        </Group>
+      </Form>
+      <Form name="Custom_RoleRestricted_CompanySpecific" open="hasRole('Finance Admin')" >
+        <Actions>
+          <Update />
+          <Action source="ValidateJournalSetup" />
+          <Action source="CopyJournalSetup" wizard="CopyJournalSetup" />
+        </Actions>
+        <Row>
+          <Column style="fullWidth">
+            <If condition="SharedByVar &gt; 1">
+              <Group style="attentionText">
+                <Description template="^1 companies are using this journal setup (for details see Used By)" arguments="SharedByVar" appearance="maximized" />
+              </Group>
+            </If>
+            <Group title="Journal Setup">
+              <Field source="JournalSetupNumber" />
+              <Field source="Name" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CompanySpecific">
+        <Actions>
+          <Update />
+          <Action source="ValidateJournalSetup" />
+          <Action source="CopyJournalSetup" wizard="CopyJournalSetup" />
+        </Actions>
+        <Row>
+          <Column style="fullWidth">
+            <If condition="SharedByVar &gt; 1">
+              <Group style="attentionText">
+                <Description template="^1 companies are using this journal setup (for details see Used By)" arguments="SharedByVar" appearance="maximized" />
+              </Group>
+            </If>
+            <Group title="Journal Setup">
+              <Field source="JournalSetupNumber" />
+              <Field source="Name" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Custom_RoleRestricted_Full" open="hasRole('Finance Admin')" >
+        <Actions all="true" />
+        <Columns>
+          <Field source="JournalType" size="large" />
+          <Field source="TransactionTypeGroupNumber" size="large" />
+          <Field source="UseTransactionNumberSeriesVar" title="Use Transaction Number Series" />
+          <Field source="ManualJournalVar" title="Manual Journal" />
+          <Field source="DefaultTransactionTypeMandatory" title="Default Transaction Type Mandatory" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JournalType" size="large" />
+          <Field source="TransactionTypeGroupNumber" size="large" />
+          <Field source="UseTransactionNumberSeriesVar" title="Use Transaction Number Series" />
+          <Field source="ManualJournalVar" title="Manual Journal" />
+          <Field source="DefaultTransactionTypeMandatory" title="Default Transaction Type Mandatory" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

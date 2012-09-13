@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- CSK, 22/04/09: Original layout added (37661).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 06/07/09: Standard view for LowerPane deleted, Demo view added to UpperPane (37661).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 29/01/10: Changes to the original layout regarding the user island (37818).-->
+<!-- CSK, 19/02/10: CompanySpecific view added for illustrating shared setup (37818).-->
+<!-- CSK, 01/07/10: Changes related to shared setup warnings (38612).-->
+<!-- CSK, 02/07/10: sharedSetup style renamed to attentionText (38612).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 02/12/10: Various layout enhancements (39093).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 18/10/11: AttentionText description in CompanySpecific form not shown in full (40067).-->
+<!-- PSZ, 17/11/11: Remove unused layouts (40180).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="FiscalYear">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1, ^2" arguments="FiscalYearTemplateNumber;FiscalYearStart" />
+        </Compact>
+        <Columns>
+          <Field source="FiscalYearTemplateNumber" />
+          <Field source="FiscalYearStart" />
+          <Field source="FiscalYearEnd" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Fiscal Year">
+            <Field source="FiscalYearTemplateNumber" title="Name" />
+            <Field source="FiscalYearStart" title="Start" />
+            <Field source="FiscalYearEnd" title="End" />
+            <Field source="Blocked" title="Blocked{Is}" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Custom_RoleRestricted_CompanySpecific" open="hasRole('Finance Admin')" >
+        <Actions all="true" />
+        <Column>
+          <If condition="SharedByVar &gt; 1">
+            <Group style="attentionText">
+              <Description template="^1 companies are using this fiscal year (for details see Used By)" arguments="SharedByVar" appearance="maximized" size="vast" />
+            </Group>
+          </If>
+          <Group title="Fiscal Year">
+            <Field source="FiscalYearTemplateNumber" title="Name" />
+            <Field source="FiscalYearStart" title="Start" />
+            <Field source="FiscalYearEnd" title="End" />
+            <Field source="Blocked" title="Blocked{Is}" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="CompanySpecific">
+        <Actions all="true" />
+        <Column>
+          <If condition="SharedByVar &gt; 1">
+            <Group style="attentionText">
+              <Description template="^1 companies are using this fiscal year (for details see Used By)" arguments="SharedByVar" appearance="maximized" size="vast" />
+            </Group>
+          </If>
+          <Group title="Fiscal Year">
+            <Field source="FiscalYearTemplateNumber" title="Name" />
+            <Field source="FiscalYearStart" title="Start" />
+            <Field source="FiscalYearEnd" title="End" />
+            <Field source="Blocked" title="Blocked{Is}" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Custom_RoleRestricted_Full" open="hasRole('Finance Admin')" >
+        <Actions all="true" />
+        <Columns>
+          <Field source="Period" />
+          <Field source="PeriodStart" title=" Period Start" />
+          <Field source="PeriodEnd" />
+          <Field source="CalendarMonth" />
+          <Field source="CalendarYear" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="Period" />
+          <Field source="PeriodStart" title=" Period Start" />
+          <Field source="PeriodEnd" />
+          <Field source="CalendarMonth" />
+          <Field source="CalendarYear" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

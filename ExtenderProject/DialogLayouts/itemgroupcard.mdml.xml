@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<!-- KUN, 22/11/11: Added minimal filter (40166).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ItemGroupCard">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1" arguments="ItemGroupName" />
+        </Compact>
+        <Columns>
+          <Field source="ItemGroupName" />
+          <Field source="CostPricePrinciple" />
+          <Field source="OrderItem" />
+          <Field source="BillingPriceSystem" />
+          <Field source="VATCode" />
+          <Field source="VATCode2" />
+          <Field source="VATCode3" />
+          <Field source="Purchaser" />
+          <Field source="InventoryControl" />
+          <Field source="MarkUpPercentageCostPrice" />
+        </Columns>
+      </Filter>
+      <Filter name="MinimalWithLink">
+        <Columns>
+          <Field source="ItemGroupName" />
+          <Link workspace="OrderSetup" template="More details..." title=" " icon="WorkspaceLink">
+            <Waypoint pane="ItemGroupCard_Filter">
+              <Restriction template="Selected Item Group" expression="ItemGroupNumber=target.ItemGroupNumber" />
+              <Focus>
+                <Match field="ItemGroupNumber" value="ItemGroupNumber" />
+              </Focus>
+            </Waypoint>
+            <Target pane="ItemGroupCard_Filter" />
+          </Link>
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Item Group">
+              <Field source="ItemGroupName" />
+            </Group>
+            <Group title="Buyer">
+              <Field source="Purchaser" />
+            </Group>
+            <Group title="Inventory{ItemGroupCard}">
+              <Boolean source="InventoryControl" />
+            </Group>
+            <Group title="Sales Order">
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATCode" />
+                <Field source="VATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATCode" title="Tax Code" />
+              </Else>
+              <Field source="MarkUpPercentageCostPrice" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Costs">
+              <Field source="CostPricePrinciple" />
+              <Boolean source="OrderItem" />
+              <Boolean source="BillingPriceSystem" />
+              <Field source="MarkUpPercentageBillingPrice" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="ReadOnly">
+        <Actions>
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Item Group">
+              <Field source="ItemGroupName" />
+            </Group>
+            <Group title="Buyer">
+              <Field source="Purchaser" />
+            </Group>
+            <Group title="Inventory{ItemGroupCard}">
+              <Field source="InventoryControl" />
+            </Group>
+            <Group title="Sales Order">
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATCode" />
+                <Field source="VATCode2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="VATCode3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="VATCode" title="Tax Code" />
+              </Else>
+              <Field source="MarkUpPercentageCostPrice" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Costs">
+              <Field source="CostPricePrinciple" />
+              <Field source="OrderItem" />
+              <Field source="BillingPriceSystem" />
+              <Field source="MarkUpPercentageBillingPrice" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Function name="isAccount" parameters="FieldPar" value="FieldPar=Parent.Parent.DimensionCombNumber                and DepartmentNumber=Parent.Parent.DepartmentNumber" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="DepartmentNumber" />
+          <Field source="ItemSalesVATSubj" />
+          <Field source="ItemSalesVATExempt" />
+          <Field source="ItemSalesExport" />
+          <Field source="CostOfSales" />
+        </Columns>
+      </Table>
+      <Table name="Custom_RoleRestricted_DimensionOrigin">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+        <If condition="hasRole('Finance Admin')" >
+          <Field source="DepartmentNumber" open="false" />
+          <Field source="ItemSalesVATSubj" open="isAccount(ItemSalesVATSubj)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesVATSubj)" />
+          </Field>
+          <Field source="ItemSalesVATExempt" open="isAccount(ItemSalesVATExempt)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesVATExempt)" />
+          </Field>
+          <Field source="ItemSalesExport" open="isAccount(ItemSalesExport)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesExport)" />
+          </Field>
+          <Field source="CostOfSales" open="isAccount(CostOfSales)">
+            <Style ref="highlightRow" condition="isAccount(CostOfSales)" />
+          </Field>
+          </If>
+          <Else>
+          <Field source="DepartmentNumber" open="false" />
+          <Field source="ItemSalesVATSubj" open="isAccount(ItemSalesVATSubj)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesVATSubj)" />
+          </Field>
+          <Field source="ItemSalesVATExempt" open="isAccount(ItemSalesVATExempt)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesVATExempt)" />
+          </Field>
+          <Field source="ItemSalesExport" open="isAccount(ItemSalesExport)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesExport)" />
+          </Field>
+          <Field source="CostOfSales" open="isAccount(CostOfSales)">
+            <Style ref="highlightRow" condition="isAccount(CostOfSales)" />
+          </Field>
+          </Else>
+        </Columns>
+      </Table>
+      <Table name="DimensionOrigin">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+          <Field source="DepartmentNumber" open="false" />
+          <Field source="ItemSalesVATSubj" open="isAccount(ItemSalesVATSubj)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesVATSubj)" />
+          </Field>
+          <Field source="ItemSalesVATExempt" open="isAccount(ItemSalesVATExempt)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesVATExempt)" />
+          </Field>
+          <Field source="ItemSalesExport" open="isAccount(ItemSalesExport)">
+            <Style ref="highlightRow" condition="isAccount(ItemSalesExport)" />
+          </Field>
+          <Field source="CostOfSales" open="isAccount(CostOfSales)">
+            <Style ref="highlightRow" condition="isAccount(CostOfSales)" />
+          </Field>
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

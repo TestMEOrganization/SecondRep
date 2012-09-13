@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 29/01/10: Minimal and Overview views added for Companies workspace (37818).-->
+<!-- CSK, 19/02/10: Minimal filter contains only open campaigns (37818).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- SJK, 21/05/10: Filter button restrictions converted to common expression language (38492).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 01/12/10: Various layout enhancements (39093).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="Campaigns">
+    <FilterPane>
+      <Filter name="Standard">
+        <Actions>
+          <If condition="hasWorkspace('Campaigns')">
+            <Action source="with.Create" wizard="CreateCampaignWizard" />
+          </If>
+        </Actions>
+        <ControlBar>
+          <Selection default="CurrentCampaigns">
+            <Option name="CurrentCampaigns" title="Current Campaigns" restriction="not Blocked" />
+            <Option name="AllCampaigns" title="All Campaigns" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="CampaignName;CampaignNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CampaignNumber" />
+          <Field source="CampaignName" />
+          <Field source="Description" />
+          <Field source="EventFlowType" />
+          <Field source="NumberOfStartedEventSequences" />
+          <Field source="InitialEventsLastCreated" />
+          <Field source="SecondaryEventsLastCreated" />
+          <Field source="Blocked" />
+          <Field source="CompanyNumber" />
+          <Field source="Remark1" />
+        </Columns>
+      </Filter>
+      <Filter name="Minimal">
+        <ControlBar>
+          <Selection default="CurrentCampaigns">
+            <Option name="CurrentCampaigns" title="Current Campaigns" restriction="not Blocked" />
+          </Selection>
+        </ControlBar>
+        <Columns>
+          <Field source="CampaignNumber" />
+          <Field source="CampaignName" />
+          <Field source="Description" />
+          <Field source="EventFlowType" title="Type" />
+          <Field source="NumberOfStartedEventSequences" title="Started Sequences" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Wizard name="CreateCampaignWizard" title="Create Campaign">
+        <Page form="CreateCampaignWizardPage" title="Campaign" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('Campaigns')">
+              <Create />
+            </If>
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Campaign">
+              <Field source="CampaignNumber" />
+              <Field source="CampaignName" />
+              <Field source="Description" />
+            </Group>
+            <Group title="Targeting Code">
+              <Reference foreignKey="TargetingCodeName_TargetingCode" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group title="Event flow">
+              <Reference foreignKey="EventFlowType_EventFlowType_1" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Status">
+              <Field source="NumberOfStartedEventSequences" />
+              <Field source="InitialEventsLastCreated" />
+              <Field source="SecondaryEventsLastCreated" />
+              <Boolean source="Blocked" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="Remark1" appearance="maximized" />
+            <Field source="Remark2" appearance="maximized" />
+            <Field source="Remark3" appearance="maximized" />
+            <Field source="Remark4" appearance="maximized" />
+            <Field source="Remark5" appearance="maximized" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_Overview" open="hasRole('Finance Admin')" >
+        <Row style="fullWidth">
+          <Column>
+            <Group title="Campaign">
+              <Field source="CampaignNumber" />
+              <Field source="CampaignName" />
+              <Field source="Description" />
+            </Group>
+            <Group title="Event flow">
+              <Field source="EventFlowType" />
+              <Field source="EventFlowTypeDescriptionVar" title="Description{0}" />
+            </Group>
+            <Group title="Status">
+              <Field source="NumberOfStartedEventSequences" />
+              <Field source="InitialEventsLastCreated" />
+              <Field source="SecondaryEventsLastCreated" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Overview">
+        <Row style="fullWidth">
+          <Column>
+            <Group title="Campaign">
+              <Field source="CampaignNumber" />
+              <Field source="CampaignName" />
+              <Field source="Description" />
+            </Group>
+            <Group title="Event flow">
+              <Field source="EventFlowType" />
+              <Field source="EventFlowTypeDescriptionVar" title="Description{0}" />
+            </Group>
+            <Group title="Status">
+              <Field source="NumberOfStartedEventSequences" />
+              <Field source="InitialEventsLastCreated" />
+              <Field source="SecondaryEventsLastCreated" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CreateCampaignWizardPage">
+        <Actions all="true" />
+        <Column>
+          <Group title="Campaign">
+            <Reference keySource="CampaignNumber" descriptionSource="CampaignName" title="Campaign" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Targeting Code">
+            <Reference foreignKey="TargetingCodeName_TargetingCode" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+          </Group>
+          <Group title="Event flow">
+            <Reference foreignKey="EventFlowType_EventFlowType_1" />
+          </Group>
+          <Group title="Company">
+            <Reference foreignKey="CompanyNumber_CompanyInformation" />
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="TargetGroupSpecNumber" />
+          <Field source="TargetGroupSpecType" title="Selection Criterion Specification Type" />
+          <Field source="TargetGroupDescriptionVar" title="Description{0}" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

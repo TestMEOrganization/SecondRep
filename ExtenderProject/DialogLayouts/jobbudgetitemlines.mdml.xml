@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- PSZ, 20/05/10: Fixed incorrect abbreviation (33872).-->
+<!-- BPE, 01/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- KUN, 19/01/11: New layouts to be used in the purchase process (39353).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- SBA, 20/09/11: Change link to new syntax (39699). -->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JobBudgetItemLines">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Job No. ^1, ^2, Revision ^3, Line No. ^4, ^5" arguments="JobNumber;BudgetType;RevisionNumber;LineNumber;Text" />
+        </Compact>
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="BudgetType" />
+          <Field source="RevisionNumber" />
+          <Field source="ChangedInRevisionNumber" />
+          <Field source="LineNumber" />
+          <Field source="IncludedInFixedPrice" />
+          <Field source="ActivityNumber" />
+          <Field source="TaskName" />
+          <Field source="EmployeeCategoryNumber" />
+          <Field source="EmployeeNumber" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Job Budget">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Field source="BudgetType" />
+              <Field source="RevisionNumber" />
+              <Field source="LineNumberVar" title="Job Budget Line No." />
+              <Field source="ActivityNumber" />
+              <Reference foreignKey="EmployeeNumber_Employee" />
+              <Field source="TheDate" title="Date" />
+              <Field source="DeliveryRemark" title="Delivery Remarks" />
+              <Field source="Text" />
+              <Boolean source="CreateSalesOrder" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Price">
+              <Field source="CostPriceTotal" title="Cost, Base" />
+              <Field source="BillingPriceTotalCurrency" title="Billing Price, Curr." />
+              <Field source="BillingPriceTotalBase" title="Billing Price, Base" />
+              <Field source="MarkUpPercentage" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrencyVar" title="Base Currency" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="PurchaseProcess">
+        <Row>
+          <Column>
+            <Group title="Job">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Reference foreignKey="ActivityNumber_Activity" />
+              <Reference foreignKey="TaskName_TaskListLine" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="EmployeeNumber_Employee" title="Employee" />
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Job Budget">
+              <Field source="BudgetType" />
+              <Field source="TheDate" title="Date" />
+              <Field source="DeliveryRemark" title="Delivery Remarks" />
+              <Field source="Text" />
+              <Link workspace="Jobs" template="Job Budget" appearance="maximized" icon="WorkspaceLink">
+                <Waypoint pane="Jobs_Filter">
+                  <Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+                  <Focus>
+                    <Match value="JobNumber" field="JobNumber" />
+                  </Focus>
+                </Waypoint>
+                <Target pane="AmountBudget_Table">
+                  <Focus>
+                    <Match value="InstanceKey" field="InstanceKey" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Price">
+              <UnitField source="CostPriceTotal" unitSource="BaseCurrencyVar" />
+              <UnitField source="BillingPriceTotalCurrency" unitSource="CurrencyVar" />
+              <UnitField source="BillingPriceTotalBase" unitSource="BaseCurrencyVar" />
+              <Field source="MarkUpPercentage" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="ItemNumber" title="Item No." />
+          <Field source="NumberOf" title="Quantity{Number}" />
+          <Field source="Unit" title="Unit" />
+          <Field source="ItemText1" title="Description{Item}" />
+          <Field source="CostPrice" title="Cost, Base" />
+          <Field source="CostPriceTotal" title="Total Cost, Base{1}" />
+          <Field source="UnitPriceCurrency" title="Billing Price, Curr." />
+          <Field source="LinePriceCurrency" title="Extended Price, Currency" />
+          <Field source="LinePriceBase" title="Extended Price, Base" />
+          <Field source="DeliveryDate" title="Deliv. Date" />
+          <Field source="DeliveryRemark" title="Deliv. Remarks" />
+          <Field source="ExternalItemText" title="External Desc." />
+          <Field source="InternalText" title="Internal Desc." />
+          <Columns ref="DimensionColumns" />
+          <Field source="NumberTransferredToSalesOrder" title="Qty. Transf. to Sales Order" />
+          <Field source="TextLineTransferredToSalesOrder" title="Text Line Transf. to Sales Order" />
+          <Field source="ChangedInRevisionNumber" title="Changed in Revision No.{1}" />
+        </Columns>
+      </Table>
+      <Table name="Custom">
+        <Actions all="true" />
+        <Columns>
+          <Field source="ItemNumber" title="Item No." />
+          <Field source="NumberOf" title="Quantity{Number}" />
+          <Field source="Unit" title="Unit" />
+          <Field source="ItemText1" title="Description{Item}" />
+          <Field source="CostPrice" title="Cost, Base" />
+          <Field source="CostPriceTotal" title="Total Cost, Base{1}" />
+          <If condition="parent.parent.ShowBudgetTypeVar=jobbudgettypetype'\contract budget\">
+          	<Field source="UnitPriceCurrency" title="Billing Price, Curr." />
+          </If>
+          <Field source="LinePriceCurrency" title="Extended Price, Currency" />
+          <Field source="LinePriceBase" title="Extended Price, Base" />
+          <Field source="DeliveryDate" title="Deliv. Date" />
+          <Field source="DeliveryRemark" title="Deliv. Remarks" />
+          <Field source="ExternalItemText" title="External Desc." />
+          <Field source="InternalText" title="Internal Desc." />
+          <Columns ref="DimensionColumns" />
+          <Field source="NumberTransferredToSalesOrder" title="Qty. Transf. to Sales Order" />
+          <Field source="TextLineTransferredToSalesOrder" title="Text Line Transf. to Sales Order" />
+          <Field source="ChangedInRevisionNumber" title="Changed in Revision No.{1}" />
+        </Columns>
+      </Table>
+      <Table name="PurchaseProcess">
+        <Columns>
+          <Field source="ItemNumber" title="Item No." />
+          <Field source="ItemText1" title="Description{Item}" />
+          <UnitField source="NumberOf" unitSource="Unit" title="Quantity{Number}" />
+          <UnitField source="CostPrice" unitSource="parent.BaseCurrencyVar" title="Cost, Base" />
+          <UnitField source="CostPriceTotal" unitSource="parent.BaseCurrencyVar" title="Total Cost, Base{1}" />
+          <UnitField source="LinePriceBase" unitSource="parent.BaseCurrencyVar" title="Extended Price, Base" />
+          <UnitField source="UnitPriceCurrency" unitSource="parent.CurrencyVar" title="Billing Price, Currency" />
+          <UnitField source="LinePriceCurrency" unitSource="parent.CurrencyVar" title="Extended Price, Currency" />
+          <Field source="DeliveryDate" title="Deliv. Date" />
+          <Field source="DeliveryRemark" title="Deliv. Remarks" />
+          <Field source="ExternalItemText" title="External Desc." />
+          <Field source="InternalText" title="Internal Desc." />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SJK, 09/06/11: New sales order workspace (39731).-->
+<!-- SJK, 19/08/11: Improvements after verification (39731).-->
+<!-- SJK, 01/11/11: Performance improvements (40121).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="SalesOrderHome" title="Sales Orders">
+    <Filter source="SalesOrders" name="SalesOrders_Filter" view="C_SalesOrderHome_Commerce" title="Sales Orders">
+      <With>
+        <Card title="Sales Order" view="Custom">
+          <Expansions>
+            <With>
+              <Table view="Custom">
+                <Expansions minimized="true">
+                  <Bind foreignKey="primary">
+                    <Table source="SerialNumberReporting" view="Standard" title="Serial Numbers" />
+                  </Bind>
+                </Expansions>
+              </Table>
+            </With>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Bind foreignKey="JobNumber_JobHeader">
+              <Card source="Jobs" view="Overview_Vertical" hidden="parent.JobNumber = ''" title="Job" />
+            </Bind>
+            <Bind foreignKey="CustomerNumber_Customer">
+              <Card source="CustomerCard" view="Overview_Vertical" title="Customer" />
+            </Bind>
+          </Assistants>
+        </Card>
+      </With>
+      <Bind foreignKey="primary">
+        <Card source="OrderStatus" view="Full" title="Status" />
+      </Bind>
+      <!-- <Bind foreignKey="primary">
+        <Card source="SalesOrderToItemPurchaseOrders" view="Standard" title="Create Item Purchase Orders" hidden="not parent.Approved">
+          <With>
+            <Table view="Standard" />
+          </With>
+        </Card>
+      </Bind -->
+      <!-- <Bind foreignKey="primary">
+        <Card source="PickingReports" view="Standard" title="Packing List" hidden="(not parent.PickingList) or parent.ReadyForDelivery">
+          <With>
+            <Table view="Standard">
+              <Expansions minimized="true">
+                <Bind foreignKey="primary">
+                  <Table source="SerialNumberReporting" view="Standard" title="Serial Numbers" />
+                </Bind>
+              </Expansions>
+            </Table>
+          </With>
+        </Card>
+      </Bind> -->
+      <Restrict reversedForeignKey="OrderNumber_OrderHeader">
+        <Filter source="ShowDeliveryNote" view="Standard" hidden="parent.Delivered = OrderStatusType'\No\" title="Packing Slips">
+          <With>
+            <Card view="Standard">
+              <With>
+                <Table view="Standard" />
+              </With>
+            </Card>
+          </With>
+        </Filter>
+      </Restrict>
+      <!-- <Restrict reversedForeignKey="OrderNumber_OrderHeader">
+        <Filter source="ShowInvoice" view="Standard" hidden="parent.Invoiced = OrderStatusType'\No\ or parent.InvoiceInJobCost" title="Invoices">
+          <With>
+            <Card view="Standard">
+              <Expansions>
+                <With>
+                  <Table view="Standard" />
+                </With>
+              </Expansions>
+              <Assistants>
+                <Bind foreignKey="primary">
+                  InvoiceToCreditOrder is included because the action CreateCreditOrder is used by standard view for ShowInvoice
+                  <Hidden source="InvoiceToCreditOrder" />
+                </Bind>
+              </Assistants>
+            </Card>
+          </With>
+        </Filter>
+      </Restrict> -->
+    </Filter>
+  </Workspace>
+</MWSL>
+

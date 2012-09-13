@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KUN, 22/12/09: New workspace (39095).-->
+<!-- KUN, 22/12/10: Included the new approval workspace (39253).-->
+<!-- KUN, 22/12/10: Changed and added titles (39253) -->
+<!-- KUN, 20/01/11: Added job budget line assistants (39360).-->
+<!-- CSK, 22/07/11: Name added for the purchase process filter (39786).-->
+<!-- CSK, 06/09/11: Names added to Requisitions and PurchaseOrders panes, for workspace links (39786).-->
+<!-- KUN, 04/10/11: Added purchase order line section (39994).-->
+<!-- KUN, 11/10/11: Use highlighted row view (39994).-->
+<!-- KUN, 14/11/11: Performance improvements (40159).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_PurchaseProcesses" title="Purchase Processes">
+    <Filter source="PurchaseProcesses" view="Custom_NoCompact" title="Purchase Processes" name="PurchaseProcessFilter">
+      <Expansions >
+        <Bind foreignKey="primary">
+          <Card source="PurchaseProcesses" name="PurchaseProcesses_Card" title="Purchase Process" />
+        </Bind>
+      </Expansions>
+    </Filter>
+  </Workspace>
+</MWSL>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 10/08/11: New Manager Reporting workspace (39838).-->
+<!-- CSK, 01/09/11: Rename Analytix Prompts dialog to Report Criteria (39911).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_GBA_Website" title="GBA Websites">
+	<Card source="TimeRegistration" title="GBA Denmark" view="GBA_Denmark" />
+	<Card source="TimeRegistration" title="GBA Finland" view="GBA_Finland" />
+  </Workspace>
+</MWSL>
+

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--8c03a512d5b44619bdcdc744fbf3f0317c81ca62-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--fb767631ec2ee839dfb8fd71fe11bdee677e45bf-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 05335a9584376d7cd924086affd0137d   3 _ _   213
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 28.10.2011
+  TAC_CreationTime: 14:31:39
+  TAC*MaconomyHQ: yes
+-->
+<!-- AMC, 13/11/09: New workspace: Job Invoicing (38106).-->
+<!-- AMC, 15/01/10: Update Job Invoice History workspace and layouts (37999).-->
+<!-- MJA, 30/06/10: Updates after verification (38570).-->
+<!-- MJA, 14/07/10: inJobContext parameter added (38570).-->
+<!-- MJA, 13/09/10: Use demo layouts (38816).-->
+<!-- JSV, 04/03/11: Include Invoice Selection, On Account Invoice Selection, Bill To Customer Distribution -->
+<!-- 								Itemize Invoice Selection, Job Invoices On Account and Invoicing Plans (39458).-->
+<!-- JSV, 21/06/11: Include Job Invoice Allocation with itemization, allocation history and -->
+<!-- 								Job Reallocation by Job (39464).-->
+<!-- JSV, 21/06/11: New demo layouts for ItemizeInvoiceSelection (39464).-->
+<!-- PSZ, 11/07/11: Added name for JobInvoiceHistory table for use in links (39759).-->
+<!-- PSZ, 15/08/11: Change titles for tables under InvoiceSelection (39850).-->
+<!-- JSV, 19/08/11: Use "with" instead of "bind" in "Allocation History" (39458).-->
+<!-- SBA, 26/08/11: Introduction of name for invoice selection pane (39489).-->
+<!-- JSV, 02/09/11: Rename DraftInvoiceEditing to DraftInvoices (39256).-->
+<!-- PSZ, 15/09/11: Move Invoice History tab to Lookup section (39939).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="JobInvoicing" title="Job Invoicing">
+    <!-- <Card name="InvoiceSelection" source="InvoiceSelection" view="Custom" hidden="not hasRole('Superuser')">
+      <Expansions>
+        <With>
+          <Table title="Selection" view="Demo_Standard_View">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ItemizeInvoiceSelection" title="Entries" view="Demo_Standard_View" />
+              </Bind>
+            </Expansions>
+          </Table>
+          <Table title="Selection, Billing Prices" view="Demo_Billing_Prices">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ItemizeInvoiceSelection" title="Entries" view="Demo_Billing_Prices" />
+              </Bind>
+            </Expansions>
+          </Table>
+          <Table title="Direct Invoicing" view="Demo_Direct_Invoicing">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ItemizeInvoiceSelection" title="Entries" view="Demo_Direct_Invoicing" />
+              </Bind>
+            </Expansions>
+          </Table>
+        </With>
+      </Expansions>
+    </Card> -->
+    <!-- <Card source="JobInvoicesOnAccount" title="On Account" view="Demo" hidden="not hasRole('Superuser')">
+      <Expansions parentSize="medium">
+        <With>
+          <Table title="Invoices On Account, Overview" view="Demo_Overview">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ShowReconciliationOfJobInvoiceOnAccount" title="Reconciliation" view="Demo" />
+              </Bind>
+            </Expansions>
+          </Table>
+          <Table title="Detailed View" view="Demo_Detailed">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ShowReconciliationOfJobInvoiceOnAccount" title="Reconciliation" view="Demo" />
+              </Bind>
+            </Expansions>
+          </Table>
+        </With>
+      </Expansions>
+    </Card> -->
+    <Card source="InvoicingPlans" title="Plan" view="Demo">
+      <Expansions parentSize="medium">
+        <With>
+          <Table title="Specification, Overview" view="Demo_Overview" />
+          <Table title="Detailed View" view="Full" />
+        </With>
+      </Expansions>
+    </Card>
+    <!-- <Card source="OnAccountInvoiceSelection" title="Invoice On Account" view="Custom" hidden="not hasRole('Superuser')">
+      <Expansions parentSize="medium">
+        <With>
+          <Table title="Specification" view="Custom" />
+        </With>
+      </Expansions>
+    </Card> -->
+    <!--<Card source="BillToCustomerDistribution" title="Split Billing" view="Demo">
+			<Expansions parentSize="small">
+				<With>
+					<Table title="Selection on Bill To Customers" view="Demo_Selection" />
+					<Table title="On Account Information" view="Demo_OnAccountReconciliation" />
+					<Table title="Setup of Bill To Customers" view="Demo_Setup" />
+					<Table title="Address Information" view="Demo_AddressInformation" />
+				</With>
+			</Expansions>
+		</Card>-->
+    <Hidden name="Invoice_Editing" source="Jobs">
+      <Restrict reversedForeignKey="JobNumber_JobHeader">
+        <Workspace source="DraftInvoices" />
+      </Restrict>
+    </Hidden>
+    <!-- <Workspace source="SD_InvoiceDraftStatus" /> -->
+    <!-- <Card source="InvoiceDraftStatus" view="Full">
+      <Expansions>
+        <With>
+          <Table title="Draft Invoices" view="Full" />
+        </With>
+      </Expansions>
+    </Card> -->
+    <!-- <Card source="JobInvoiceAllocation" title="Job Invoice Allocation" view="Demo" hidden="hasNoRecords()">
+      <Expansions>
+        <With>
+          <Table title="Selection, Standard View" view="Demo_Standard_View">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ItemizeJobInvoiceAllocation" title="Entries" view="Full" />
+              </Bind>
+            </Expansions>
+          </Table>
+          <Table title="Selection, Billing Prices" view="Demo_Billing_Prices">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ItemizeJobInvoiceAllocation" title="Entries" view="Full" />
+              </Bind>
+            </Expansions>
+          </Table>
+          <Table title="Selection, Without Registrations" view="Demo_Without_Registrations">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ItemizeJobInvoiceAllocation" title="Entries" view="Full" />
+              </Bind>
+            </Expansions>
+          </Table>
+        </With>
+        <Bind foreignKey="primary">
+          <Table source="JobInvoicesOnAccount" title="Invoices On Account" view="Demo_Overview">
+            <Expansions minimized="true">
+              <Bind foreignKey="primary">
+                <Table source="ShowReconciliationOfJobInvoiceOnAccount" title="Reconciliation" view="Demo" />
+              </Bind>
+            </Expansions>
+          </Table>
+        </Bind>
+      </Expansions>
+    </Card>
+    <Hidden source="JobInvoiceAllocation">
+      <Restrict reversedForeignKey="JobNumber_JobHeader">
+        <Filter name="Allocation_History" source="ShowJobInvoiceAllocationReconciliations" title="Allocation History" view="Demo" hidden="hasNoRecords()">
+          <With>
+            <Hidden>
+              <Expansions>
+                <With>
+                  <Table view="Full" />
+                </With>
+                <Bind foreignKey="primary">
+                  <Table source="ShowJobInvoiceAllocationEntries" view="Demo" />
+                </Bind>
+              </Expansions>
+            </Hidden>
+          </With>
+        </Filter>
+      </Restrict>
+    </Hidden> -->
+    <Card source="JobReallocationByJob" title="Reallocate Entries" view="Custom">
+      <Expansions>
+        <With>
+          <Table title="Entries" view="Custom" />
+        </With>
+      </Expansions>
+    </Card>
+  </Workspace>
+</MWSL>
+

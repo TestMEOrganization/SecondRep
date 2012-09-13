@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--82a2f1b72a71f0fb18e6061536cf32b653d95432-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!-- RMA, 12/12/09: Creation (38166).-->
+<!-- PSZ, 13/07/11: Added name for filter for use in links (39512).-->
+<!-- CSK, 15/07/11: Top filter improved (39255).-->
+<!-- CSK, 15/07/11: Lookup section added (39773).-->
+<!-- CSK, 22/07/11: No transactions allowed for requests for quote (39413).-->
+<!-- CSK, 05/09/11: Binding requisitions should be done using the SuggestedSupplierNumber (39786).-->
+<!-- KUN, 14/11/11: The sub-workspace is now binded with "with" instead of "bind".(40160) -->
+<!-- CSK, 05/12/11: Remove context information from lookup filters (40259).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="Vendors" title="Vendors">
+    <Filter source="VendorCard" name="VendorCard_Filter" view="VendorHome" title="List of Vendors">
+      <Formation>
+        <Section title="Home">
+          <With>
+            <Workspace source="VendorHome" />
+          </With>
+        </Section>
+        <!-- <Section title="Lookup">
+          <Bind foreignKey="primary">
+            <Card source="GlobalPeriodicVendorStatement" view="FromVendorContext" title="Periodic Statements">
+              <Expansions parentSize="small">
+                <With>
+                  <Table view="Full" title="Entries">
+                    <Expansions minimized="true">
+                      <Bind foreignKey="primary">
+                        <Workspace source="VendorEntry" />
+                      </Bind>
+                    </Expansions>
+                  </Table>
+                </With>
+              </Expansions>
+            </Card>
+          </Bind>
+          <Restrict reversedForeignKey="VendorNumber_Vendor">
+            <Filter source="ShowVendorReconciliation" view="FullAnalysis" title="Entries">
+              <Expansions minimized="true">
+                <Bind foreignKey="primary">
+                  <Workspace source="VendorEntry" />
+                </Bind>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="SuggestedSupplierNumber_Vendor">
+            <Filter source="Requisitions" view="InVendorContext" title="Requisitions">
+              <Expansions minimized="true">
+                <With>
+                  <Card title="Requisition" view="Demo">
+                    <With>
+                      <Table title="Lines" view="Demo" />
+                    </With>
+                  </Card>
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="SupplierNumber_Vendor">
+            <Filter source="RequestsForQuote" view="InVendorContext" title="Requests For Quote">
+              <Expansions minimized="true">
+                <With>
+                  <Card title="Request For Quote" view="Demo">
+                    <With>
+                      <Table title="Lines" view="Demo" />
+                    </With>
+                  </Card>
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="SupplierNumber_Vendor">
+            <Filter source="PurchaseOrders" view="InVendorContext" title="Purchase Orders">
+              <Expansions minimized="true">
+                <With>
+                  <Card title="Purchase Order" view="Demo">
+                    <With>
+                      <Table title="Lines" view="Demo" />
+                    </With>
+                  </Card>
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="VendorNumber_Vendor">
+            <Filter source="ShowVendorInvoices" view="InVendorContext" title="Vendor Invoices">
+              <Expansions minimized="true">
+                <With>
+                  <Card title="Vendor Invoice" view="Analysis">
+                    <With>
+                      <Table title="Lines" view="VendorInvoices" />
+                    </With>
+                  </Card>
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+        </Section> -->
+      </Formation>
+    </Filter>
+  </Workspace>
+</MWSL>
+

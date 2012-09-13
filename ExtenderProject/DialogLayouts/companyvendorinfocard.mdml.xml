@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- RMA, 15/12/09: New filter for Vendor Home workspace (38166).-->
+<!-- CSK, 29/01/10: VendorOverview filter view added for Companies workspace (37818).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- SJK, 25/05/10: Filter button restrictions converted to common expression language (38492).-->
+<!-- BPE, 30/06/10: New view AnalysisOverview for vendor assistant in vendor entry (38555).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- MJA, 08/07/10: Change grid to pairs (38630).-->
+<!-- CSK, 02/08/10: Changes to Overview_Vertical view (38706).-->
+<!-- BPE, 10/09/10: Changed layout to use global definition dimensions (38828). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 08/12/10: Update filter conditions in MDML (39116).-->
+<!-- CSK, 10/12/10: Various changes to Overview_Vertical view (39091).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- KUN, 21/12/10: New layout for vendor invoice workspace (39094).-->
+<!-- KUN, 21/12/10: Changed boolean fields to normal fields (39094).-->
+<!-- CSK, 25/02/11: Workspace link added to Overview_Vertical view (39379).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 28/06/11: New syntax for links (39747).-->
+<!-- CSK, 15/07/11: Demo filter renamed to CompanyVendorHome (39255).-->
+<!-- CSK, 15/07/11: Overview form improved, InVendorContext filter renamed to CompanyNotCompacted (39773).-->
+<!-- CSK, 18/07/11: Standard form added (39775).-->
+<!-- CSK, 22/07/11: Alignment adjustments (39781).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- JSV, 30/08/11: Description source for reference on VendorNumber_CompanyVendor (39874).-->
+<!-- JSV, 14/09/11: Restrict to location of employee rather than user as department in option (39332).-->
+<!-- CSK, 07/10/11: Shadow title for address fields (40003).-->
+<!-- CSK, 19/10/11: Wizard title improved (40064).-->
+<!-- KUN, 17/11/11: Remove e-mail icon from filters, if no e-mail address is specified (40183) -->
+<!-- KUN, 22/11/11: The sub-workspace is now binded with "with" instead of "bind".(40160) -->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="CompanyVendorInfoCard">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), Company ^3" arguments="Name1;VendorNumber;SettlingCompany" />
+        </Compact>
+        <Columns>
+          <Field source="VendorNumber" />
+          <Field source="SettlingCompany" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Name3" />
+          <Field source="ZipCode" />
+          <Field source="PostalDistrict" />
+          <Field source="Name4" />
+          <Field source="Name5" />
+          <Field source="Attention" />
+        </Columns>
+      </Filter>
+      <Filter name="CompanyVendorHome">
+        <Actions>
+          <Action source="with-&gt;CompanyVendorInfoCard.Create" wizard="MDK_CreateVendorWizard" />
+        </Actions>
+        <ControlBar>
+          <Selection default="MyVendors">
+            <Option name="MyVendors" title="My Company Vendors" restriction="Responsible = maconomy:userEmployeeNumber() or OurReference = maconomy:userEmployeeNumber() or OurReference = maconomy:username()" />
+            <Option name="DepartmentVendors" title="Department Company Vendors" restriction="LocationName = stringEnvVar('user.employeeinfo.EntityName')" />
+            <Option name="AllVendors" title="All Company Vendors" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1(^2), Company: ^3" arguments="Name1;VendorNumber;SettlingCompany" />
+        </Compact>
+        <Columns>
+          <Field source="VendorNumber" />
+          <Field source="Name1" title="Name" />
+          <Field source="SettlingCompany" />
+          <Field source="Name3" title="Address" />
+          <Field source="Country" />
+          <Field source="Attention" />
+          <Field source="Telephone" />
+          <Link template="^1" arguments="ElectronicMailAddress" tooltip="Send email to vendor" title="Email" url="'mailto:'+urlEncode(ElectronicMailAddress)" icon="Mail">
+            <Override condition="ElectronicMailAddress = ''">
+              <Link icon="" />
+            </Override>
+          </Link>
+          <If condition="maconomy:isSelectedOption('AllVendors')">
+            <Field source="Blocked" />
+            <Field source="PaymentVendor" />
+            <Field source="ParentVendor" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="PaymentTerms" />
+            <Field source="VendorGroup" />
+          </If>
+        </Columns>
+      </Filter>
+      <Filter name="CompanyNotCompacted">
+        <Columns>
+          <Field source="SettlingCompany" size="medium" />
+        </Columns>
+      </Filter>
+      <Filter name="VendorOverview">
+        <Columns>
+          <Field source="VendorNumber" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Attention" />
+          <Field source="Telephone" />
+          <Field source="Country" />
+          <Field source="Blocked" />
+          <Field source="DebitBalanceBase" />
+          <Field source="CreditBalanceBase" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Wizard name="CreateVendorWizard" title="Create Company Vendor">
+        <Page form="CreateVendorWizardPage1" title="Company Vendor" description="Please select a vendor and a company (cannot be changed after creation)" />
+      </Wizard>
+      <Wizard name="MDK_CreateVendorWizard" title="Create Company Vendor">
+        <Page form="MDK_CreateVendorWizardPage1" title="Company Vendor" description="Please select a vendor and a company (cannot be changed after creation)" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Vendor{Creditor}">
+              <Field source="VendorNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="Giro" />
+              <Field source="ElectronicMailAddress" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompany_CompanyInformation" />
+              <Field source="SettlingCompanyCurrencyVar" title="Currency" />
+            </Group>
+            <Group title="General Information">
+              <Field source="DepartmentNumber" />
+              <Field source="Language" />
+              <Field source="Currency" />
+              <Field source="VendorGroup" />
+              <Field source="CompanyRegistrationNumber" />
+              <Field source="CNRNumber" />
+              <Boolean source="Disclosable" />
+              <Boolean source="Blocked" />
+              <Field source="AllocationCodeName" />
+              <Field source="WeekCalendarNumber" />
+              <Field source="HolidayCalendarName" />
+            </Group>
+            <Group title="Extra Fields">
+              <Field source="Vendorpopup1" />
+              <Field source="Vendorpopup2" />
+              <Field source="Vendorpopup3" />
+              <Field source="Vendorpopup4" />
+              <Field source="Vendorpopup5" />
+            </Group>
+            <Group title="Document Archive">
+              <Reference foreignKey="DocumentArchiveNumber_DocumentArchiveHeader" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Pay to Vendor">
+              <Reference foreignKey="CompanyVendorPaymentVendor_Vendor" />
+              <Field source="Name2Var" appearance="maximized" />
+              <Field source="Name3Var" appearance="maximized" />
+              <ZipCity citySource="PostalDistrictVar" zipSource="ZipCodeVar" appearance="maximized" />
+              <Field source="Name4Var" appearance="maximized" />
+              <Field source="Name5Var" appearance="maximized" />
+              <Field source="AttentionVar" title="Attn." />
+              <Field source="CountryVar" title="Country" />
+              <Field source="TelephoneVar" title="Phone" />
+              <Field source="ElectronicMailAddressVar" title="E-mail{native}" />
+            </Group>
+            <Group title="Parent Vendor">
+              <Reference foreignKey="ParentVendor_Vendor" />
+              <Field source="VendorVendorLinking" />
+              <Field source="CompanyVendorVendorLinking" title="Company Specific Linking" />
+            </Group>
+            <Group title="Purchase Information">
+              <Field source="OurCustomerNumber" />
+              <Field source="Purchaser" />
+              <Field source="PriceListNumber" />
+              <Boolean source="MaintainPrice" />
+              <Field source="CostPercentage" />
+              <Field source="InvoiceDiscountPercentage" />
+              <Field source="YourReference" />
+              <Field source="OurReference" />
+            </Group>
+            <Group title="Warehouse Information{1}">
+              <Field source="InventoryNumber" />
+              <Field source="DeliveryTerms" title="Delivery Terms{abbr}" />
+              <Field source="DeliveryMode" />
+            </Group>
+            <Group title="Access Level">
+              <Field source="AccessLevelName" title="Name" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Dimension Combination">
+            <Grid>
+              <Header cells="|Value|;|Description|" title="" />
+              <Row cells="DimensionCombNumber;DimensionCombDescriptionVar" title="Dim. Comb." />
+            </Grid>
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Derived Company">
+            <Grid>
+              <Header cells="|Value|;|Description|;|Overwrite|" title="" />
+              <Row cells="CompanyNumber;CompanyNameVar;OverwriteCompany#" title="Company" />
+            </Grid>
+          </Group>
+        </Row>
+        <Row>
+          <Group ref="DerivedDimensionWithDescriptionGroup" />
+        </Row>
+        <Row>
+          <Group title="Print Control">
+            <Pair firstSource="Statistic1" secondSource="Statistic1List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 1" />
+            <Pair firstSource="Statistic2" secondSource="Statistic2List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 2" />
+            <Pair firstSource="Statistic3" secondSource="Statistic3List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 3" />
+            <Pair firstSource="Statistic4" secondSource="Statistic4List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 4" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="RemarkText1" appearance="maximized" />
+            <Field source="RemarkText2" appearance="maximized" />
+            <Field source="RemarkText3" appearance="maximized" />
+            <Field source="RemarkText4" appearance="maximized" />
+            <Field source="RemarkText5" appearance="maximized" />
+            <Field source="RemarkText6" appearance="maximized" />
+            <Field source="RemarkText7" appearance="maximized" />
+            <Field source="RemarkText8" appearance="maximized" />
+            <Field source="RemarkText9" appearance="maximized" />
+            <Field source="RemarkText10" appearance="maximized" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Standard" style="fullWidth">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+            <Action source="AttachDocument" />
+          </Exclude>
+        </Actions>
+        <Column>
+          <Group title="Vendor{Creditor}">
+            <Field source="VendorNumber" shadowTitle="Number" />
+            <Field source="Name1" appearance="maximized" shadowTitle="Name" />
+            <Field source="Name2" appearance="maximized" shadowTitle="Address 1" />
+            <Field source="Name3" appearance="maximized" shadowTitle="Address 2" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" cityShadowTitle="City" zipShadowTitle="Postal Code" />
+            <Field source="Name4" appearance="maximized" shadowTitle="Address 3" />
+            <Field source="Name5" appearance="maximized" shadowTitle="Address 4" />
+            <Field source="Attention" />
+            <Field source="Country" />
+            <Field source="Telephone" />
+            <Field source="Telefax" />
+            <Field source="Telex" />
+            <Field source="Giro" />
+            <Field source="ElectronicMailAddress" />
+          </Group>
+          <Group title="Settling Company">
+            <Reference foreignKey="SettlingCompany_CompanyInformation" />
+            <Field source="SettlingCompanyCurrencyVar" title="Currency" />
+          </Group>
+          <Group title="General Information">
+            <Field source="DepartmentNumber" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="VendorGroup" />
+            <Field source="CompanyRegistrationNumber" />
+            <Field source="CNRNumber" />
+            <Field source="AllocationCodeName" />
+            <Field source="WeekCalendarNumber" />
+            <Field source="HolidayCalendarName" />
+            <Boolean source="Disclosable" />
+            <Boolean source="Blocked" />
+          </Group>
+          <Group title="Document Archive">
+            <Reference foreignKey="DocumentArchiveNumber_DocumentArchiveHeader" />
+          </Group>
+          <Group title="Print Control">
+            <Pair firstSource="Statistic1" secondSource="Statistic1List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 1" />
+            <Pair firstSource="Statistic2" secondSource="Statistic2List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 2" />
+            <Pair firstSource="Statistic3" secondSource="Statistic3List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 3" />
+            <Pair firstSource="Statistic4" secondSource="Statistic4List" firstShadowTitle="Value" secondShadowTitle="List" title="Statistics 4" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Pay to Vendor">
+            <Reference foreignKey="CompanyVendorPaymentVendor_Vendor" />
+            <Field source="Name2Var" appearance="maximized" />
+            <Field source="Name3Var" appearance="maximized" />
+            <ZipCity citySource="PostalDistrictVar" zipSource="ZipCodeVar" appearance="maximized" />
+            <Field source="Name4Var" appearance="maximized" />
+            <Field source="Name5Var" appearance="maximized" />
+            <Field source="AttentionVar" title="Attn." />
+            <Field source="CountryVar" title="Country" />
+            <Field source="TelephoneVar" title="Phone" />
+            <Field source="ElectronicMailAddressVar" title="E-mail{native}" />
+          </Group>
+          <Group title="Parent Vendor">
+            <Reference foreignKey="ParentVendor_Vendor" />
+            <Field source="VendorVendorLinking" title="Parent Linking Rule" />
+            <Field source="CompanyVendorVendorLinking" title="Company Specific Linking" />
+          </Group>
+          <Group title="Purchase Information">
+            <Field source="OurCustomerNumber" />
+            <Field source="Purchaser" />
+            <Field source="PriceListNumber" />
+            <Boolean source="MaintainPrice" />
+            <Field source="CostPercentage" />
+            <Field source="InvoiceDiscountPercentage" />
+            <Field source="YourReference" />
+            <Field source="OurReference" />
+          </Group>
+          <Group title="Warehouse Information{1}">
+            <Field source="InventoryNumber" />
+            <Field source="DeliveryTerms" title="Delivery Terms{abbr}" />
+            <Field source="DeliveryMode" />
+          </Group>
+          <Group title="Access Level">
+            <Field source="AccessLevelName" title="Name" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Dimensions">
+        <Actions>
+          <Update />
+        </Actions>
+        <Column style="fullWidth">
+          <Group title="Dimension Combination">
+            <Grid>
+              <Header cells="|Value|;|Description|" title="" />
+              <Row cells="DimensionCombNumber;DimensionCombDescriptionVar" title="Dim. Comb." />
+            </Grid>
+          </Group>
+          <Group title="Derived Company">
+            <Grid>
+              <Header cells="|Value|;|Description|;|Overwrite|" title="" />
+              <Row cells="CompanyNumber;CompanyNameVar;OverwriteCompany#" title="Company     " />
+              <!-- the space was necessary for alignment -->
+            </Grid>
+          </Group>
+          <Group ref="DerivedDimensionWithDescriptionGroup" />
+        </Column>
+      </Form>
+      <Form name="ExtraInformation">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+          <Group title="Extra Fields">
+            <Field source="Vendorpopup1" />
+            <Field source="Vendorpopup2" />
+            <Field source="Vendorpopup3" />
+            <Field source="Vendorpopup4" />
+            <Field source="Vendorpopup5" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="RemarkText1" appearance="maximized" />
+            <Field source="RemarkText2" appearance="maximized" />
+            <Field source="RemarkText3" appearance="maximized" />
+            <Field source="RemarkText4" appearance="maximized" />
+            <Field source="RemarkText5" appearance="maximized" />
+            <Field source="RemarkText6" appearance="maximized" />
+            <Field source="RemarkText7" appearance="maximized" />
+            <Field source="RemarkText8" appearance="maximized" />
+            <Field source="RemarkText9" appearance="maximized" />
+            <Field source="RemarkText10" appearance="maximized" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Overview">
+        <Row>
+          <Group title="Vendor{Creditor}">
+            <Field source="VendorNumber" />
+            <Field source="Name1" appearance="maximized" />
+            <If condition="Name2 != ''">
+              <Field source="Name2" appearance="maximized" />
+            </If>
+            <Field source="Country" appearance="maximized" />
+            <EmptyLabel />
+            <Field source="Attention" />
+            <Field source="Telephone" />
+            <Field source="Blocked" />
+          </Group>
+          <Group title="Pay to Vendor{Creditor}">
+            <Reference foreignKey="CompanyVendorPaymentVendor_Vendor" />
+            <If condition="Name2Var != ''">
+              <Field source="Name2Var" appearance="maximized" />
+            </If>
+            <Field source="CountryVar" appearance="maximized" />
+            <EmptyLabel />
+            <Field source="AttentionVar" title="Attn." />
+            <Field source="TelephoneVar" title="Phone" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Settling Company">
+            <Reference foreignKey="SettlingCompany_CompanyInformation" />
+            <Field source="SettlingCompanyCurrencyVar" title="Currency" />
+          </Group>
+          <Group title="Parent Vendor{Creditor}">
+            <Reference foreignKey="ParentVendor_Vendor" />
+            <Field source="VendorVendorLinking" />
+          </Group>
+        </Row>
+        <If condition="not hasWorkspace('CompanyVendorHome')">
+          <Row>
+            <Group>
+              <Link workspace="CompanyVendors" template="More details..." title=" " appearance="maximized" icon="WorkspaceLink">
+                <Target pane="CompanyVendorInfoCard">
+                  <Restriction template="Selected Company Vendor" expression="SettlingCompany=target.SettlingCompany                                         and VendorNumber=target.VendorNumber" />
+                  <Focus>
+                    <Match field="SettlingCompany" value="SettlingCompany" />
+                    <Match field="VendorNumber" value="VendorNumber" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Row>
+        </If>
+      </Form>
+      <Form name="CreateVendorWizardPage1">
+        <Actions all="true" />
+        <Column>
+          <Group style="fullWidth">
+            <Reference foreignKey="VendorNumber_CompanyVendor" keyMandatory="true" title="Vendor{Creditor}" keySource="VendorNumber" />
+            <Reference foreignKey="SettlingCompany_CompanyInformation" title="Company" />
+            <Field source="CompanyVendorVendorLinking" />
+            <Reference foreignKey="ParentVendor_Vendor" title="Parent Vendor{Creditor}" />
+            <Field source="VendorVendorLinking" title="Parent Linking Rule" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="MDK_CreateVendorWizardPage1">
+        <Actions all="true" />
+        <Column>
+          <Group style="fullWidth">
+            <!-- <Reference foreignKey="VendorNumber_CompanyVendor" keyMandatory="true" title="Vendor" descriptionShadowTitle="" /> -->
+            <Field source="VendorNumber" mandatory="true" title="Vendor" shadowTitle=""/>
+           <!--  <Field source="Name1" /> -->
+            <Field source="SettlingCompany" mandatory="true" shadowTitle=""/>
+            <Field source="Currency" />
+            <Field source="CompanyVATCode" title="Ramboll Company VAT Code" />
+            <Field source="PaymentTerms" />
+            <Field source="ControlAccountCode" shadowTitle="Control Account &amp; Vendor Group must always be identical" />
+            <Field source="VendorGroup" shadowTitle="Control Account &amp; Vendor Group must always be identical" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Overview_Vertical">
+        <Column>
+          <Group title="Vendor{Creditor}" style="fullWidth">
+            <Field source="VendorNumber" />
+            <Field source="Name1" appearance="maximized" />
+            <Field source="Name2" appearance="maximized" />
+            <Field source="Name3" appearance="maximized" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+            <Field source="Name4" appearance="maximized" />
+            <Field source="Name5" appearance="maximized" />
+            <Field source="Attention" />
+            <Field source="Country" />
+            <Field source="Telephone" />
+            <Field source="Telefax" />
+            <Field source="Telex" />
+            <Field source="ElectronicMailAddress" />
+            <Field source="Giro" />
+            <Field source="Responsible" />
+          </Group>
+          <Group title="General Information">
+            <Field source="DepartmentNumber" />
+            <Field source="Language" />
+            <Field source="VendorGroup" />
+            <Field source="Currency" />
+            <Field source="Disclosable" />
+            <Field source="Blocked" />
+          </Group>
+          <Group>
+            <Link workspace="CompanyVendors" template="More details..." title=" " tooltip="Company specific vendor workspace" appearance="maximized" icon="WorkspaceLink">
+              <Target pane="CompanyVendorInfoCard">
+                <Restriction template="Selected Vendor" expression="VendorNumber=target.VendorNumber and SettlingCompany=target.SettlingCompany" />
+                <Focus>
+                  <Match field="VendorNumber" value="VendorNumber" />
+                  <Match field="SettlingCompany" value="SettlingCompany" />
+                </Focus>
+              </Target>
+            </Link>
+          </Group>
+        </Column>
+      </Form>
+      <Form name="VendorInvoiceOverview">
+        <Column>
+          <Group title="Vendor{Creditor}">
+            <Field source="VendorNumber" />
+            <Field source="Name1" appearance="maximized" />
+            <Field source="Name2" appearance="maximized" />
+            <Field source="Name3" appearance="maximized" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+            <Field source="Name4" appearance="maximized" />
+            <Field source="Name5" appearance="maximized" />
+            <Field source="Attention" />
+            <Field source="Country" />
+            <Field source="Telephone" />
+            <Field source="Telefax" />
+            <Field source="Telex" />
+            <Field source="Giro" />
+            <Field source="ElectronicMailAddress" />
+          </Group>
+          <Group title="Settling Company">
+            <Reference foreignKey="SettlingCompany_CompanyInformation" />
+            <Field source="SettlingCompanyCurrencyVar" title="Currency" />
+          </Group>
+          <Group title="Bank">
+            <Field source="BankAddress1" title="Address" />
+            <Field source="BankAddress2" appearance="maximized" />
+            <Field source="BankAddress3" appearance="maximized" />
+            <Field source="BankAddress4" appearance="maximized" />
+            <Field source="SWIFTCode" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Pay to Vendor">
+            <Reference foreignKey="CompanyVendorPaymentVendor_Vendor" />
+            <Field source="Name2Var" appearance="maximized" />
+            <Field source="Name3Var" appearance="maximized" />
+          </Group>
+          <Group title="Payment Control">
+            <Field source="StopPayment" />
+            <Field source="PaymentMode" />
+            <Field source="PaymentTerms" title="Pmt. Terms" />
+            <Field source="CashDiscountCode" title="Cash Discount Payment" />
+            <Field source="Giro" title="Giro No." />
+            <Field source="BankRegistrationNumber" />
+            <Field source="BankAccount" />
+            <Field source="PaymentServiceNumber" title="BACS No." />
+            <Field source="CPCNumber" title="CPS No." />
+            <Field source="StandardCardTypeCode" />
+            <Field source="StandardPayerIdentification" />
+            <Field source="VAT" />
+            <Field source="CompanyVATCode" />
+            <Field source="EUTradeType" />
+            <Field source="VATNumber" />
+            <Field source="ControlAccountCode" />
+            <Field source="Responsible" />
+            <Field source="AutomaticallyApproved" />
+          </Group>
+        </Column>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

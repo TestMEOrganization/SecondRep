@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 13/07/10: Show IBANAccountNumber and SWIFTCode (38394).-->
+<!-- BPE, 07/09/10: Changed layout to use global definition dimensions (38744). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- CSK, 11/10/11: DimensionOrigin form added (39547).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ExternalAccounts">
+    <FilterPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Bank Acc. No. ^1, Reg. No. ^2, ^3" arguments="BankAccountNumber;BankRegistrationNumber;PaymentAgent" />
+        </Compact>
+        <Columns>
+          <Field source="PaymentAgent" />
+          <Field source="BankRegistrationNumber" />
+          <Field source="BankAccountNumber" />
+          <Field source="Description" />
+          <Field source="BankReconciliation" />
+          <Field source="AccountNumber" />
+          <Field source="CompanyNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="Minimal_NoAccount">
+        <Compact>
+          <Description template="Bank Acc. No. ^1, Reg. No. ^2, ^3" arguments="BankAccountNumber;BankRegistrationNumber;PaymentAgent" />
+        </Compact>
+        <Columns>
+          <Field source="PaymentAgent" />
+          <Field source="BankRegistrationNumber" />
+          <Field source="BankAccountNumber" />
+          <Field source="Description" />
+          <Field source="BankReconciliation" />
+          <Field source="CompanyNumber" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Bank Account">
+              <Field source="PaymentAgent" />
+              <Field source="BankRegistrationNumber" title="Reg. No.{1}" />
+              <Field source="BankAccountNumber" title="Account No." />
+              <Field source="Description" />
+              <Field source="IBANAccountNumber" />
+              <Field source="SWIFTCode" />
+              <Boolean source="BankReconciliation" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Account">
+              <Field source="AccountNumber" />
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="ReadOnly">
+        <Actions>
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Bank Account" style="fullWidth">
+              <Field source="PaymentAgent" />
+              <Field source="BankRegistrationNumber" title="Reg. No.{1}" />
+              <Field source="BankAccountNumber" title="Account No." />
+              <Field source="Description" />
+              <Field source="IBANAccountNumber" />
+              <Field source="SWIFTCode" />
+              <Field source="BankReconciliation" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column style="fullWidth">
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Account">
+              <Field source="AccountNumber" />
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Row>
+        <If condition="hasRole('Finance Admin')" >
+          <Column>
+            <Group title="Bank Account" style="fullWidth">
+              <Field source="PaymentAgent" />
+              <Field source="BankRegistrationNumber" title="Reg. No.{1}" />
+              <Field source="BankAccountNumber" title="Account No." />
+              <Field source="Description" />
+              <Field source="IBANAccountNumber" />
+              <Field source="SWIFTCode" />
+              <Field source="BankReconciliation" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column style="fullWidth">
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Account">
+              <If condition="AccountNumber=Parent.Parent.AccountNumber">
+                <Field source="AccountNumber" style="highlightRow" open="true" />
+              </If>
+              <Else>
+                <Field source="AccountNumber" />
+              </Else>
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+          </If>
+          <Else>
+          <Column>
+            <Group title="Bank Account" style="fullWidth">
+              <Field source="PaymentAgent" />
+              <Field source="BankRegistrationNumber" title="Reg. No.{1}" />
+              <Field source="BankAccountNumber" title="Account No." />
+              <Field source="Description" />
+              <Field source="IBANAccountNumber" />
+              <Field source="SWIFTCode" />
+              <Field source="BankReconciliation" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column style="fullWidth">
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Account">
+              <If condition="AccountNumber=Parent.Parent.AccountNumber">
+                <Field source="AccountNumber" style="highlightRow" open="false" />
+              </If>
+              <Else>
+                <Field source="AccountNumber" />
+              </Else>
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+          </Else>
+        </Row>
+      </Form>
+      <Form name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Bank Account" style="fullWidth">
+              <Field source="PaymentAgent" />
+              <Field source="BankRegistrationNumber" title="Reg. No.{1}" />
+              <Field source="BankAccountNumber" title="Account No." />
+              <Field source="Description" />
+              <Field source="IBANAccountNumber" />
+              <Field source="SWIFTCode" />
+              <Field source="BankReconciliation" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column style="fullWidth">
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Account">
+              <If condition="AccountNumber=Parent.Parent.AccountNumber">
+                <Field source="AccountNumber" style="highlightRow" open="true" />
+              </If>
+              <Else>
+                <Field source="AccountNumber" />
+              </Else>
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Function name="isAccount" parameters="FieldPar" value="FieldPar=Parent.Parent.DimensionCombNumber" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="PaymentMode" />
+          <Field source="BeingPaidAccount" />
+          <Field source="CustomerPaymentMode" />
+          <Field source="BeingCollectedAccount" />
+        </Columns>
+      </Table>
+      <Table name="ReadOnly">
+        <Columns>
+          <Field source="PaymentMode" />
+          <Field source="BeingPaidAccount" />
+          <Field source="CustomerPaymentMode" />
+          <Field source="BeingCollectedAccount" />
+        </Columns>
+      </Table>
+      <Table name="Custom_RoleRestricted_DimensionOrigin">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+        <If condition="hasRole('Finance Admin')" >
+          <Field source="PaymentMode" open="false" />
+          <Field source="BeingPaidAccount" open="isAccount(BeingPaidAccount)">
+            <Style ref="highlightRow" condition="isAccount(BeingPaidAccount)" />
+          </Field>
+          <Field source="CustomerPaymentMode" open="false" />
+          <Field source="BeingCollectedAccount" open="isAccount(BeingCollectedAccount)">
+            <Style ref="highlightRow" condition="isAccount(BeingCollectedAccount)" />
+          </Field>
+          </If>
+          <Else>
+          <Field source="PaymentMode" open="false" />
+          <Field source="BeingPaidAccount" open="false">
+            <Style ref="highlightRow" condition="isAccount(BeingPaidAccount)" />
+          </Field>
+          <Field source="CustomerPaymentMode" open="false" />
+          <Field source="BeingCollectedAccount" open="false">
+            <Style ref="highlightRow" condition="isAccount(BeingCollectedAccount)" />
+          </Field>
+          </Else>
+        </Columns>
+      </Table>
+      <Table name="DimensionOrigin">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+          <Field source="PaymentMode" open="false" />
+          <Field source="BeingPaidAccount" open="isAccount(BeingPaidAccount)">
+            <Style ref="highlightRow" condition="isAccount(BeingPaidAccount)" />
+          </Field>
+          <Field source="CustomerPaymentMode" open="false" />
+          <Field source="BeingCollectedAccount" open="isAccount(BeingCollectedAccount)">
+            <Style ref="highlightRow" condition="isAccount(BeingCollectedAccount)" />
+          </Field>
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

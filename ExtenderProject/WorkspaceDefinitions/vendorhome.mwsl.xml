@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--340b3897826459be98b7bcebec027e976a32ae8e-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!-- RMA, 12/12/09: Creation (38166).-->
+<!-- BPE, 30/06/10: Embedded the vendor entry workspace (38555).-->
+<!-- JSV, 01/09/10: Use view AttachDocument_From_Parent on table with documents (38778).-->
+<!-- JSV, 02/12/10: Place DocumentRevisions in extension instead of assistant (39187).-->
+<!-- PSZ, 13/07/11: Added name for VendorCard for use in links (39512).-->
+<!-- CSK, 14/07/11: No transactions allowed in Vendors workspace (39413).-->
+<!-- CSK, 15/07/11: Linking rule related changes (39310).-->
+<!-- CSK, 15/07/11: Overview/Entries pane removed (39255).-->
+<!-- CSK, 15/07/11: Periodic Statements, Entries, Requisitions, RFO, PO and VI moved to Lookup 
+										Company Vendor embedded workspace removed (39773).-->
+<!-- KUN, 14/11/11: Performance improvements (40160). -->
+<!-- KUN, 22/11/11: Performance improvements (40160). -->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="VendorHome" title="Vendor Home">
+    <Card source="VendorCard" name="VendorCard_Overview" view="Overview" title="Overview">
+      <!-- <Expansions>
+        <Restrict reversedForeignKey="VendorNumber_Vendor">
+          <Filter source="CompanyVendorInfoCard" view="CompanyNotCompacted" title="Company Vendors">
+            <Assistants minimized="false">
+              <With>
+                <Card view="Overview" title="Details" hidden="Parent.VendorNumber = '' or Parent.SettlingCompany = ''" />
+              </With>
+            </Assistants>
+          </Filter>
+        </Restrict>
+      </Expansions> -->
+    </Card>
+    <Card source="VendorCard" view="Standard" title="Information">
+      <Assistants minimized="false" parentSize="huge">
+        <Bind foreignKey="primary">
+          <Card source="PaymentControl" view="Standard" title="Payment">
+            <Assistants>
+              <Bind foreignKey="PaymentMode_PaymentMode">
+                <Card source="PaymentModes" view="Readonly" title="Payment Mode" />
+              </Bind>
+            </Assistants>
+          </Card>
+        </Bind>
+        <With>
+          <Card view="Dimensions" title="Dimensions" />
+          <Card view="ExtraInformation" title="Extra Information" />
+        </With>
+        <Bind foreignKey="Card_LinkingRuleHeader">
+          <Card source="LinkingRules" view="Readonly" title="Linking Rule" hidden="parent.VendorVendorLinking = ''">
+            <With>
+              <Table title="Linked Fields" view="Readonly" />
+            </With>
+          </Card>
+        </Bind>
+      </Assistants>
+    </Card>
+    <Hidden source="VendorCard">
+      <Bind foreignKey="DocumentArchiveNumber_DocumentArchiveHeader">
+        <Table source="DocumentArchives" view="AttachDocument_From_Parent" title="Documents">
+          <Expansions minimized="true">
+            <Bind foreignKey="primary">
+              <Table source="DocumentRevisions" view="Full" />
+            </Bind>
+          </Expansions>
+        </Table>
+      </Bind>
+    </Hidden>
+  </Workspace>
+</MWSL>
+

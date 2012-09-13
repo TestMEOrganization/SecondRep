@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 02/07/09: Create empty workspace for every dialog (37794).-->
+<!-- PBO, 15/12/10: Auto-populate workspace's title by the one defined in the GlobalMenu (39149).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="SD_ItemizeInvoiceSelection" title="Itemize Invoice Selection">
+    <Filter source="ItemizeInvoiceSelection" view="Standard">
+      <Expansions minimized="false">
+        <With>
+          <Card view="Full" hidden="not hasRole('Projects - Controllers')">
+            <Expansions>
+              <With>
+                <Table />
+              </With>
+            </Expansions>
+          </Card>
+        </With>
+      </Expansions>
+    </Filter>
+  </Workspace>
+</MWSL>
+

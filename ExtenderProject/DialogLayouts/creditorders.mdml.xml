@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- BPE, 16/08/10: Changed layout to use global definition dimensions (38743). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- SJK, 20/06/11: demo views (39731).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- SJK, 19/08/11: Improvements after verification (39731).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="CreditOrders">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Order No. ^1, ^2" arguments="OrderNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="OrderNumber" />
+          <Field source="CustomerNumber" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Name3" />
+          <Field source="ZipCode" />
+          <Field source="PostalDistrict" />
+          <Field source="Name4" />
+          <Field source="Name5" />
+        </Columns>
+      </Filter>
+      <Filter name="CreditOrderHome">
+        <Actions>
+        	<Action source="with.Create" wizard="CreateOrderWizard" />
+        </Actions>
+        <ControlBar>
+          <Selection default="MyOpenCreditOrders">
+            <Option title="My Open Credit Orders" name="MyOpenCreditOrders" restriction="SalesPersonNumber = userEmployeeNumber() and Invoiced = OrderStatusType'No" />
+            <Option title="All My Credit Orders" name="MyCreditOrders" restriction="SalesPersonNumber = userEmployeeNumber()" />
+            <Option title="Open Credit Orders on My Jobs" name="MyJobsOpenCreditOrders" restriction="ProjectManagerNumber = userEmployeeNumber() and Invoiced = OrderStatusType'No" />
+            <Option title="All Credit Orders on My Jobs" name="MyJobsCreditOrders" restriction="ProjectManagerNumber = userEmployeeNumber()" />
+            <Option title="All Open Credit Orders" name="AllOpenCreditOrders" restriction="Invoiced = OrderStatusType'No" />
+            <Option title="All Credit Orders" name="AllCreditOrders" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Order No. ^1, ^2" arguments="OrderNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="OrderNumber" />
+          <Field source="Name1" title="Customer" />
+          <Field source="SalesPerson" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="ProjectManagerName" />
+          <UnitField source="OrderSumCurrency" unitSource="Currency" title="Total" />
+          <Field source="CreatedDate" />
+          <Field source="Approved" />
+          <Field source="LastInvoiceDate" title="Date Credited" />
+        </Columns>
+      </Filter>
+      <Filter name="C_CreditOrderHome_Commerce">
+        <Actions>
+          <Action source="with.Create" wizard="C_CreateOrderWizardCustomerProject" title="Credit Order to Customer with Project" name="C_CreateOrderWizardCustomerProject"/>
+          <Action source="with.Create" wizard="C_CreateOrderWizardProject" title="Credit Order to Project" name="C_CreateOrderWizardProject"/>
+        </Actions>
+        <ControlBar>
+          <Selection default="MyOpenCreditOrders">
+            <Option title="My Open Credit Orders" name="MyOpenCreditOrders" restriction="SalesPersonNumber = userEmployeeNumber() and Invoiced = OrderStatusType'No" />
+            <Option title="All My Credit Orders" name="MyCreditOrders" restriction="SalesPersonNumber = userEmployeeNumber()" />
+            <Option title="Open Credit Orders on My Jobs" name="MyJobsOpenCreditOrders" restriction="ProjectManagerNumber = userEmployeeNumber() and Invoiced = OrderStatusType'No" />
+            <Option title="All Credit Orders on My Jobs" name="MyJobsCreditOrders" restriction="ProjectManagerNumber = userEmployeeNumber()" />
+            <Option title="All Open Credit Orders" name="AllOpenCreditOrders" restriction="Invoiced = OrderStatusType'No" />
+            <Option title="All Credit Orders" name="AllCreditOrders" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="Order No. ^1, ^2" arguments="OrderNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="OrderNumber" />
+          <Field source="Name1" title="Customer" />
+          <Field source="SalesPerson" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="ProjectManagerName" />
+          <UnitField source="OrderSumCurrency" unitSource="Currency" title="Total" />
+          <Field source="CreatedDate" />
+          <Field source="Approved" />
+          <Field source="LastInvoiceDate" title="Date Credited" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+        <Trigger name="assignDummyCustomerName">
+          <Assign source="Name1" valueString="Only to be changed if not derived from Project" />
+        </Trigger>
+      </Define>
+      <Wizard name="CopyOrderWizard" title="Copy Order">
+        <Page form="CopyOrderWizardPage" title="Create new order from existing order." />
+      </Wizard>
+      <Wizard name="CreateOrderWizard" title="Create Order">
+        <Page form="CreateOrderWizardPage" title="Order" />
+      </Wizard>
+      <Wizard name="C_CreateOrderWizardCustomerProject" title="Order to Customer with Project" >
+        <Page form="C_CreateOrderWizardCustomerProjectPage1" title="Credit Order Creation - Step 1/2" preTrigger="assignDummyCustomerName" />
+        <Page form="C_CreateOrderWizardCustomerProjectPage2" title="Credit Order Creation - Step 2/2" />
+      </Wizard>
+      <Wizard name="C_CreateOrderWizardProject" title="Order to Project">
+        <Page form="C_CreateOrderWizardProjectPage1" title="Credit Order Creation" preTrigger="assignDummyCustomerName" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Credit Order">
+              <Field source="OrderNumber" />
+              <Field source="OrderMode" />
+              <Reference foreignKey="SalesPersonNumber_Employee" />
+              <Field source="Receiver" title="Received by" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Remarks{sg}">
+              <Field source="BasedOnInvoiceNumber" title="Re. Invoice No." />
+              <Field source="Reference" />
+              <Field source="Remark" title="Customer" />
+              <Field source="InventoryRemark" title="Warehouse" />
+              <Field source="EndCustomerNumber" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Ship to Address">
+              <Reference foreignKey="CustomerNumber_Customer" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="ElectronicMailAddress" title="E-mail{native 1}" />
+            </Group>
+            <Group title="Status">
+              <Field source="Approved" />
+              <Field source="LastInvoiceDate" title="Date Credited" />
+            </Group>
+            <Group title="Credit Order Total">
+              <Field source="OrderSumCurrency" title="Price" />
+              <Field source="OrderWeight" title="Weight" />
+              <Field source="OrderVolume" title="Volume" />
+            </Group>
+            <Group title="Price">
+              <Field source="Currency" />
+              <Field source="ExchangeRateDate" />
+              <Field source="PriceListNumber" />
+              <Field source="PriceLevel" />
+              <Boolean source="MaintainPrice" />
+              <Field source="InvoiceDiscountPercentage" />
+            </Group>
+            <Group title="Charges">
+              <Grid>
+                <Header cells="_;      |Maintain|;   |Amount|" />
+                <Row cells="ChargeCode1; Charge1Maintain;Charge1Currency" />
+                <Row cells="ChargeCode2; Charge2Maintain;Charge2Currency" />
+                <Row cells="ChargeCode3; Charge3Maintain;Charge3Currency" />
+                <Row cells="ChargeCode4; Charge4Maintain;Charge4Currency" />
+              </Grid>
+            </Group>
+            <Group title="Account Information{Setup}">
+              <Field source="StandardInformationChanged" title="Changed" />
+            </Group>
+            <Group title="Document Archive">
+              <Reference foreignKey="DocumentArchiveNumber_DocumentArchiveHeader" />
+            </Group>
+            <Group title="Job Cost">
+              <Boolean source="InvoiceInJobCost" title="Credit in Job Cost" />
+              <Field source="JobNumber" />
+              <Field source="ActivityNumber" />
+              <Field source="TaskName" />
+            </Group>
+            <Group title="Statistics to Tax Authorities">
+              <Boolean source="EUSalesListSystemRegistration" />
+              <Boolean source="IntrastatRegistration" />
+              <Field source="EUTradeType" />
+              <Field source="TransactionNature" />
+              <Field source="CustomsDocument" />
+            </Group>
+            <Group title="Order Linking">
+              <Field source="MainOrderNumber" />
+            </Group>
+            <Group title="Extra Fields">
+              <Field source="CustomerPopup1" />
+              <Field source="CustomerPopup2" />
+              <Field source="CustomerPopup3" />
+              <Field source="CustomerPopup4" />
+              <Field source="CustomerPopup5" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column>
+            <Group title="Billing Address">
+              <Field source="PaymentCustomer" title="Bill to Customer{No.}" />
+              <Field source="PayerName1Var" appearance="maximized" />
+              <Field source="PayerName2Var" appearance="maximized" />
+              <Field source="PayerName3Var" appearance="maximized" />
+              <ZipCity citySource="PayerPostalDistrictVar" zipSource="PayerZipCodeVar" appearance="maximized" />
+              <Field source="PayerName4Var" appearance="maximized" />
+              <Field source="PayerName5Var" appearance="maximized" />
+              <Field source="PayerAttVar" title="Attn." />
+              <Field source="PayerCountryVar" title="Country" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompany_CompanyInformation" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+            </Group>
+            <Group title="Delivery">
+              <Field source="InventoryNumber" />
+              <Field source="LocationNumber" />
+              <Field source="Transporter" />
+              <Field source="DeliveryMode" />
+              <Field source="DeliveryTerms" title="Delivery Terms{abbr}" />
+              <Field source="ConsignmentType" />
+              <Field source="DestinationNumber" />
+              <Field source="FreightTableName" />
+              <Field source="FreightDiscountPercentage" />
+            </Group>
+            <Group title="Crediting">
+              <Boolean source="ReleasedForInvoicing" title="Batch Credit" />
+              <Field source="PreferredInvoiceDate" title="Pref. Credit Memo Date" />
+            </Group>
+            <Group title="Customer Information{1}">
+              <Field source="DepartmentNumber" />
+              <Field source="CustomerGroup" />
+              <Field source="Language" />
+              <Boolean source="VAT" />
+              <Field source="VATNumber" />
+              <Field source="CustomerPaymentMode" />
+              <Field source="GlobalLocationNumber" />
+              <Field source="Enterprise" />
+              <Field source="Segment" />
+              <Field source="Area" />
+              <Field source="CompanyVATCode" />
+            </Group>
+            <Group ref="DimensionGroup" />
+            <Group title="Subscription Order">
+              <Field source="SubscriptionOrderNumber" />
+            </Group>
+            <Group title="Contact Management">
+              <Field source="CampaignNumber" />
+            </Group>
+            <Group title="Copying">
+              <Field source="NewCustomerNumberVar" title="Customer No." />
+              <Field source="NewInventoryNumberVar" title="Warehouse" />
+              <Field source="NewCompanyNumberVar" title="Company No." />
+              <Field source="NewCurrencyVar" title="Currency" />
+              <Field source="NewPriceListVar" title="Price List" />
+              <Field source="NewPriceStepVar" title="Price Step" />
+              <Field source="NewJobNumberVar" title="Job No." />
+              <Field source="NewActivityNumberVar" title="Activity No." />
+              <Field source="NewTaskNameVar" title="Task" />
+              <Boolean source="MaintainPricesVar" title="Maintain Prices" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Standard">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+            <Action source="PrintItemMovementList" />
+            <Action source="CreateWarehouseTransaction" />
+            <Action source="AttachDocument" />
+          </Exclude>
+          <Action source="CopyOrder" wizard="CopyOrderWizard" />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Credit Order">
+              <Field source="OrderNumber" />
+              <Field source="OrderMode" />
+              <Reference foreignKey="SalesPersonNumber_Employee" title="Sales Rep." />
+            </Group>
+            <Group title="Ship to Address">
+              <Reference foreignKey="CustomerNumber_Customer" title="Customer" />
+              <Field source="Name2" title="Address" shadowTitle="Street" />
+              <Field source="Name3" title="" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" title="" cityShadowTitle="Postal District" zipShadowTitle="Zip Code" />
+              <Field source="Name4" title="" />
+              <Field source="Name5" title="" />
+              <Field source="Attention" />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="ElectronicMailAddress" title="E-mail{native 1}" />
+            </Group>
+            <Group title="Billing Address">
+              <Reference foreignKey="PaymentCustomer_Customer" title="Bill to Customer{No.}" />
+              <Field source="PayerName2Var" title="Address" shadowTitle="Street" />
+              <Field source="PayerName3Var" title="" />
+              <ZipCity citySource="PayerPostalDistrictVar" zipSource="PayerZipCodeVar" title="" cityShadowTitle="Postal District" zipShadowTitle="Zip Code" />
+              <Field source="PayerName4Var" title="" />
+              <Field source="PayerName5Var" title="" />
+              <Field source="PayerAttVar" title="Attn." />
+              <Field source="PayerCountryVar" title="Country" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Remarks{sg}">
+              <Link workspace="SalesOrders" template="^1" arguments="BasedOnInvoiceNumber" title="Re. Invoice No." icon="WorkspaceLink">
+                <Target pane="ShowInvoice_Filter">
+                  <Restriction template="Selected Invoice" expression="BasedOnInvoiceNumber=target.InvoiceNumber" />
+                  <Focus>
+                    <Match field="InvoiceNumber" value="BasedOnInvoiceNumber" />
+                  </Focus>
+                </Target>
+                <Override condition="BasedOnInvoiceNumber = 0">
+                  <Link disabled="true" />
+                </Override>
+              </Link>
+              <Field source="Reference" />
+              <Field source="Remark" title="Customer" />
+              <Field source="EndCustomerNumber" />
+            </Group>
+            <Group title="Price">
+              <Field source="Currency" />
+              <Field source="ExchangeRateDate" />
+              <Field source="PriceListNumber" />
+              <Field source="PriceLevel" />
+              <Boolean source="MaintainPrice" />
+              <UnitField source="InvoiceDiscountPercentage" unitTitle="%" />
+              <UnitField source="OrderSumCurrency" title="Price" unitSource="Currency" />
+            </Group>
+            <Group title="Charges">
+              <Grid>
+                <Header cells="_;      |Maintain|;   |Amount|" />
+                <Row cells="ChargeCode1; Charge1Maintain;Charge1Currency" />
+                <Row cells="ChargeCode2; Charge2Maintain;Charge2Currency" />
+                <Row cells="ChargeCode3; Charge3Maintain;Charge3Currency" />
+                <Row cells="ChargeCode4; Charge4Maintain;Charge4Currency" />
+              </Grid>
+            </Group>
+            <Group title="Statistics to Tax Authorities">
+              <Boolean source="EUSalesListSystemRegistration" />
+              <Boolean source="IntrastatRegistration" />
+              <Field source="EUTradeType" />
+              <Field source="TransactionNature" />
+              <Field source="CustomsDocument" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Job Cost">
+              <Boolean source="InvoiceInJobCost" title="Credit in Job Cost" />
+              <Field source="JobNumber" />
+              <Field source="ActivityNumber" />
+              <Field source="TaskName" />
+            </Group>
+            <Group title="Status">
+              <Field source="Approved" />
+              <Field source="LastInvoiceDate" title="Date Credited" />
+            </Group>
+            <Group title="Crediting">
+              <Boolean source="ReleasedForInvoicing" title="Batch Credit" />
+              <Field source="PreferredInvoiceDate" title="Pref. Credit Memo Date" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompany_CompanyInformation" title="Settling Company" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+            </Group>
+            <Group ref="DimensionGroup" />
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+            <Action source="PrintItemMovementList" />
+            <Action source="CreateWarehouseTransaction" />
+            <Action source="AttachDocument" />
+          </Exclude>
+          <Action source="CopyOrder" wizard="CopyOrderWizard" />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Credit Order">
+              <Field source="OrderNumber" mandatory="true" />
+              <Field source="OrderType" />
+              <Field source="BasedOnOrderNumber" title="From Invoice" />
+              <Field source="OrderMode" />
+              <Field source="Receiver" title="Received by" />
+              <Boolean source="OrderConfirmation" />
+              <Boolean source="Approved" />
+              <Field source="Delivered" />
+              <Field source="Invoiced" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Price">
+              <Field source="Currency" />
+              <Field source="BaseCurrency" />
+              <Field source="PaymentTerms" title="Payment Terms" />
+              <Field source="ExchangeRateDate" />
+              <UnitField source="OrderSumCurrency" unitSource="Currency" title="Order Total" />
+              <UnitField source="InvoiceDiscountPercentage" unitTitle="%" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <UnitField source="VAT1CurrencyVar" unitSource="Currency" title="Tax 1" />
+                <UnitField source="VAT2CurrencyVar" unitSource="Currency" title="Tax 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <UnitField source="VAT3CurrencyVar" unitSource="Currency" title="Tax 3" />
+                </If>
+              </If>
+              <UnitField source="VATCurrency" unitSource="Currency" />
+              <UnitField source="TotalCurrency" unitSource="Currency" title="Total" />
+              <UnitField source="TotalBase" unitSource="Currency" />
+              <Field source="PriceListNumber" />
+              <Boolean source="VAT" />
+              <Field source="VATNumber" />
+              <EmptyLabel />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Job Cost">
+              <Boolean source="InvoiceInJobCost" title="Credit in Job Cost" />
+              <Field source="JobNumber" />
+              <Field source="ActivityNumber" />
+              <Field source="TaskName" />
+            </Group>
+            <Group title="Invoicing">
+              <Boolean source="ToBeBlanketInvoiced" />
+              <Boolean source="ReleasedForInvoicing" />
+              <Field source="PreferredInvoiceDate" />
+              <Boolean source="ReadyForInvoicing" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Billing Address">
+              <Reference foreignKey="PaymentCustomer_Customer" title="Bill to Customer{No.}" />
+              <Field source="PayerName2Var" title="Address" shadowTitle="Street" />
+              <Field source="PayerName3Var" title="" />
+              <ZipCity citySource="PayerPostalDistrictVar" zipSource="PayerZipCodeVar" title="" cityShadowTitle="Postal District" zipShadowTitle="Zip Code" />
+              <Field source="PayerName4Var" title="" />
+              <Field source="PayerName5Var" title="" />
+              <Field source="PayerAttVar" title="Attn." />
+              <Field source="PayerCountryVar" title="Country" />
+            </Group>
+            <Group title="Ship to Address">
+              <Reference foreignKey="CustomerNumber_Customer" title="Customer" />
+              <Field source="Name2" title="Name 1" />
+              <Field source="Name2" title="Name 2" shadowTitle="Street" />
+              <Field source="Name3" title="Name 3" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" title="" cityShadowTitle="Postal District" zipShadowTitle="Zip Code" />
+              <Field source="Name4" title="Name 4" />
+              <Field source="Name5" title="Name 5" />
+              <Field source="Attention" />
+              <Field source="Reference" />
+              <Field source="Country" />
+              <Field source="Telephone" title="Phone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="ElectronicMailAddress" title="E-mail{native 1}" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompany_CompanyInformation" title="Settling Company" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          <Column>
+            <Group title="Customer Information">
+              <Field source="Remark" title="Customer Remarks" />
+              <Field source="EndCustomerNumber" />
+              <Field source="CustomerGroup" />
+              <Field source="CustomerPaymentMode" />
+              <Field source="CompanyVATCode" />
+              <Field source="GlobalLocationNumber" />
+            </Group>
+            <Group title="Subscription Order">
+              <Field source="SubscriptionOrderNumber" />
+            </Group>
+            <Group title="Extra Fields">
+              <Field source="CustomerPopup1" />
+              <Field source="CustomerPopup2" />
+              <Field source="CustomerPopup3" />
+              <Field source="CustomerPopup4" />
+              <Field source="CustomerPopup5" />
+            </Group>
+            <Group title="Order Linking">
+              <Field source="NumberOfSubOrders" />
+              <Field source="MainOrderNumber" />
+              <Boolean source="ToBeExpanded" />
+            </Group>
+            <Group title="Statistics to Tax Authorities">
+              <Boolean source="EUSalesListSystemRegistration" />
+              <Boolean source="IntrastatRegistration" />
+              <Field source="EUTradeType" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Remarks{sg}">
+              <Field source="Reference" />
+              <Field source="Language" />
+              <Field source="CreatedDate" />
+              <Field source="LastInvoiceDate" />
+              <Field source="BasedOnOrderNumber" />
+            </Group>
+            <Group title="Item Purchase Order">
+              <Link workspace="SalesOrders" template="^1" arguments="ItemPurchaseOrderNumber" title="Item Purchase Order No." icon="WorkspaceLink">
+                <Target pane="ItemPurchaseOrders">
+                  <Restriction template="Selected Item Purchase Order" expression="ItemPurchaseOrderNumber=target.ItemPurchaseOrderNumber" />
+                  <Focus>
+                    <Match field="ItemPurchaseOrderNumber" value="ItemPurchaseOrderNumber" />
+                  </Focus>
+                </Target>
+                <Override condition="ItemPurchaseOrderNumber = 0">
+                  <Link disabled="true" />
+                </Override>
+              </Link>
+              <Reference foreignKey="SupplierNumber_Vendor" />
+              <Field source="LastItemReceiptDate" title="Last Item Receipt{abbr}" />
+            </Group>
+            <Group title="Delivery">
+              <Field source="CustomerPurchaseNumber" title="Customer's Item Purchase Order No." />
+              <Field source="InventoryNumber" />
+              <Field source="DateOrdered" />
+              <Boolean source="BlanketOrder" />
+              <Field source="PickDate" />
+              <Boolean source="PickingListCreated" />
+              <Field source="DeliveryDate" title="Delivery Date" />
+              <Field source="DeliveryTerms" title="Delivery Terms{abbr}" />
+            </Group>
+            <Group ref="DimensionGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CopyOrderWizardPage">
+        <Actions all="true" />
+        <Group>
+          <Field source="NewCustomerNumberVar" title="Customer No." />
+          <Field source="NewInventoryNumberVar" title="Warehouse" />
+          <Field source="NewCompanyNumberVar" title="Company No." />
+          <Field source="NewCurrencyVar" title="Currency" />
+          <Field source="NewPriceListVar" title="Price List" />
+          <Field source="NewPriceStepVar" title="Price Step" />
+          <Field source="NewJobNumberVar" title="Job No." />
+          <Field source="NewActivityNumberVar" title="Activity No." />
+          <Field source="NewTaskNameVar" title="Task" />
+          <Boolean source="MaintainPricesVar" title="Maintain Prices" />
+        </Group>
+      </Form>
+      <Form name="CreateOrderWizardPage">
+        <Actions all="true" />
+        <Group>
+          <Reference foreignKey="CustomerNumber_Customer" title="Customer" />
+          <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+        </Group>
+        <Group>
+          <Field source="JobNumber" />
+          <Field source="ActivityNumber" />
+          <Field source="TaskName" />
+        </Group>
+      </Form>
+      
+      
+      <!-- ****************** Order to Customer with Project ******************* -->
+      <Form name="C_CreateOrderWizardCustomerProjectPage1">
+        <Actions all="true" />
+        <Group> 
+          <Field source="JobNumber" title="Project" />
+          <Reference foreignKey="TaskName_TaskListLine" title="Task" />
+        </Group>
+      </Form>
+      <Form name="C_CreateOrderWizardCustomerProjectPage2">
+        <Actions all="true" />
+        <Group> 
+          <Reference foreignKey="CustomerNumber_Customer" title="Customer" />
+          <Field source="Attention" />
+          <Field source="Reference" />
+          <Field source="Currency" />
+          <Field source="Language" title="Invoice Language" />
+          <Field source="GlobalLocationNumber" />
+          <Field source="PriceListNumber" />
+          <Boolean source="InvoiceInJobCost" />
+          <Description template="Due to technical challenges the above fields cannot at the moment be changed from the wizard. After creation of the sales order you can change values in the sales order header." size="large">
+          <Style height="6" />
+          </Description>
+        </Group>
+      </Form>
+      
+      <!-- ****************** Order to Project  ******************* -->
+      <Form name="C_CreateOrderWizardProjectPage1">
+        <Actions all="true" />
+        <Group>
+          <Field source="JobNumber" title="Project" />
+          <Reference foreignKey="TaskName_TaskListLine" title="Task" />
+          <Field source="PriceListNumber" />
+          <Field source="InvoiceInJobCost" />
+          <Description template="Due to technical challenges the above fields cannot at the moment be changed from the wizard. After creation of the sales order you can change values in the sales order header." size="large">
+          <Style height="7" />
+          </Description>
+          <Description template="Remember to change the tick field Invoice in Project Cost in the Project Cost Island on the sales order header." size="large">
+          <Style height="6" />
+          </Description>
+        </Group>
+      </Form>
+      
+      <!-- ******************************************************* -->
+      
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="ItemNumber" />
+          <Field source="ItemText1" />
+          <UnitField source="NumberCredited" unitSource="Unit" />
+          <UnitField source="NumberReturned" unitSource="Unit" />
+          <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" />
+          <UnitField source="DiscountPercentage" unitTitle="%" />
+          <UnitField source="DiscountCurrency" unitSource="parent.Currency" />
+          <UnitField source="LinePriceCurrency" unitSource="parent.Currency" />
+          <Field source="DiscountText" />
+          <Field source="LocationNumber" />
+          <Field source="PriceUnit" />
+          <Field source="NoteNumber" />
+          <Field source="NoteDescriptionVar" title="Note Description" />
+          <Field source="ExternalItemText" />
+          <Field source="InternalText" />
+          <Field source="SupplementaryText1" />
+          <Field source="SupplementaryText2" />
+          <Field source="SupplementaryText3" />
+          <Field source="SupplementaryText4" />
+          <Field source="SupplementaryText5" />
+          <Field source="SupplementaryText6" />
+          <Field source="SupplementaryText7" />
+          <Field source="SupplementaryText8" />
+          <Field source="SupplementaryText9" />
+          <Field source="SupplementaryText10" />
+          <Field source="ItemPopup1" />
+          <Field source="ItemPopup2" />
+          <Field source="ItemPopup3" />
+          <Field source="ItemPopup4" />
+          <Field source="ItemPopup5" />
+          <UnitField source="InitialNumberOrdered" unitSource="Unit" />
+          <Field source="CurrentPriceList" />
+          <Field source="CurrentPriceLevel" />
+          <Field source="MaintainPrice" />
+          <UnitField source="UnitPrice1Currency" unitSource="parent.Currency" />
+          <UnitField source="QuantityDiscountCurrency" unitSource="parent.Currency" />
+          <Field source="BOM" />
+          <Columns ref="DimensionColumns" />
+          <Field source="Length" />
+          <Field source="Width" />
+          <Field source="ActivityNumber" />
+          <Field source="TaskName" />
+          <Field source="DateOrdered" />
+          <Field source="SupplierNumber" />
+          <Field source="SupplierNameVar" title="Vendor Name" />
+          <Field source="CampaignNumber" />
+        </Columns>
+      </Table>
+      <Table name="Standard">
+        <Actions all="true" />
+        <Columns>
+          <Field source="ItemNumber" />
+          <Field source="ItemText1" />
+          <UnitField source="NumberCredited" unitSource="Unit" />
+          <UnitField source="NumberReturned" unitSource="Unit" />
+          <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" />
+          <UnitField source="DiscountPercentage" unitTitle="%" />
+          <UnitField source="DiscountCurrency" unitSource="parent.Currency" />
+          <UnitField source="LinePriceCurrency" unitSource="parent.Currency" />
+          <Field source="DiscountText" />
+          <UnitField source="PriceUnit" unitSource="Unit" />
+          <Field source="ExternalItemText" />
+          <Field source="InternalText" />
+          <UnitField source="InitialNumberOrdered" unitSource="Unit" />
+          <Field source="CurrentPriceList" />
+          <Field source="CurrentPriceLevel" />
+          <Field source="MaintainPrice" />
+          <UnitField source="UnitPrice1Currency" unitSource="parent.Currency" />
+          <UnitField source="QuantityDiscountCurrency" unitSource="parent.Currency" />
+          <Field source="ActivityNumber" />
+          <Field source="TaskName" />
+          <Field source="DateOrdered" />
+          <Field source="SupplierNumber" />
+          <Field source="SupplierNameVar" title="Vendor Name" />
+        </Columns>
+      </Table>
+      <Table name="Custom">
+        <Actions all="true" />
+        <Columns>
+          <Field source="ItemNumber" open="true" />
+          <Field source="ItemText1" open="true" />
+          <Field source="ExternalItemText" open="true" />
+          <UnitField source="NumberOrdered" unitSource="Unit" title="Quantity{Number}" />
+          <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" />
+          <UnitField source="DiscountPercentage" unitTitle="%" open="true" />
+          <UnitField source="DiscountCurrency" unitSource="parent.Currency" />
+          <UnitField source="LinePriceCurrency" unitSource="parent.Currency" title="Line Total" />
+          <UnitField source="PriceUnit" unitSource="Unit" />
+          <Field source="CurrentPriceList" />
+          <UnitField source="NumberInvoiced" unitSource="Unit" />
+          <UnitField source="NumberCredited" unitSource="Unit" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

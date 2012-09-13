@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--bcd662738e22f8f9fa6a37d4ff143eedb0b722b8-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!-- MKJ, 19/04/12: New custom workspace for the RFI Quality Management System.-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_AnalyzerLinkPage" title="Items">
+      <Formation>
+        <Section title="Link to Analyzer Reports">
+        <Mount>
+        	<Card source="Jobs" view="AnalyzerReportsLink" />
+        </Mount>
+        </Section>
+      </Formation>
+  </Workspace>
+</MWSL>
+

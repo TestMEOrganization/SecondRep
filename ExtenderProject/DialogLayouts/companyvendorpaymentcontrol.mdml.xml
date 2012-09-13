@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 29/01/10: OverviewNoCompany view added for Companies workspace (37818).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 03/12/10: Workspace link added to OverviewNoCompany view (39093).-->
+<!-- CSK, 09/12/10: urlEncode strings in links (39203).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 28/06/11: New syntax for links (39747).-->
+<!-- CSK, 18/07/11: Standard form added (39775).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="CompanyVendorPaymentControl">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), Company ^3" arguments="Name1;VendorNumber;SettlingCompany" />
+        </Compact>
+        <Columns>
+          <Field source="VendorNumber" />
+          <Field source="SettlingCompany" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Name3" />
+          <Field source="ZipCode" />
+          <Field source="PostalDistrict" />
+          <Field source="Name4" />
+          <Field source="Name5" />
+          <Field source="Attention" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Vendor{Creditor}">
+              <Field source="VendorNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="OurCustomerNumber" />
+              <Field source="Currency" />
+            </Group>
+            <Group title="Settling Company">
+              <Field source="SettlingCompany" title="Company No." />
+              <Field source="CompanyName1Var" title="Name" />
+              <Field source="BaseCurrencyVar" title="Currency" />
+            </Group>
+            <Group title="Payment Status">
+              <Field source="SelectedForPayment" title="Selected for Payment{Creditor}" />
+              <Field source="NumberSelected" title="No. Entries Selected" />
+              <Field source="NumberOfEntriesBeingPaid" />
+            </Group>
+            <Group title="Bank">
+              <Field source="BankAddress1" title="Address" />
+              <Field source="BankAddress2" appearance="maximized" />
+              <Field source="BankAddress3" appearance="maximized" />
+              <Field source="BankAddress4" appearance="maximized" />
+              <Field source="SWIFTCode" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Pay to Vendor">
+              <Reference foreignKey="CompanyVendorPaymentVendor_Vendor" />
+              <Field source="Name2Var" appearance="maximized" />
+              <Field source="Name3Var" appearance="maximized" />
+            </Group>
+            <Group title="Balance{Saldo}">
+              <Field source="StandardBalanceVar" title="Balance, Currency" />
+              <Field source="BaseBalanceVar" title="Balance, Base" />
+            </Group>
+            <Group title="Payment Control">
+              <Boolean source="StopPayment" />
+              <Field source="PaymentMode" />
+              <Field source="PaymentTerms" title="Pmt. Terms" />
+              <Field source="CashDiscountCode" title="Cash Discount Payment" />
+              <Field source="Giro" title="Giro No." />
+              <Field source="BankRegistrationNumber" />
+              <Field source="BankAccount" />
+              <Field source="PaymentServiceNumber" title="BACS No." />
+              <Field source="CPCNumber" title="CPS No." />
+              <Field source="StandardCardTypeCode" />
+              <Field source="StandardPayerIdentification" />
+              <Boolean source="VAT" />
+              <Field source="CompanyVATCode" />
+              <Field source="EUTradeType" />
+              <Field source="VATNumber" />
+              <Field source="ControlAccountCode" />
+              <Reference foreignKey="CompanyVendorResponsible_Employee" />
+              <Boolean source="AutomaticallyApproved" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Standard">
+        <Actions all="true" />
+        <Column style="fullWidth">
+          <Group title="Payment Control">
+            <Field source="PaymentMode" />
+            <Field source="PaymentTerms" title="Pmt. Terms" />
+            <Field source="CashDiscountCode" title="Cash Discount Payment" />
+            <Field source="Giro" title="Giro No." />
+            <Field source="BankRegistrationNumber" />
+            <Field source="BankAccount" />
+            <Field source="PaymentServiceNumber" title="BACS No." />
+            <Field source="CPCNumber" title="CPS No." />
+            <Field source="StandardCardTypeCode" />
+            <Field source="StandardPayerIdentification" />
+            <Field source="CompanyVATCode" />
+            <Field source="EUTradeType" />
+            <Field source="VATNumber" />
+            <Field source="ControlAccountCode" />
+            <Reference foreignKey="CompanyVendorResponsible_Employee" />
+            <Boolean source="StopPayment" />
+            <Boolean source="VAT" />
+            <Boolean source="AutomaticallyApproved" />
+          </Group>
+          <Group title="Payment Status">
+            <Field source="SelectedForPayment" title="Selected for Payment{Creditor}" />
+            <Field source="NumberSelected" title="No. Entries Selected" />
+            <Field source="NumberOfEntriesBeingPaid" />
+          </Group>
+          <Group title="Bank">
+            <Field source="BankAddress1" title="Address" />
+            <Field source="BankAddress2" appearance="maximized" />
+            <Field source="BankAddress3" appearance="maximized" />
+            <Field source="BankAddress4" appearance="maximized" />
+            <Field source="SWIFTCode" />
+          </Group>
+          <Group title="Balance{Saldo}">
+            <Field source="StandardBalanceVar" title="Balance, Currency" />
+            <Field source="BaseBalanceVar" title="Balance, Base" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Custom_RoleRestricted_OverviewNoCompany" open="hasRole('Finance Admin')">
+        <Row>
+          <Column>
+            <Group title="Vendor{Creditor}" style="fullWidth">
+              <Field source="VendorNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="OurCustomerNumber" />
+              <Field source="Country" />
+              <Field source="Currency" />
+            </Group>
+            <Group>
+              <Link workspace="CompanyVendors" template="More details..." title=" " tooltip="Company specific vendor workspace" appearance="maximized" icon="WorkspaceLink">
+                <Target pane="CompanyVendorInfoCard">
+                  <Restriction template="Selected Vendor" expression="VendorNumber=target.VendorNumber and SettlingCompany=target.SettlingCompany" />
+                  <Focus>
+                    <Match field="VendorNumber" value="VendorNumber" />
+                    <Match field="SettlingCompany" value="SettlingCompany" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Pay to Vendor">
+              <Reference foreignKey="CompanyVendorPaymentVendor_Vendor" />
+              <Field source="Name2Var" appearance="maximized" />
+              <Field source="Name3Var" appearance="maximized" />
+            </Group>
+            <Group title="Balance{Saldo}">
+              <Field source="StandardBalanceVar" title="Balance, Currency" />
+              <Field source="BaseBalanceVar" title="Balance, Base" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="OverviewNoCompany">
+        <Row>
+          <Column>
+            <Group title="Vendor{Creditor}" style="fullWidth">
+              <Field source="VendorNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="OurCustomerNumber" />
+              <Field source="Country" />
+              <Field source="Currency" />
+            </Group>
+            <Group>
+              <Link workspace="CompanyVendors" template="More details..." title=" " tooltip="Company specific vendor workspace" appearance="maximized" icon="WorkspaceLink">
+                <Target pane="CompanyVendorInfoCard">
+                  <Restriction template="Selected Vendor" expression="VendorNumber=target.VendorNumber and SettlingCompany=target.SettlingCompany" />
+                  <Focus>
+                    <Match field="VendorNumber" value="VendorNumber" />
+                    <Match field="SettlingCompany" value="SettlingCompany" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Pay to Vendor">
+              <Reference foreignKey="CompanyVendorPaymentVendor_Vendor" />
+              <Field source="Name2Var" appearance="maximized" />
+              <Field source="Name3Var" appearance="maximized" />
+            </Group>
+            <Group title="Balance{Saldo}">
+              <Field source="StandardBalanceVar" title="Balance, Currency" />
+              <Field source="BaseBalanceVar" title="Balance, Base" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

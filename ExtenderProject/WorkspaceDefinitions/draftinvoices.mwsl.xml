@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--72aa2798c253abd2362d9ed22f354b3b85f4320b-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--d2c88234b293f130b16a76d52b9e25091ae3a305-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!-- AMC, 13/11/09: New workspace: Draft Invoice Editing (38106).-->
+<!-- MJA, 09/08/10: Set names for use in ApproveInvoiceDrafts notification (38255).-->
+<!-- MJA, 17/10/10: Update title (38597).-->
+<!-- JSV, 04/03/11: Show the foundation as an expansion instead of an assistant (39458).-->
+<!-- JSV, 21/06/11: Set parent size to small (39464).-->
+<!-- JSV, 02/09/11: Rename DraftInvoiceEditing to DraftInvoices (39256).-->
+<!-- SBA, 21/11/11: Use of defaultTo for hidden expression (40189).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="DraftInvoices" title="Draft Invoices">
+    <Filter source="InvoiceEditing" name="InvoiceEditing_Filter" view="Custom" title="Draft Invoices">
+      <With>
+        <Card name="InvoiceEditing_Card" hidden="not parent.parent.parent.ApprovedForInvoiceEditing defaultTo false" >
+          <Expansions parentSize="small">
+            <With>
+              <Table title="Specification" />
+            </With>
+            <Restrict reversedForeignKey="InvoiceEditingHeader">
+              <Filter source="API_DraftInvoiceEntry" view="Demo" title="Foundation" />
+            </Restrict>
+          </Expansions>
+        </Card>
+      </With>
+    </Filter>
+  </Workspace>
+</MWSL>
+

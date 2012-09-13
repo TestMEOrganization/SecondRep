@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--3dcd6fba7dd5a70bb4dc56f06904aca69cda4b4b-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--7a9abbfdce529478171c0cfae5ddc18a440f8339-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 9ce4e52f75ac9c09eca7b0b000acd24d   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:10
+  TAC*MaconomyHQ: yes
+-->
+<!-- KRN, 08/10/09: New window (38086). -->
+<!-- KRN, 03/11/09: Demo layout (38091). -->
+<!-- KRN, 12/11/09: Demo layout (38109). -->
+<!-- KRN, 26/11/09: No wizard for creating job (38091). -->
+<!-- KRN, 09/12/09: Original layout according to mdl (38109). -->
+<!-- KRN, 03/01/10: Amounts in currencies (38261). -->
+<!-- KRN, 03/01/10: Current budget details (38262). -->
+<!-- KRN, 24/02/10: Revenue recognized amount (38304). -->
+<!-- KRN, 24/02/10: Invoice on account amounts (38305). -->
+<!-- KRN, 25/02/10: Job progress values (38313). -->
+<!-- KRN, 24/03/10: Show name of main job (38383). -->
+<!-- KRN, 26/03/10: Revenue recognized date (38390). -->
+<!-- KRN, 26/03/10: Job progress fields removed (38391). -->
+<!-- KRN, 26/03/10: Job invoiceable setup (38387). -->
+<!-- KRN, 21/04/10: Fixed price setup (38392). -->
+<!-- CSK, 22/04/10: Demo_Company view added for Companies workspace (37818). -->
+<!-- KRN, 26/04/10: Further job budget details (38385). -->
+<!-- KRN, 27/04/10: Next invoicing plan line date (38389). -->
+<!-- KRN, 22/06/10: Invoice selection status (38388).-->
+<!-- KRN, 24/06/10: Time and expense dates (38386).-->
+<!-- KRN, 24/06/10: Time and expense details (38586).-->
+<!-- KRN, 25/06/10: Expense sheet cost (38592).-->
+<!-- KRN, 14/07/10: Simple use of style (38667).-->
+<!-- KRN, 13/08/10: Demo layout updated (38644).-->
+<!-- KRN, 24/08/10: Job and budget Factor (38757).-->
+<!-- KRN, 26/08/10: Purchase orders information (38769).-->
+<!-- KRN, 26/08/10: Improve layout looks (38769).-->
+<!-- KRN, 13/09/10: JobHome demo view name updated (38735).-->
+<!-- KRN, 15/09/10: Job factor revenue recognized added and styles from definitions (38862).-->
+<!-- KRN, 07/10/10: Field instead of grid for single element and dynamic invoicing (38930).-->
+<!-- KRN, 08/10/10: Job Invoice Allocation (38939).-->
+<!-- KRN, 11/10/10: Field instead of grid for job progress (38930).-->
+<!-- JSV, 12/10/10: Rename Reference to Baseline (38942).-->
+<!-- KRN, 13/10/10: Include all metrics in original layout (38930).-->
+<!-- KRN, 13/10/10: Size and height of job progress fields (38930).-->
+<!-- KRN, 15/10/10: Job activity details (38953).-->
+<!-- KRN, 18/10/10: Job revenue recognition details (38955).-->
+<!-- KRN, 18/11/10: Reference supplement fields instead of pair (38986).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 03/12/10: Demo_Company renamed to OverviewNoCompany (39093).-->
+<!-- CSK, 09/12/10: urlEncode strings in links (39203).-->
+<!-- JSV, 10/12/10: Label style (39211).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- KRN, 21/12/10: Readonly jobhome demo layout (38644).-->
+<!-- SBA, 21/12/10: Layout improvements (38607).-->
+<!-- SBA, 25/05/11: Adding Evaluation status field (39608). -->
+<!-- CSK, 28/06/11: New syntax for links (39747).-->
+<!-- PSZ, 11/07/11: PSO Jobs workspace changes (39759).-->
+<!-- CSK, 12/07/11: OverviewNoCompany form renamed to Overview (39763).-->
+<!-- JSV, 14/07/11: Apply style alignRight to Standard form (39770). -->
+<!-- CSK, 22/07/11: Alignment adjustments (39781).-->
+<!-- SBA, 16/08/11: Use compact_amountAlignment (39770). -->
+<!-- PSZ, 15/08/11: Improved links in Standard form (39850).-->
+<!-- JSV, 18/08/11: Icon on links (39862).-->
+<!-- SBA, 30/08/11: Use specialized colors for DialChartWidget (39770). -->
+<!-- MJA, 19/09/11: Add Integration Status information (39881).-->
+<!-- MJA, 18/10/11: Remove duplicate Integration Status information (40076).-->
+<!-- KRN, 17/11/11: Actual ending date and closed (40075).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JobOverview">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="JobName;JobNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="JobGroup" />
+          <Field source="NotInvoiceable" />
+          <Field source="InternalJob" />
+          <Field source="Status" />
+          <Field source="ConvertedBy" />
+          <Field source="ConversionDate" />
+          <Field source="ProjectManagerNumber" />
+          <Field source="SalesPersonNumber" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <Pane>
+      <Define>
+        <!-- **** Rambøll - GD_Dimensions added for Black Box pane using on the definitions **** -->
+        <Include fragment="GD_Dimensions" />
+        <Function name="NonApprovedHoursWithBillingPrice" value="TimeNonApprovedBillingPriceCurrencyVar gt 0" />
+        <Style name="NonApprovedHoursWithBillingPrice" ref="trafficlightRed" condition="NonApprovedHoursWithBillingPrice()" />
+        <Function name="InvoicingIsWrittenDown" value="TotalBillingPriceUpDownCurrencyVar lt 0" />
+        <Style name="InvoicingIsWrittenDown" ref="trafficlightRed" condition="InvoicingIsWrittenDown()" />
+        <Function name="InvoicingIsWrittenUp" value="TotalBillingPriceUpDownCurrencyVar gt 0" />
+        <Style name="InvoicingIsWrittenUp" ref="trafficlightGreen" condition="InvoicingIsWrittenUp()" />
+        <Function name="InvoicingPlanLineDue" value="NextInvoicingPlanLineDateVar le currentDate() and NextInvoicingPlanLineDateVar != date(nulldate)" />
+        <Style name="InvoicingPlanLineDue" ref="trafficlightRed" condition="InvoicingPlanLineDue()" />
+        <Function name="HasProjectManagerTimeApproval" value="ApprovalProjectManager = ApprovalPrincipleType'Optional or ApprovalProjectManager = ApprovalPrincipleType'Mandatory" />
+        <Function name="HasProjectManagerExpenseApproval" value="ApprProjectManagerExpenses = ApprovalPrincipleType'Optional or ApprProjectManagerExpenses = ApprovalPrincipleType'Mandatory" />
+        <Widget name="RealizedFactorDialChart" source="DialChartWidget">
+          <Dimension start="0" end="3">
+            <Region start="0" end="1.5" style="redDialColor" />
+            <Region start="1.5" end="2.0" style="greyDialColor" />
+            <Region start="2.0" end="3" style="greenDialColor" />
+          </Dimension>
+        </Widget>
+        <Function name="deltaxy" value="y-x" parameters="x y" />
+        <Function name="deltaXYZ" value="x-y-z" parameters="x y z" />
+        <Function name="sumXYZ" value="x+y+z" parameters="x y z" />
+        <Function name="divXY" value="x/y" parameters="x y" />
+        <Function name="profitability" value="(x-y)/z" parameters="x y z" />
+        <Style name="HighlightNegative" ref="trafficlightForegroundRed" condition="fieldValue() lt 0" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Job">
+              <Reference foreignKey="JobNumber_JobHeader" descriptionSuggestions="none" keySuggestions="none" />
+              <Field source="Currency" />
+              <Field source="JobInvoiceableVar" />
+              <Field source="JobGroup" />
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+              <Reference foreignKey="MainJobNumber_JobHeader" title="Main Job" />
+              <Field source="NumberOfSubJobs" />
+              <Field source="Closed" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Customer">
+              <Reference foreignKey="CustomerNumber_Customer" descriptionSource="Name1" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrency" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Dates">
+              <Field source="StartingDate" />
+              <Field source="ExpectedEndingDate" />
+              <Field source="ActualEndingDate" />
+            </Group>
+            <Group title="Price">
+              <Field source="InvoicingPrincipleVar" />
+              <Field source="FixedPriceBasisVar" />
+              <Field source="FixedPriceBudgetTypeVar" />
+              <Field source="FixedPriceCurrencyVar" />
+              <Field source="QuotationPriceCurrency" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Current Budget">
+              <Field source="CurrentBudgetCreatedVar" title="Created" />
+              <Field source="CurrentBudgetTypeVar" title="Budget Type" />
+              <Field source="CurrentBudgetRevisionNumberVar" title="Revision No." />
+              <Field source="CurrentBudgetCostPriceBaseVar" title="Cost Price" />
+              <Field source="CurrentBudgetBillingPriceCurrencyVar" title="Billing Price, Currency" />
+              <Field source="CurrentBudgetBillingPriceBaseVar" title="Billing Price, Base" />
+              <Field source="CurrentBudgetGrossMargin1BaseVar" title="Gross Margin, Base" />
+              <Field source="CurrentBudgetPercGrossMargin1Var" title="Gross Margin Percentage" />
+              <Field source="CurrentBudgetMarkUpPercentageVar" title="Markup Percentage" />
+              <Field source="CurrentBudgetSubmittedVar" title="Submitted" />
+              <Field source="CurrentBudgetSubmittedByVar" title="Submitted by" />
+              <Field source="CurrentBudgetDateSubmittedVar" title="Date Submitted" />
+              <Field source="CurrentBudgetApprovedVar" title="Approved" />
+              <Field source="CurrentBudgetApprovedByVar" title="Approved by" />
+              <Field source="CurrentBudgetApprovalDateVar" title="Date Approved" />
+              <If condition="hasAddOn(128) and IntegrationStatusLastSentVar != ''">
+                <Field source="IntegrationStatusLastSentVar" />
+              </If>
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Time Registrations">
+              <Field source="TimeNumberRegisteredVar" />
+              <Field source="TimeCostPriceRegBaseVar" title="Cost Price Reg., Base" />
+              <Field source="TimeBillingPriceRegCurrencyVar" title="Billing Price Reg., Currency" />
+              <Field source="LatestTimeSheetRegistrationsVar" />
+              <Field source="LastDateProjectManagerTimeApprovalVar" />
+              <Label title="Invoiced" style="label" appearance="maximized" />
+              <Field source="TimeNumberInvoicedVar" />
+              <Field source="TimeNumberUpDownVar" />
+              <Field source="TimeBillingPriceInvoicedCurrencyVar" title="Billing Price Invoiced, Currency" />
+              <Field source="TimeBillingPriceUpDownCurrencyVar" title="Billing Price Up/Down, Currency" />
+              <Field source="TimeCostPriceInvoicedBaseVar" title="Cost Price Invoiced, Base" />
+              <Label title="Open" style="label" appearance="maximized" />
+              <Field source="TimeNumberOpenVar" />
+              <Field source="TimeBillingPriceOpenCurrencyVar" title="Billing Price, Currency" />
+              <Field source="TimeCostPriceOpenBaseVar" title="Cost Price, Base" />
+              <Label title="Non Approved Time Sheets" style="label" appearance="maximized" />
+              <Field source="TimeNonApprovedBillingPriceCurrencyVar" title="Billing Price, Currency" />
+              <Label title="Non Submitted Time Sheets" style="label" appearance="maximized" />
+              <Field source="TimeNumberOfNotSubmittedVar" title="Number of Hours" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Amount Registrations">
+              <Field source="AmountCostPriceRegBaseVar" title="Cost Price Reg., Base" />
+              <Field source="AmountBillingPriceRegCurrencyVar" title="Billing Price Reg., Currency" />
+              <Field source="LatestExpenseSheetRegistrationsVar" />
+              <Field source="LatestMileageSheetRegistrationsVar" />
+              <Field source="LastDateProjectManagerExpenseApprovalVar" />
+              <Label title="Invoiced" style="label" appearance="maximized" />
+              <Field source="AmountBillingPriceInvoicedCurrencyVar" title="Billing Price Invoiced, Currency" />
+              <Field source="AmountBillingPriceUpDownCurrencyVar" title="Billing Price Up/Down, Currency" />
+              <Field source="AmountCostPriceInvoicedBaseVar" title="Cost Price Invoiced, Base" />
+              <Label title="Open Entries" style="label" appearance="maximized" />
+              <Field source="AmountBillingPriceOpenCurrencyVar" title="Open Billing Price, Currency" />
+              <Field source="AmountCostPriceOpenBaseVar" title="Open Cost Price, Base" />
+              <Label title="Non Approved Expense Sheets" style="label" appearance="maximized" />
+              <Field source="AmountNonApprovedBillingPriceCurrencyVar" title="Billing Price, Currency" />
+              <Field source="AmountNonApprovedCostPriceExVATBaseVar" title="Cost Price Excl. Tax, Base" />
+              <Label title="Non Approved Mileage Sheets" style="label" appearance="maximized" />
+              <Field source="MileageNonApprovedBillingPriceCurrencyVar" title="Billing Price, Currency" />
+              <Field source="MileageNonApprovedCostPriceExVATBaseVar" title="Cost Price Excl. Tax, Base" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Billing">
+              <Field source="TotalBillingPriceUpDownCurrencyVar" />
+            </Group>
+            <If condition="InvoiceAllocation">
+              <Group title="Job Invoice Allocation">
+                <Field source="InvoiceAllocationBillingPriceCurrencyVar" title="Allocated, Total, Currency" />
+                <Label title="Gross Margin" style="label" appearance="maximized" />
+                <Field source="InvoiceAllocationGrossMarginBaseVar" title="Gross Margin, Base" />
+                <Field source="InvoiceAllocationGrossMarginPercentageVar" title="Gross Margin Percentage" />
+                <Field source="InvoiceAllocationMarkUpPercentageVar" title="Markup Percentage" />
+              </Group>
+            </If>
+            <If condition="ToBeInvoicedOnMainJobVar">
+              <Group title="Invoiced on Main Job">
+                <Field source="OpenForInvoiceSelection" title="Open for Selection" />
+                <Field source="ApprovedForInvoicingOnMainJob" title="Appr. for Inv. on Main Job" />
+                <Field source="ApprovedForInvoicingBy" title="Approved by" />
+                <Field source="ApprovedForInvoicingDate" title="Approval Date" />
+              </Group>
+            </If>
+            <Else>
+              <Group title="Invoice Selection Status">
+                <Field source="OpenForInvoiceSelection" title="Open for Selection" />
+                <Field source="IncludesSubJobsVar" />
+                <Field source="CarryForwardCurrencyVar" />
+                <Pair firstSource="ApprovedForInvoiceEditing" secondSource="NumberOfDraftsForEditingVar" title="Drafts for Editing" />
+                <Pair firstSource="ApprovedForInvoicing" secondSource="NumberOfApprovedDraftsVar" title="Approved for Invoicing" />
+                <Field source="ApprovedForInvoicingBy" title="Approved by" />
+                <Field source="ApprovedForInvoicingDate" title="Approval Date" />
+              </Group>
+            </Else>
+            <Group title="Revenue Recognition">
+              <Field source="RevenueRecognitionJobParameterVar" title="Job Parameter Setup" />
+              <Field source="TotalRevenueRecognizedCurrencyVar" title="Revenue Recognized, Currency" />
+              <If condition="RecognizeRevenueByCompletionPctVar">
+                <Label title="Completion Percentage" style="label" appearance="maximized" />
+                <Field source="LastDateOfRevenueRecognizedVar" />
+                <Field source="CompletionPctBudgetTypeVar" title="Budget Type" />
+                <Field source="PercentageRevenueRecognizedVar" title="Completion Percentage" />
+                <Field source="RevenueRecognizedByCompletionPctCurrencyVar" title="Revenue Recognized" />
+              </If>
+              <If condition="EvaluationOfWorkInProgressVar">
+                <Label title="Evaluation of WIP" style="label" appearance="maximized" />
+                <Field source="WIPEvaluationDateVar" />
+                <Field source="ApprovedWorkInProgressCurrencyVar" />
+              </If>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Invoicing">
+              <Field source="LastInvoiceDate" />
+              <Field source="InvoiceBillingPriceCurrencyVar" />
+              <Label title="Invoicing on Account" style="label" appearance="maximized" />
+              <Field source="TotalInvoicedOnAccountCurrencyVar" />
+              <Field source="JobNetOnAccountCurrencyVar" />
+              <Field source="CollectionNetOnAccountCurrencyVar" />
+              <Field source="NextInvoicingPlanLineDateVar" />
+              <Field source="NextInvoicingPlanLinePhaseVar" />
+              <Label title="Gross Margin" style="label" appearance="maximized" />
+              <Field source="InvoiceGrossMarginBaseVar" />
+              <Field source="InvoiceGrossMarginPercentageVar" />
+              <Field source="InvoiceMarkUpPercentageVar" />
+            </Group>
+            <Group title="Customer Balance (Incl. Tax)">
+              <Field source="JobCustomersBalanceBaseVar" />
+              <Field source="JobCustomersBalanceDueBaseVar" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Factor">
+              <Field source="CurrentBudgetFactorVar" />
+              <Field source="JobFactorRegVar" />
+              <Field source="JobFactorInvoicedVar" />
+              <Field source="JobFactorRevenueRecognizedVar" />
+            </Group>
+            <Group title="Purchase Orders">
+              <Field source="CommittedPurchaseOrdersCurrencyVar" title="Committed, Currency" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Latest Approved Progress Evaluation">
+              <Field source="JobProgressUnitOfMeasureVar" />
+              <Field source="JobProgressShowOriginalFiguresVar" />
+              <Field source="JobProgressEstimateDateVar" />
+              <Field source="JobProgressPlannedVar" />
+              <Field source="JobProgressExecutedVar" />
+              <Field source="JobProgressEstimatedTimeToCompVar" />
+              <Field source="JobProgressEstimatedTimeToCompManDaysVar" />
+              <Field source="JobProgressTotalVar" />
+              <Field source="JobProgressDeviationVar" />
+              <Field source="JobProgressAccumulatedDeviationVar" />
+              <Field source="JobProgressBaselineVar" />
+              <Field source="JobProgressBaselineDeviationVar" />
+              <Field source="JobProgressCompletionPercentageVar" />
+              <Field source="JobProgressRemarkVar" style="MultilineDescription" />
+              <Field source="JobProgressEvaluationStatusVar" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <!-- **** Rambøll customization - Changes made to look and feel of overview **** -->
+      <Form name="Standard" style="compact_amountAlignment">
+        <Actions>
+          <Refresh />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Basic Information">
+              <Description title="Job Name" template="^1 (^2)" arguments="JobName;JobNumber" size="huge" />
+              <Description title="Customer" template="^1 (^2)" arguments="Name1;CustomerNumber" size="huge" />
+            </Group>
+            <Group title="Overall KPI">
+              <Style anchor="left" justify="left" />
+              <Description title="Profitability" template="" />
+              <Element source="JobFactorRevenueRecognizedVar" widget="RealizedFactorDialChart" title="Profitability" appearance="maximized" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Project Financials">
+              <Grid>
+                <Define>
+                  <!-- <Description name="CostPriceTime_Bud" template="^1" arguments="parent.primary->JobBudgets_Card.ShownCostPriceTimeVar" />
+					<Description name="CostPriceAmount_Bud" template="^1" arguments="parent.primary->JobBudgets_Card.CostPriceAmountVar" /> -->
+                  <Description name="CostPriceTime_Bud" template="^1" arguments="parent.TimeBudgetedCostPriceBase" />
+                  <Description name="CostPriceAmount_Bud" template="^1" arguments="parent.AmountBudgetedCostPriceBase" />
+                  <!-- <Description name="RemainRevBud" template="^1" arguments="deltaxy(TotalRevenueRecognizedBaseVar,BaselineBudgetBillingPriceCurrencyVar)" /> -->
+                  <Description name="RemainRevBud" template="^1" arguments="deltaxy(TotalRevenueRecognizedBaseVar,BaselineBudgetBillingPriceBaseVar)" />
+                  <Description name="RemainTimeCostBud" template="^1" arguments="deltaxy(TimeCostPriceRegBaseVar,parent.TimeBudgetedCostPriceBase)" />
+                  <Description name="RemainAmountCostBud" template="^1" arguments="deltaxy(AmountCostPriceRegBaseVar,parent.AmountBudgetedCostPriceBase)" />
+                  <Description name="Result_Actuals" template="^1" arguments="deltaXYZ(TotalRevenueRecognizedBaseVar,TimeCostPriceRegBaseVar,AmountCostPriceRegBaseVar)" />
+                  <Description name="Result_Bud" template="^1" arguments="deltaXYZ(BaselineBudgetBillingPriceBaseVar,parent.TimeBudgetedCostPriceBase,parent.AmountBudgetedCostPriceBase)" />
+                  <Description name="Result_RemainBud" template="^1" arguments="deltaXYZ(deltaxy(TotalRevenueRecognizedBaseVar,BaselineBudgetBillingPriceBaseVar),deltaxy(TimeCostPriceRegBaseVar,parent.TimeBudgetedCostPriceBase),deltaxy(AmountCostPriceRegBaseVar,parent.AmountBudgetedCostPriceBase))" />
+                  <Description name="FF_Actuals" template="^1" arguments="divXY(TimeRevenueRecognizedBaseVar,TimeCostPriceRegBaseVar)" />
+                  <Description name="FF_Budget" template="^1" arguments="divXY(BaselineBudgetBillingPriceBaseVar,parent.TimeBudgetedCostPriceBase)" />
+                  <Description name="Profit_Actuals" template="^1" arguments="profitability(TotalRevenueRecognizedBaseVar,AmountCostPriceRegBaseVar,TimeCostPriceRegBaseVar)" />
+                  <Description name="Profit_Budget" template="^1" arguments="profitability(BaselineBudgetBillingPriceBaseVar,parent.AmountBudgetedCostPriceBase,parent.TimeBudgetedCostPriceBase)" />
+                  <Description name="CompletePercent" template="^1%" arguments="PercentageRevenueRecognizedVar" />
+                  <Description name="FeePerHourVar" template="^1" arguments="divXY(TotalRevenueRecognizedBaseVar,TimeNumberRegisteredVar)" />
+                </Define>
+                <Row title="" cells="|Actuals|;|Budget|;|Remaining budget|" style="grid_header" />
+                <Row title="Project revenue" cells="TotalRevenueRecognizedBaseVar;BaselineBudgetBillingPriceBaseVar;RemainRevBud" />
+                <Row title="Cost, time" cells="TimeCostPriceRegBaseVar;CostPriceTime_Bud;RemainTimeCostBud" />
+                <Row title="Cost, amount" cells="AmountCostPriceRegBaseVar;CostPriceAmount_Bud;RemainAmountCostBud" />
+                <!-- <Row cells="||||______________________________________________________________________________________||||" /> -->
+                <Row title="Project result       " cells="Result_Actuals;Result_Bud;Result_RemainBud" style="highlightFieldGrey" />
+                <Row title="" cells="_;_;_" />
+                <Row title="Fee Factor" cells="FF_Actuals;FF_Budget;_" />
+                <Row title="Profitability" cells="Profit_Actuals;Profit_Budget;_" />
+                <Row title="Fee per hour" cells="FeePerHourVar" />
+                <Row title="Completion Pct." cells="CompletePercent;_;_" />
+                <Row title="(This Comp. % is based on the calculation of POC per Task)" cells="_;_;_" />
+              </Grid>
+              <!-- 
+					<Field source="TimeRevenueRecognizedBase" />
+					<Field source="BaselineBudgetBillingPriceBaseVar" /> -->
+              <Link workspace="Jobs" template="Budget Details" icon="WorkspaceLink" appearance="maximized">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+                <Waypoint pane="Jobs_Filter">
+                  <Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+                  <Focus>
+                    <Match value="JobNumber" field="JobNumber" />
+                  </Focus>
+                </Waypoint>
+                <Target pane="JobBudgets_Card" />
+              </Link>
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Time">
+              <Field source="TimeNumberRegisteredVar" />
+              <UnitField source="TimeBillingPriceOpenBaseVar" unitSource="BaseCurrency" title="Open Billing Price, Time" />
+              <UnitField source="TimeCostPriceOpenBaseVar" unitSource="BaseCurrency" title="Open Cost Price, Time" />
+              <UnitField source="TimeBillingPriceRegBaseVar" unitSource="BaseCurrency" title="Billing Price Registered, Time" />
+              <UnitField source="TimeCostPriceRegBaseVar" unitSource="BaseCurrency" title="Cost Price Registered, Time" />
+              <Link template="Time Report" icon="WorkspaceLink" appearance="maximized">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+		        <Url value="urlOpenReportingServer() + '/_layouts/ReportServer/RSViewerPage.aspx'">
+		          <Query field="rv:RelativeReportUrl" value="/Reports/Time.rdl" />
+		          <!-- <Query field="rv:ToolBarItemsDisplayMode" value="^1" arguments="223" />
+		          <Query field="rv:ParamMode" value="^1" arguments="'hidden'" /> -->
+		          <Query field="rv:HeaderArea" value="^1" arguments="'none'" />
+		          <Query field="rp:Project" value="^1" arguments="parent.JobNumber" />
+		          <Query field="rp:Employee" value="^1" arguments="username()" />
+		        </Url>
+              </Link>
+            </Group>
+            <!-- <Group title="Non Approved Time">
+						<If condition="HasProjectManagerTimeApproval()">
+							<Link workspace="Jobs" template="Time Approval" icon="WorkspaceLink" appearance="maximized">
+								<Waypoint pane="Jobs_Filter">
+									<Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+									<Focus>
+										<Match value="JobNumber" field="JobNumber" />
+									</Focus>
+								</Waypoint>
+								<Target pane="ApproveTimeSheetLines_Card" />
+							</Link>
+						</If>
+						<UnitField source="TimeNonApprovedBillingPriceBaseVar" unitSource="BaseCurrency" title="Billing Price, Time" />
+					</Group> -->
+            <Group title="Expenses">
+              <!-- <UnitField source="AmountCostPriceOpenBaseVar" unitSource="BaseCurrency" title="Open Cost Price, Amount" /> -->
+              <UnitField source="AmountCostPriceOpenBaseVar" unitSource="BaseCurrency" title="Not invoiced outlays" />
+              <!-- <UnitField source="AmountBillingPriceOpenBaseVar" unitSource="BaseCurrency" title="Open Billing Price, Amount" /> -->
+              <Link template="Basware" icon="WorkspaceLink" appearance="maximized">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+                <Url value="urlOpenReportingServer() + '/_layouts/ReportServer/RSViewerPage.aspx'">
+                  <!-- <Query field="rv:RelativeReportUrl" value="/Reports/Time%20Report.rdl" />
+								<Query field="rv:ToolBarItemsDisplayMode" value="^1" arguments="223" />
+								<Query field="rv:ParamMode" value="^1" arguments="'hidden'" />
+								<Query field="rv:HeaderArea" value="^1" arguments="'none'" /> -->
+                </Url>
+              </Link>
+            </Group>
+            <!-- <Group title="Non Approved Expenses">
+						<If condition="HasProjectManagerExpenseApproval()">
+							<Link workspace="Jobs" template="Expense Approval" icon="WorkspaceLink" appearance="maximized">
+								<Waypoint pane="Jobs_Filter">
+									<Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+									<Focus>
+										<Match value="JobNumber" field="JobNumber" />
+									</Focus>
+								</Waypoint>
+								<Target pane="ApproveExpenseSheetLines_Card" />
+							</Link>
+						</If>
+						<UnitField source="AmountNonApprovedBillingPriceBaseVar" unitSource="BaseCurrency" title="Billing Price, Amount" />
+					</Group> -->
+          </Column>
+          <Column>
+            <!-- <Group title="Current Budget">
+						<Link workspace="Jobs" template="Budget Details" icon="WorkspaceLink" appearance="maximized">
+							<Waypoint pane="Jobs_Filter">
+								<Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+								<Focus>
+									<Match value="JobNumber" field="JobNumber" />
+								</Focus>
+							</Waypoint>
+							<Target pane="JobBudgets_Card" />
+						</Link>
+						<UnitField source="CurrentBudgetBillingPriceBaseVar" unitSource="BaseCurrency" title="Billing Price" />
+						<UnitField source="CurrentBudgetCostPriceBaseVar" unitSource="BaseCurrency" title="Cost Price" />					
+					</Group> -->
+            <If condition="not NotInvoiceable">
+              <Group title="Invoicing">
+                <!-- <UnitField source="FixedPriceBaseVar" unitSource="BaseCurrency" title="Fixed Price" />  MKJ -->
+                <Field source="LastInvoiceDate" />
+                <UnitField source="InvoiceBillingPriceBaseVar" unitSource="BaseCurrency" title="Invoiced, Total" />
+                <UnitField source="TotalBillingPriceUpDownBaseVar" unitSource="BaseCurrency" title="Billing Price Up/Down, Total" />
+                <UnitField source="JobNetOnAccountBaseVar" unitSource="BaseCurrency" title="Net Invoiced on Account" />
+                <Field source="NextInvoicingPlanLineDateVar" title="Next Invoicing Date, Planned" />
+                <Field source="NumberOfInvoicings" title="No. of Invoices" />
+                <Field source="NumberOfInvoices" title="No. of Copies" />
+                <Field source="NumberOfCreditings" title="No. of Creditings" />
+                <Field source="NumberOfCreditMemos" title="No. of Credit Memo Printouts" />
+                <Link workspace="Jobs" template="Invoice History" icon="WorkspaceLink" appearance="maximized">
+                  <Style linkForegroundColor="rgb=161,191,54">
+                    <Label linkForegroundColor="rgb=161,191,54" />
+                  </Style>
+                  <Waypoint pane="Jobs_Filter">
+                    <Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+                    <Focus>
+                      <Match value="JobNumber" field="JobNumber" />
+                    </Focus>
+                  </Waypoint>
+                  <Target pane="InvoiceHistory_Table" />
+                </Link>
+              </Group>
+            </If>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Group title="Outstanding incl. VAT">
+              <UnitField source="JobCustomersBalanceBaseVar" unitSource="BaseCurrency" title="Customer Balance" />
+              <UnitField source="JobCustomersBalanceDueBaseVar" unitSource="BaseCurrency" title="Customer Balance, Due" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Job Dates">
+              <Field source="StartingDate" />
+              <Field source="ExpectedEndingDate" />
+              <Field source="Closed" />
+              <!-- <Field source="ActualEndingDate" /> MKJ -->
+            </Group>
+            <Group title="Main/Sub Project">
+              <Field source="MainJobNumber" />
+              <Field source="NumberOfSubJobs" />
+              <!-- <Field source="ActualEndingDate" /> MKJ -->
+            </Group>
+
+            <!-- <Group title="Currency">
+						<Field source="BaseCurrency" />
+						<Field source="Currency" />
+						<Field source="InvoiceCurrency" />
+					</Group>
+					<Group title="Latest Approved Progress Evaluation">
+						<Field source="JobProgressUnitOfMeasureVar" />
+						<Field source="JobProgressEstimateDateVar" />
+						<Field source="JobProgressBaselineVar" />
+						<Field source="JobProgressExecutedVar" />
+						<Field source="JobProgressEstimatedTimeToCompVar" />
+						<Field source="JobProgressTotalVar" />
+						<Field source="JobProgressCompletionPercentageVar" />
+						<Field source="JobProgressBaselineDeviationVar" />
+						<Field source="JobProgressRemarkVar" style="MultilineDescription" />
+					</Group>  MKJ -->
+          </Column>
+        </Row>
+        <!-- <Column>
+					<Group title="Profitability">
+						<If condition="hasAnalytix()">
+							<Link workspace="Jobs" template="Job Profitability" icon="ReportLink" appearance="maximized">
+								<Waypoint pane="Jobs_Filter">
+									<Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+									<Focus>
+										<Match value="JobNumber" field="JobNumber" />
+									</Focus>
+								</Waypoint>
+								<Target pane="JobProfitability_Budget" />
+							</Link>
+						</If>
+						<UnitField source="TotalRevenueRecognizedBaseVar" unitSource="BaseCurrency" title="Revenue Recognized, Total" />
+					</Group>
+					<Group title="A/R. This Job Only (Incl. Tax)">
+						<If condition="hasAnalytix()">
+							<Link workspace="Jobs" template="A/R Transactions" icon="ReportLink" appearance="maximized">
+								<Waypoint pane="Jobs_Filter">
+									<Restriction template="Selected Job" expression="JobNumber = target.JobNumber" />
+									<Focus>
+										<Match value="JobNumber" field="JobNumber" />
+									</Focus>
+								</Waypoint>
+								<Target pane="ARTransactions" />
+							</Link>
+						</If>
+						<UnitField source="JobCustomersBalanceBaseVar" unitSource="BaseCurrency" title="Customer Balance" />
+						<UnitField source="JobCustomersBalanceDueBaseVar" unitSource="BaseCurrency" title="Customer Balance Due" />
+					</Group>
+					<Group title="Job Dates">
+						<Field source="StartingDate" />
+						<Field source="ExpectedEndingDate" />
+						<Field source="Closed" />
+						<Field source="ActualEndingDate" /> MKJ
+					</Group>
+					<If condition="hasAddOn(128) and (maconomy:stringSysInfo('IntegrationStatusNoteType')!='')">
+						<Group title="People Planner">
+							<Field source="IntegrationStatusBudgetTypeTitleVar" />
+							<Field source="IntegrationStatusLastSentVar" />
+						</Group>
+					</If>
+				</Column> -->
+        <!-- </Row> -->
+      </Form>
+      <Form name="Custom_RoleRestricted_Overview" open="hasRole('Finance Admin')">
+        <Parameters>
+          <Parameter name="ShowCustomerPar" type="boolean" />
+          <Parameter name="ShowCompanyPar" type="boolean" />
+        </Parameters>
+        <Row>
+          <Column>
+            <Group title="Job" style="fullWidth">
+              <Reference foreignKey="JobNumber_JobHeader" descriptionSuggestions="none" keySuggestions="none" />
+              <If condition="ShowCustomerPar">
+                <Reference foreignKey="CustomerNumber_Customer" descriptionSource="Name1" />
+              </If>
+              <If condition="ShowCompanyPar">
+                <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+              </If>
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+              <Field source="Description1" title="Description" />
+              <Field source="JobGroup" />
+              <Field source="DepartmentNumber" />
+            </Group>
+            <Group>
+              <Link workspace="Jobs" template="More details..." title=" " tooltip="Job workspace" appearance="maximized" icon="WorkspaceLink">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+                <Target pane="Jobs_Filter">
+                  <Restriction template="Selected Job" expression="JobNumber=target.JobNumber" />
+                  <Focus>
+                    <Match field="JobNumber" value="JobNumber" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Invoiced" style="amountAlignment">
+              <Field source="LastInvoiceDate" />
+              <Field source="InvoiceBillingPriceCurrencyVar" />
+              <Field source="JobNetOnAccountCurrencyVar" />
+              <Field source="TotalBillingPriceUpDownCurrencyVar" style="InvoicingIsWrittenDown,InvoicingIsWrittenUp" />
+            </Group>
+            <Group title="Revenue">
+              <Field source="InvoiceGrossMarginBaseVar" />
+              <Field source="InvoiceGrossMarginPercentageVar" />
+              <Field source="InvoiceMarkUpPercentageVar" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Overview">
+        <Parameters>
+          <Parameter name="ShowCustomerPar" type="boolean" />
+          <Parameter name="ShowCompanyPar" type="boolean" />
+        </Parameters>
+        <Row>
+          <Column>
+            <Group title="Job" style="fullWidth">
+              <Reference foreignKey="JobNumber_JobHeader" descriptionSuggestions="none" keySuggestions="none" />
+              <If condition="ShowCustomerPar">
+                <Reference foreignKey="CustomerNumber_Customer" descriptionSource="Name1" />
+              </If>
+              <If condition="ShowCompanyPar">
+                <Reference foreignKey="CompanyNumber_CompanyInformation" title="Company" />
+              </If>
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+              <Field source="Description1" title="Description" />
+              <Field source="JobGroup" />
+              <Field source="DepartmentNumber" />
+            </Group>
+            <Group>
+              <Link workspace="Jobs" template="More details..." title=" " tooltip="Job workspace" appearance="maximized" icon="WorkspaceLink">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+                <Target pane="Jobs_Filter">
+                  <Restriction template="Selected Job" expression="JobNumber=target.JobNumber" />
+                  <Focus>
+                    <Match field="JobNumber" value="JobNumber" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Invoiced" style="amountAlignment">
+              <Field source="LastInvoiceDate" />
+              <Field source="InvoiceBillingPriceCurrencyVar" />
+              <Field source="JobNetOnAccountCurrencyVar" />
+              <Field source="TotalBillingPriceUpDownCurrencyVar" style="InvoicingIsWrittenDown,InvoicingIsWrittenUp" />
+            </Group>
+            <Group title="Revenue">
+              <Field source="InvoiceGrossMarginBaseVar" />
+              <Field source="InvoiceGrossMarginPercentageVar" />
+              <Field source="InvoiceMarkUpPercentageVar" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="BlackBox">
+        <Actions>
+          <Update />
+        </Actions>
+       <Column>
+          <Group title="From Job Overview">
+            <UnitField source="InvoiceGrossMarginBaseVar" unitSource="BaseCurrency" title="Gross Margin, Invoiced" />
+            <Field source="InvoiceGrossMarginPercentageVar" />
+            <Field source="InvoiceMarkUpPercentageVar" />
+          </Group>
+          <Group title="From Job Information">
+            <UnitField source="FixedPriceCurrencyVar" unitSource="Currency" title="Fixed Price" />
+            <Field source="Status" />
+            <Reference foreignKey="ProjectName_Project" keyShadowTitle="Name" descriptionShadowTitle="Description" title="Project" />
+            <Reference foreignKey="Specification1Name_Specification1" keyShadowTitle="Name" descriptionShadowTitle="Description" title="Spec. 1" />
+            <Reference foreignKey="SalesPersonNumber_Employee" />
+            <Field source="JobInvoiceableVar" appearance="interval" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+          <Group title="Time &amp; Expense Approval">
+            <PairHeader firstTitle="Time" secondTitle="Expenses" />
+            <Pair firstSource="ApprovalSuperior" secondSource="ApprovalSuperiorExpenses" title="Approval, Supervisor / Approval, Supervisor, Exp." />
+            <Pair firstSource="ApprovalProjectManager" secondSource="ApprProjectManagerExpenses" title="Approval, Project Manager" />
+          </Group>
+          <Group>
+            <BooleanGroup title="Invoicing">
+              <Boolean source="AllowProjectManagerInvoiceProposal" title="Allow PM Proposals" />
+              <Boolean source="AllowEmployeeInvoiceProposal" title="Allow Employee Proposals" />
+              <Boolean source="ToBeBlanketInvoiced" />
+            </BooleanGroup>
+            <BooleanGroup>
+              <Boolean source="Template" title="Template Job" />
+            </BooleanGroup>
+          </Group>
+          <Group title="From Prices">
+            <Field source="FixedMarkUpPercentage" />
+            <Field source="MarkUpPercentage" />
+            <Field source="InvoiceDiscountPercentage" />
+            <Field source="JobSurchargeRuleName" />
+          </Group>
+          <!-- <Group title="Price Lists">
+							<Reference foreignKey="CostJobPriceListCurrentIssue" title="Cost" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <If condition="CostJobPriceList != ''">
+	              <Field source="CostJobPriceListCurrentIssue->JobPriceLists.CostPriceCurrency" />
+              </If>
+							<Reference foreignKey="IntercompanyJobPriceListCurrentIssue" title="Intercompany" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <If condition="IntercompanyJobPriceList != ''">
+	              <Field source="IntercompanyJobPriceListCurrentIssue->JobPriceLists.IntercompanyPriceCurrency" />
+              </If>
+							<Reference foreignKey="JobPriceListCurrentIssue" title="Sales" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <If condition="JobPriceList != ''">
+	              <Field source="JobPriceListCurrentIssue->JobPriceLists.Currency" />
+              </If>
+							<Reference foreignKey="StandardBillingPriceListCurrentIssue" title="Standard Sales" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <If condition="StandardBillingPriceList != ''">
+	              <Field source="StandardBillingPriceListCurrentIssue->JobPriceLists.Currency" />
+              </If>
+            </Group> -->
+        </Column>
+        <Column>
+          <Group title="Other Project Information">
+          	<Field source="CompanyVATCode" />
+          	<Field source="Text19" title="Business ID" />
+            <Field source="AccessLevelName" />
+            <Field source="Text1" title="Former Maconomy Database (Country code)" />
+            <Field source="Text2" title="Alternative Project No." />
+            <Field source="Popup5" title="Finance to prepare invoice" />
+            <Field source="JobAllocationName" title="Project Allocation Combination" />
+            <Field source="ApprProjectManagerExpenses" title="Approval, Project Manager, Exp." />
+            <Field source="TemplateJobNumber" title="Project template" />
+            <Field source="ActualEndingDate" title="Closed Date" />
+            <Field source="QuotationPriceCurrency" title="Quote Price, Curr." />
+            <Field source="ProbabilityPercentage" />
+            <Field source="Status" />
+            <Field source="Telex" title="Ramboll Local VAT Reg. No." />
+            <Field source="SalesPersonNumber" />
+            <Field source="SalesPerson" />
+            <Field source="DepartmentNumber" title="Posting Rule Set" />
+            <Field source="VersionNumber" title="Version" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Closure">
+        <Actions>
+          <Update />
+          	<Action source="parent.primary->Jobs.CloseJob" disabled="HasPMReadOnly()"/>
+        </Actions>
+        <Group title="Closure - from Job Information">
+          <!-- <BooleanGroup title="Blocked for"> -->
+          <Boolean source="BlockedForTimeRegistrations" title="Blocked For Time Registration" />
+          <Boolean source="BlockedForAmountRegistrations" title="Blocked For Amount Registrations" />
+          <Boolean source="BlockedForBudgeting" title="Blocked For Budgeting" />
+          <Boolean source="BlockedForInvoicing" title="Blocked For Invoicing" />
+          <Boolean source="EndInvoiced" title="Project can be closed" />
+          <Boolean source="Closed" title="Closed" />
+          <!-- </BooleanGroup> -->
+        </Group>
+      </Form>
+      <Form name="RamLink">
+        <Actions>
+          <Update />
+        </Actions>
+        <Group title="RamLink">
+          <Field source="CustomerPopup3" title="Make this project a reference in RamLink" size="small" />
+          <Description template="Project Short Description, Local Language." appearance="maximized" size="huge" />
+          <Field title="" source="Text6" size="huge" appearance="maximized" suggestions="none" />
+          <Description template="Project Short Description, English." appearance="maximized" size="huge" />
+          <Field title="" source="Text5" size="huge" appearance="maximized" suggestions="none">
+            <!-- <Style height="3" /> -->
+          </Field>
+          <!-- <Description template="Project Short Description, Local Language. (This text is transferred to RamLink)" size="vast" /> -->
+        </Group>
+      </Form>
+    </Pane>
+  </Layout>
+</MDML>
+

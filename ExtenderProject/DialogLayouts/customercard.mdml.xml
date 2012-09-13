@@ -1,0 +1,1039 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--ef9daf86749cf54e3f3dd0766ed62b0b7836be44-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--154c45832b95c0220b6e7b06b77bd6b850872412-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!-- AMC, 13/02/09: First draft Job Invoicing Workspace (37416).-->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- RMA, 23/07/09: Redesign (37635).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- RMA, 28/10/09: A demo view for CustomerHome (37635).-->
+<!-- CSK, 13/11/09: New Overview_Vertical view added for Analysis workspace (38033).-->
+<!-- RMA, 28/10/09: A demo view for CustomerHome (37635).-->
+<!-- RMA, 23/11/09: Reintroducing a wizard, removed by mistake (37635).-->
+<!-- CSK, 29/01/10: IntercompanyCustomer view added for Companies workspace (37818).-->
+<!-- AMC, 04/02/10: Delete unused experimental workspaces and layouts (38249).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- SJK, 28/05/10: Filter button restrictions converted to common expression language (38492).-->
+<!-- JSV, 02/06/10: Rename CompanyName1Var to SettlingCompanyNameVar (38482).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- MJA, 06/07/10: Move "Option List Fields" group to global include file (38627).-->
+<!-- MJA, 08/07/10: Change grid to pairs (38630).-->
+<!-- JSV, 19/07/10: Show Employee 1-10 and their names. Use Reference tag for price lists and teams (38326).-->
+<!-- CSK, 02/08/10: Changes to Overview_Vertical view (38706).-->
+<!-- BPE, 10/09/10: Changed layout to use global definition dimensions (38823). -->
+<!-- SJK, 13/10/10: New fields CustomerJobOptionListNumber1-3 and SelectedCustomerJobOption1-3-->
+<!--                (38948).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 01/12/10: Various layout enhancements (39093).-->
+<!-- PSZ, 08/12/10: Update filter conditions in MDML (39116).-->
+<!-- CSK, 10/12/10: Various changes to Overview_Vertical card view (39091).-->
+<!-- CSK, 13/12/10: Use global style fullWidth for anchoring (39214).-->
+<!-- CSK, 10/02/11: Add more mandatory fields to the customer creation wizard (39405).-->
+<!-- CSK, 25/02/11: Add key employees to Overview_Vertical (39379).-->
+<!-- SJK, 18/03/11: Layout for Contact Company Home (39479).-->
+<!-- SJK, 05/06/11: Link to customer home from contact compamy home (39697).-->
+<!-- SJK, 07/06/11: Converting Links to new format (39702).-->
+<!-- PSZ, 22/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 12/07/11: Creation filter moved from Demo form to CustomerHome filter (39763).-->
+<!-- PSZ, 13/07/11: Added details link to Overview_Vertical (39512).-->
+<!-- CSK, 14/07/11: No search on Customer No. in creation wizard (39592).-->
+<!-- CSK, 15/07/11: Minor changes to CustomerHome filter (39763).-->
+<!-- CSK, 15/07/11: Minor changes to CustomerHomeKPI form (39763).-->
+<!-- CSK, 18/07/11: Minor changes to the creation wizard (39763).-->
+<!-- CSK, 22/07/11: CustomerHomeKPI form reused in Company Customers (39765).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- CSK, 12/09/11: Layout improvements (39763).-->
+<!-- CSK, 13/09/11: New field PostVendorPaymentExchangeRateVariancesOnJob (39638).-->
+<!-- JSV, 14/09/11: Restrict to location of employee rather than user as department in option (39332).-->
+<!-- CSK, 04/10/11: Customer number optional in creation wizard (40003).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 07/10/11: Creation wizard improved (40003).-->
+<!-- CSK, 12/10/11: Country not always mandatory in creation wizard (400003).-->
+<!-- CSK, 12/10/11: PostVendorPaymentExchangeRateVariancesOnJob is Boolean not Field (39638).-->
+<!-- CSK, 12/10/11: Country removed from creation wizard description (40003).-->
+<!-- CSK, 19/10/11: New removed from creation wizard title (40064).-->
+<!-- KUN, 17/11/11: Remove e-mail icon from filters, if no e-mail address is specified (40183) -->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="CustomerCard">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name1;CustomerNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CustomerNumber" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Name3" />
+          <Field source="ZipCode" />
+          <Field source="PostalDistrict" />
+          <Field source="Name4" />
+          <Field source="Name5" />
+          <Field source="Attention" />
+          <Field source="Country" />
+        </Columns>
+      </Filter>
+      <Filter name="CustomerHome">
+        <Actions>
+          <Action source="primary.Create" wizard="CreateCustomerWizard" />
+        </Actions>
+        <ControlBar>
+          <Selection default="MyCustomers">
+            <Option name="MyCustomers" title="My Customers" restriction="OurContact = userEmployeeNumber()" />
+            <Option name="DepartmentCustomers" title="Department Customers" restriction="LocationName = stringEnvVar('user.employeeinfo.EntityName')" />
+            <Option name="AllCustomers" title="All Customers" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name1;CustomerNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CustomerNumber" />
+          <Field source="Name1" title="Name" />
+          <Field source="Name2" title="Address" />
+          <Field source="Country" />
+          <Field source="Attention" title="Attention" />
+          <Field source="Telephone" />
+          <Field source="ElectronicMailAddress" title="Email" />
+          <Link template="^1" arguments="ElectronicMailAddress" tooltip="Send email to customer" title="Email" url="'mailto:'+urlEncode(ElectronicMailAddress)" icon="Mail">
+            <Override condition="ElectronicMailAddress = ''">
+              <Link icon="" />
+            </Override>
+          </Link>
+          <If condition="maconomy:isSelectedOption('AllCustomers')">
+            <Field source="Blocked" />
+            <Field source="PaymentCustomer" />
+            <Field source="ParentCustomer" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="CustomerGroup" />
+          </If>
+        </Columns>
+      </Filter>
+      <Filter name="C_CustomerHome">
+        <Actions>
+          <Action name="MDK_CreateCustomerWizard" source="primary.Create" wizard="MDK_CreateCustomerWizard" title="New Global Customer" disabled="false" />
+          <Action name="MDK_CreateParentCustomerWizard" source="primary.Create" wizard="MDK_CreateParentCustomerWizard" title="New Parent Customer" disabled="false" />
+        </Actions>
+        <ControlBar>
+          <Selection default="MyCustomers">
+            <!-- <Option name="MyCustomers" title="My Customers" restriction="OurContact = userEmployeeNumber()" />
+            <Option name="DepartmentCustomers" title="Department Customers" restriction="LocationName = stringEnvVar('user.employeeinfo.EntityName')" /> -->
+            <Option name="AllCustomers" title="All Customers" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name1;CustomerNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CustomerNumber" />
+          <Field source="Name1" title="Name" />
+          <Field source="Name2" title="Address" />
+          <Field source="Country" />
+          <Field source="Attention" title="Attention" />
+          <Field source="Telephone" />
+          <Field source="ElectronicMailAddress" title="Email" />
+          <Link template="^1" arguments="ElectronicMailAddress" tooltip="Send email to customer" title="Email link" url="'mailto:'+urlEncode(ElectronicMailAddress)" icon="Mail">
+            <Override condition="ElectronicMailAddress = ''">
+              <Link icon="" />
+            </Override>
+          </Link>
+          <If condition="maconomy:isSelectedOption('AllCustomers')">
+            <Field source="Blocked" />
+            <Field source="PaymentCustomer" />
+            <Field source="ParentCustomer" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="CustomerGroup" />
+          </If>
+        </Columns>
+      </Filter>
+      <Filter name="C_CustomerHomeFront">
+        <Actions>
+        </Actions>
+        <ControlBar>
+          <Selection default="MyCustomers">
+            <!-- <Option name="MyCustomers" title="My Customers" restriction="OurContact = userEmployeeNumber()" />
+            <Option name="DepartmentCustomers" title="Department Customers" restriction="LocationName = stringEnvVar('user.employeeinfo.EntityName')" /> -->
+            <Option name="AllCustomers" title="All Customers" />
+          </Selection>
+        </ControlBar>
+        <Compact>
+          <Description template="^1 (^2)" arguments="Name1;CustomerNumber" />
+        </Compact>
+        <Columns>
+          <Field source="CustomerNumber" />
+          <Field source="Name1" title="Name" />
+          <Field source="Name2" title="Address" />
+          <Field source="Country" />
+          <Field source="Attention" title="Attention" />
+          <Field source="Telephone" />
+          <Link template="^1" arguments="ElectronicMailAddress" tooltip="Send email to customer" title="Email" url="'mailto:'+urlEncode(ElectronicMailAddress)" icon="Mail">
+            <Override condition="ElectronicMailAddress = ''">
+              <Link icon="" />
+            </Override>
+          </Link>
+          <If condition="maconomy:isSelectedOption('AllCustomers')">
+            <Field source="Blocked" />
+            <Field source="PaymentCustomer" />
+            <Field source="ParentCustomer" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="CustomerGroup" />
+          </If>
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <Pane>
+      <Define>
+        <Include fragment="GD_OptionLists" />
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Wizard name="CreateCustomerWizard" title="Create Customer">
+        <Page form="CreateCustomerWizardPage1" title="Basic Information" description="Please enter the customer name" />
+        <If condition="ParentCustomer=''">
+          <Page form="CreateCustomerWizardPage2" title="Detailed Information" description="Please enter the following mandatory information" />
+        </If>
+      </Wizard>
+      <Wizard name="MDK_CreateCustomerWizard" title="Create Global Customer">
+        <Page form="MDK_CreateCustomerWizardPage1" title="Basic Information" description="Please select a Template" />
+        <Page form="MDK_CreateCustomerWizardPage2" title="Detailed Information" description="Please enter the following mandatory information" />
+        <Page form="MDK_CreateCustomerWizardPage3" title="Detailed Information" description="Please enter the following mandatory information" mandatory="true"/>
+      </Wizard>
+      <Wizard name="MDK_CreateParentCustomerWizard" title="Create Parent Customer">
+        <Page form="MDK_CreateParentCustomerWizardPage1" title="Basic Information" description="Please select a Template" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Ship to Customer{Debitor}">
+              <Field source="CustomerNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="ElectronicMailAddress" />
+              <Field source="ContactPerson" />
+              <Field source="OurContact" />
+              <Field source="TerminationDate" />
+            </Group>
+            <Group title="Settling Company">
+              <Field source="SettlingCompany" title="Company No." />
+              <Field source="SettlingCompanyNameVar" title="Name" />
+              <Field source="BaseCurrencyVar" title="Base Currency" />
+            </Group>
+            <Group title="General Information">
+              <Field source="DepartmentNumber" />
+              <Field source="Language" />
+              <Field source="Currency" />
+              <Field source="CustomerType" />
+              <Field source="CustomerGroup" />
+              <Field source="Enterprise" />
+              <Field source="Segment" />
+              <Field source="Area" />
+              <Field source="CompanyVATCode" />
+              <Boolean source="VAT" />
+              <Field source="VATNumber" />
+              <Field source="CompanyRegistrationNumber" title="Comp. Reg. No." />
+              <Field source="CNRNumber" title="CNR No." />
+              <Field source="Agreement" />
+              <Field source="Remark" />
+              <Field source="HolidayCalendarName" />
+            </Group>
+            <Group title="Job Cost">
+              <Reference foreignKey="CostJobPriceList_JobPriceListInformation" title="Job Price List, Cost" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="IntercompanyJobPriceList_JobPriceListInformation" title="Job Price List, Intercomp." keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="JobPriceList_JobPriceListInformation" title="Job Price List, Sales" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Reference foreignKey="StandardBillingPriceList_JobPriceListInformation" title="Job Price List, Std. Sales" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+              <Field source="JobMarkUpPercentage" />
+              <Field source="JobSurchargeRuleName" />
+              <Field source="InvoiceLayout" />
+            </Group>
+            <Group title="Vendor Payment Exchange Rate Variances">
+              <Boolean source="PostVendorPaymentExchangeRateVariancesOnJob" />
+            </Group>
+            <Group title="Employees">
+              <Reference foreignKey="EmployeeNumber1_Employee" title="Employee 1" />
+              <Reference foreignKey="EmployeeNumber2_Employee" title="Employee 2" />
+              <Reference foreignKey="EmployeeNumber3_Employee" title="Employee 3" />
+              <Reference foreignKey="EmployeeNumber4_Employee" title="Employee 4" />
+              <Reference foreignKey="EmployeeNumber5_Employee" title="Employee 5" />
+              <Reference foreignKey="EmployeeNumber6_Employee" title="Employee 6" />
+              <Reference foreignKey="EmployeeNumber7_Employee" title="Employee 7" />
+              <Reference foreignKey="EmployeeNumber8_Employee" title="Employee 8" />
+              <Reference foreignKey="EmployeeNumber9_Employee" title="Employee 9" />
+              <Reference foreignKey="EmployeeNumber10_Employee" title="Employee 10" />
+            </Group>
+            <Group title="Charges">
+              <Field source="ChargeCode1" />
+              <Field source="ChargeCode2" />
+              <Field source="ChargeCode3" />
+              <Field source="ChargeCode4" />
+            </Group>
+            <Group title="Account Stm. Cust.">
+              <Field source="AccountStatementCustomer" title="Customer No.{Debitor}" />
+              <Field source="StatementName1" appearance="maximized" />
+              <Field source="StatementName2" appearance="maximized" />
+              <Field source="StatementName3" appearance="maximized" />
+              <ZipCity citySource="StatementPostalDistrict" zipSource="StatementZipCode" appearance="maximized" />
+              <Field source="StatementName4" appearance="maximized" />
+              <Field source="StatementName5" appearance="maximized" />
+              <Field source="StatementAttention" title="Attn." />
+              <Field source="StatementCountry" title="Country" />
+              <Field source="StatementTelephone" title="Phone" />
+              <Field source="StatementTelefax" title="Fax" />
+              <Field source="StatementElectronicMailAddress" title="E-mail{native}" />
+            </Group>
+            <Group title="Catalog">
+              <Field source="CatalogNumber" />
+            </Group>
+            <Group title="Access Level">
+              <Field source="AccessLevelName" title="Name" />
+            </Group>
+            <Group title="Subscription">
+              <Field source="PriceAdjustmentPrincipleName" />
+            </Group>
+            <Group title="Teams">
+              <Reference foreignKey="Team1Number_Team" title="Team 1" />
+              <Reference foreignKey="Team2Number_Team" title="Team 2" />
+              <Reference foreignKey="Team3Number_Team" title="Team 3" />
+              <Reference foreignKey="Team4Number_Team" title="Team 4" />
+              <Reference foreignKey="Team5Number_Team" title="Team 5" />
+              <Reference foreignKey="Team6Number_Team" title="Team 6" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Bill to Customer{Debitor}">
+              <Field source="PaymentCustomer" title="Customer No.{Debitor}" />
+              <Field source="Name1Var" appearance="maximized" />
+              <Field source="Name2Var" appearance="maximized" />
+              <Field source="Name3Var" appearance="maximized" />
+              <ZipCity citySource="PostalDistrictVar" zipSource="ZipCodeVar" appearance="maximized" />
+              <Field source="Name4Var" appearance="maximized" />
+              <Field source="Name5Var" appearance="maximized" />
+              <Field source="AttentionVar" title="Attn." />
+              <Field source="CountryVar" title="Country" />
+              <Field source="TelephoneVar" title="Phone" />
+              <Field source="TelefaxVar" title="Fax" />
+              <Field source="TelexVar" title="Telex" />
+              <Field source="ElectronicMailAddressVar" title="E-mail{native}" />
+            </Group>
+            <Group title="Sales Orders{General}">
+              <Field source="SalesPersonNumber" />
+              <Field source="SalesPersonNameVar" title="Sales Rep." />
+              <Field source="PriceListNumber" />
+              <Field source="PriceLevel" />
+              <Boolean source="MaintainPrice" />
+              <Field source="InvoiceDiscountPercentage" />
+              <Boolean source="BlockedForDelivery" />
+              <Boolean source="ShowPlusMinus" />
+              <Boolean source="ShowPricesOnDeliveryNote" title="Show Price on Packing Slip{CustomerInformationCard}" />
+              <Boolean source="ToBeBlanketInvoiced" />
+              <Boolean source="JointPickingList" title="Total Packing List" />
+              <Field source="EUTradeType" />
+            </Group>
+            <Group title="Dimension Combination">
+              <Field source="DimensionCombNumber" title="Dim. Comb. No." />
+            </Group>
+            <Group title="Derived Company">
+              <Grid>
+                <Header cells="|Value|;|Overwrite|" title="" />
+                <Row cells="CompanyNumber;OverwriteCompany#" title="Company No." />
+              </Grid>
+            </Group>
+            <Group ref="DerivedDimensionGroup" />
+            <Group title="Parent Customer">
+              <Field source="ParentCustomer" title="Customer No.{Debitor}" />
+              <Field source="ParentCustomerNameVar" title="Name" />
+              <Field source="LinkingRuleName" />
+            </Group>
+            <Group title="Contact Management">
+              <Field source="ContactCompanyNumber" title="Company No.{CustomerCard}" />
+              <Field source="CampaignNumber" />
+            </Group>
+            <Group title="Delivery">
+              <Field source="BackOrderProcessing" />
+              <Boolean source="BlanketOrder" />
+              <Field source="InventoryNumber" />
+              <Field source="DeliveryTerms" title="Delivery Terms{abbr}" />
+              <Field source="DeliveryMode" />
+              <Field source="Transporter" />
+              <Field source="ConsignmentType" />
+              <Field source="DestinationNumber" />
+              <Field source="FreightTableName" />
+              <Field source="FreightDiscountPercentage" />
+            </Group>
+            <Group title="Extra Fields">
+              <Field source="CustomerPopup1" title="Popup 1" />
+              <Field source="CustomerPopup2" title="Popup 2" />
+              <Field source="CustomerPopup3" title="Popup 3" />
+              <Field source="CustomerPopup4" title="Popup 4" />
+              <Field source="CustomerPopup5" title="Popup 5" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+            <Group title="Document Archive">
+              <Field source="DocumentArchiveNumber" title="Archive No.{Document}" />
+              <Field source="DocumentDescriptionVar" title="Description{0}" />
+            </Group>
+            <Group ref="OptionListGroup_10" />
+            <Group title="Customer Job Option Lists">
+              <Pair firstSource="CustomerJobOptionListNumber1" secondSource="SelectedCustomerJobOption1" firstShadowTitle="List" secondShadowTitle="Value" appearance="maximized" />
+              <Pair firstSource="CustomerJobOptionListNumber2" secondSource="SelectedCustomerJobOption2" firstShadowTitle="List" secondShadowTitle="Value" appearance="maximized" />
+              <Pair firstSource="CustomerJobOptionListNumber3" secondSource="SelectedCustomerJobOption3" firstShadowTitle="List" secondShadowTitle="Value" appearance="maximized" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Print Control">
+            <Pair firstSource="Statistic1" secondSource="Statistic1List" firstShadowTitle="Value" secondShadowTitle="List" />
+            <Pair firstSource="Statistic2" secondSource="Statistic2List" firstShadowTitle="Value" secondShadowTitle="List" />
+            <Pair firstSource="Statistic3" secondSource="Statistic3List" firstShadowTitle="Value" secondShadowTitle="List" />
+            <Pair firstSource="Statistic4" secondSource="Statistic4List" firstShadowTitle="Value" secondShadowTitle="List" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="CustomerRemark1" appearance="maximized" />
+            <Field source="CustomerRemark2" appearance="maximized" />
+            <Field source="CustomerRemark3" appearance="maximized" />
+            <Field source="CustomerRemark4" appearance="maximized" />
+            <Field source="CustomerRemark5" appearance="maximized" />
+            <Field source="CustomerRemark6" appearance="maximized" />
+            <Field source="CustomerRemark7" appearance="maximized" />
+            <Field source="CustomerRemark8" appearance="maximized" />
+            <Field source="CustomerRemark9" appearance="maximized" />
+            <Field source="CustomerRemark10" appearance="maximized" />
+            <Field source="CustomerRemark11" appearance="maximized" />
+            <Field source="CustomerRemark12" appearance="maximized" />
+            <Field source="CustomerRemark13" appearance="maximized" />
+            <Field source="CustomerRemark14" appearance="maximized" />
+            <Field source="CustomerRemark15" appearance="maximized" />
+            <Field source="CustomerRemark16" appearance="maximized" />
+            <Field source="CustomerRemark17" appearance="maximized" />
+            <Field source="CustomerRemark18" appearance="maximized" />
+            <Field source="CustomerRemark19" appearance="maximized" />
+            <Field source="CustomerRemark20" appearance="maximized" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CreateCustomerWizardPage1">
+        <Actions all="true" />
+        <Column style="fullWidth">
+          <Group title="Customer{Debitor}">
+            <Reference foreignKey="CustomerNumber_Customer" appearance="maximized" descriptionMandatory="true" keySuggestions="none" keyShadowTitle="Number (blank for default)" />
+            <Field source="Name2" appearance="maximized" shadowTitle="Address 1" />
+            <Field source="Name3" appearance="maximized" shadowTitle="Address 2" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" cityShadowTitle="City" zipShadowTitle="Postal Code" />
+            <Field source="Attention" />
+            <Field source="Country" mandatory="ParentCustomer=''" />
+            <Field source="Telephone" />
+            <Field source="ElectronicMailAddress" />
+          </Group>
+          <Group title="Parent Customer">
+            <Reference foreignKey="ParentCustomer_Customer" title="Customer {Debitor}" />
+            <Field source="LinkingRuleName" />
+          </Group>
+          <Group title="Sales Person">
+            <Reference foreignKey="SalesPersonNumber_Employee" title="Employee" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="CreateCustomerWizardPage2">
+        <Actions all="true" />
+        <Column>
+          <Group title="General Information">
+            <Field source="Language" mandatory="true" />
+            <Field source="DepartmentNumber" mandatory="true" />
+            <Field source="CustomerGroup" mandatory="true" />
+            <Field source="CompanyVATCode" mandatory="true" />
+            <Field source="EUTradeType" mandatory="true" />
+            <Field source="Enterprise" />
+          </Group>
+          <Group title="Payment Information">
+            <Field source="Currency" mandatory="true" />
+            <Field source="InvoiceLayout" mandatory="true" />
+            <Field source="ControlAccountCode" />
+            <Field source="PaymentTerms" />
+            <Field source="CreditMax" title="Credit Limit" />
+            <Field source="CustomerPopup1" title="Popup 1" />
+            <Field source="CustomerPopup2" title="Popup 2" />
+          </Group>
+          <Group title="Delivery">
+            <Field source="InventoryNumber" mandatory="true" />
+            <Field source="DeliveryTerms" title="Delivery Terms{abbr}" mandatory="true" />
+            <Field source="DeliveryMode" mandatory="true" />
+            <Field source="Transporter" mandatory="true" />
+            <Field source="ConsignmentType" mandatory="true" />
+            <Field source="BackOrderProcessing" mandatory="true" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="MDK_CreateCustomerWizardPage1">
+        <Actions all="true" />
+        <Column style="fullWidth">
+          <Group title="Customer">
+        	<Reference foreignKey="ParentCustomer_Customer" title="Template" descriptionShadowTitle="Please select a Template" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="MDK_CreateCustomerWizardPage2">
+        <Actions all="true" />
+        <Column style="fullWidth">
+          <Group title="Customer{Debitor}">
+            <!-- <Reference foreignKey="CustomerNumber_Customer" appearance="maximized" descriptionMandatory="true" descriptionShadowTitle="Customer Name" keyMandatory="true" keySuggestions="none" keyShadowTitle="Number (blank for default)" /> -->
+            <Field source="Name1" appearance="maximized" shadowTitle="Customer Name" mandatory="true" />
+            <Field source="Name2" appearance="maximized" shadowTitle="Department or additional name" />
+            <Field source="Name3" appearance="maximized" shadowTitle="Postbox" />
+            <Field source="Name4" appearance="maximized" shadowTitle="Street Name" mandatory="true" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" cityMandatory="true" zipMandatory="true" cityShadowTitle="City" zipShadowTitle="Zip COde" zipSuggestions="none" citySuggestions="none" />
+            <Field source="Name5" appearance="maximized" shadowTitle="Province/State" />
+            <Field source="Country" title="Country" shadowTitle="Local Country will automatically be derived at creation unless other country is picked from the list." />
+            <Field source="Telephone" appearance="maximized" shadowTitle="Telephone" />
+            <Field source="ElectronicMailAddress" shadowTitle="E-mail to accounting department/person who should receive Statements" />
+            <Field source="Currency" title="Currency" mandatory="true" />
+            <Field source="Language" title="Language" shadowTitle="Local language will automatically be derived at creation unless other language is picked from the list." />
+            <Field source="InvoiceLayout" title="Invoice Layout" shadowTitle="The preferred invoice layout - it can be changed on each project" />
+            <Field source="PaymentTerms" mandatory="true" />
+            <Field source="CustomerPaymentMode" title="Customer Payment Mode" shadowTitle="Manual is automatically derived." />
+            <Field source="Area" title="Area" mandatory="true" shadowTitle="EU is automatically derived. Otherwise choose Outside EU" />
+            <Field source="VATNumber" />
+            <!-- <Field source="CompanyRegistrationNumber" /> -->
+            <Field source="CompanyVATCode" />
+            <Field source="CustomerType" title="Customer Type" mandatory="true" />
+            <Reference foreignKey="Statistic1_TheOption" title="Statistical Classification of Economic Activities (NACE Code)" mandatory="true" />
+            <Field source="ControlAccountCode" shadowTitle="Internal should only be created by Business Application office" />
+            <Field source="CustomerGroup" shadowTitle="Internal should only be created by Business Application office" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="MDK_CreateCustomerWizardPage3">
+        <Actions all="true" />
+        <Column style="fullWidth">
+          <Group title="Finnish Customer Information">
+            <Field source="CustomerRemark6" title="eInvoice Service Provider Account" />
+            <Field source="CustomerRemark7" title="eInvoice Customer Account" />
+            <Field source="JobPriceList" title="Project Price List, Sales" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="MDK_CreateParentCustomerWizardPage1">
+        <Actions all="true" />
+        <Column style="fullWidth">
+          <Group title="Customer">
+        	<Reference foreignKey="ParentCustomer_Customer" title="Template" descriptionShadowTitle="TEMPLATE DK/ TEMPLATE FI" descriptionMandatory="true"/>
+            <Field source="Name1" mandatory="true" />
+            <Field source="Country" mandatory="true" />
+            <Field source="Blocked" />
+      	  <Description template="Parent customer should be created if several Global customers have same security number or are within the same company including accross borders." size="large">
+          	<Style height="7" />
+          </Description>
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Overview_Vertical">
+        <Column style="fullWidth">
+          <Group title="Customer{Debitor}">
+            <Field source="CustomerNumber" />
+            <Field source="Name1" appearance="maximized" />
+            <Field source="Name2" appearance="maximized" />
+            <Field source="Name3" appearance="maximized" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+            <Field source="Name4" appearance="maximized" />
+            <Field source="Name5" appearance="maximized" />
+            <Field source="Attention" />
+            <Field source="Country" />
+            <Field source="Telephone" />
+            <Field source="Telefax" />
+            <Field source="Telex" />
+            <Field source="ElectronicMailAddress" />
+            <Field source="ContactPerson" />
+          </Group>
+          <Group title="General Information">
+            <Field source="DepartmentNumber" />
+            <Field source="CustomerType" />
+            <Field source="CustomerGroup" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="Blocked" />
+          </Group>
+          <Group title="Employees">
+            <Reference foreignKey="EmployeeNumber1_Employee" title="Employee 1" />
+            <Reference foreignKey="EmployeeNumber2_Employee" title="Employee 2" />
+            <Reference foreignKey="EmployeeNumber3_Employee" title="Employee 3" />
+            <Reference foreignKey="EmployeeNumber4_Employee" title="Employee 4" />
+            <Reference foreignKey="EmployeeNumber5_Employee" title="Employee 5" />
+            <Reference foreignKey="EmployeeNumber6_Employee" title="Employee 6" />
+            <Reference foreignKey="EmployeeNumber7_Employee" title="Employee 7" />
+            <Reference foreignKey="EmployeeNumber8_Employee" title="Employee 8" />
+            <Reference foreignKey="EmployeeNumber9_Employee" title="Employee 9" />
+            <Reference foreignKey="EmployeeNumber10_Employee" title="Employee 10" />
+          </Group>
+          <Group>
+            <Link workspace="Customers" template="More details..." title="" tooltip="Customer workspace" appearance="maximized" icon="WorkspaceLink">
+              <Waypoint pane="Customers_Filter">
+                <Restriction template="Selected Customer" expression="CustomerNumber=target.CustomerNumber" />
+                <Focus>
+                  <Match field="CustomerNumber" value="CustomerNumber" />
+                </Focus>
+              </Waypoint>
+              <Target pane="CustomerCard_Overview" />
+            </Link>
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Dimensions">
+        <Actions>
+          <Update />
+        </Actions>
+        <Column>
+          <Group title="Dimension Combination">
+            <Field source="DimensionCombNumber" title="Dim. Comb. No." />
+          </Group>
+          <Group title="Derived Company">
+            <Grid>
+              <Header cells="|Value|;|Overwrite|" title="" />
+              <Row cells="CompanyNumber;OverwriteCompany#" title="Company     " />
+              <!-- the space was necessary for alignment -->
+            </Grid>
+          </Group>
+          <Group ref="DerivedDimensionGroup" />
+        </Column>
+      </Form>
+      <Form name="ExtraInformation">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+          <Column>
+            <Group ref="OptionListGroup_10" />
+            <Group title="Customer Job Option Lists">
+              <Pair firstSource="CustomerJobOptionListNumber1" secondSource="SelectedCustomerJobOption1" firstShadowTitle="List" secondShadowTitle="Value" appearance="maximized" />
+              <Pair firstSource="CustomerJobOptionListNumber2" secondSource="SelectedCustomerJobOption2" firstShadowTitle="List" secondShadowTitle="Value" appearance="maximized" />
+              <Pair firstSource="CustomerJobOptionListNumber3" secondSource="SelectedCustomerJobOption3" firstShadowTitle="List" secondShadowTitle="Value" appearance="maximized" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Extra Fields">
+              <Field source="CustomerPopup1" title="Popup 1" />
+              <Field source="CustomerPopup2" title="Popup 2" />
+              <Field source="CustomerPopup3" title="Popup 3" />
+              <Field source="CustomerPopup4" title="Popup 4" />
+              <Field source="CustomerPopup5" title="Popup 5" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="CustomerRemark1" appearance="maximized" />
+            <Field source="CustomerRemark2" appearance="maximized" />
+            <Field source="CustomerRemark3" appearance="maximized" />
+            <Field source="CustomerRemark4" appearance="maximized" />
+            <Field source="CustomerRemark5" appearance="maximized" />
+            <Field source="CustomerRemark6" appearance="maximized" />
+            <Field source="CustomerRemark7" appearance="maximized" />
+            <Field source="CustomerRemark8" appearance="maximized" />
+            <Field source="CustomerRemark9" appearance="maximized" />
+            <Field source="CustomerRemark10" appearance="maximized" />
+            <Field source="CustomerRemark11" appearance="maximized" />
+            <Field source="CustomerRemark12" appearance="maximized" />
+            <Field source="CustomerRemark13" appearance="maximized" />
+            <Field source="CustomerRemark14" appearance="maximized" />
+            <Field source="CustomerRemark15" appearance="maximized" />
+            <Field source="CustomerRemark16" appearance="maximized" />
+            <Field source="CustomerRemark17" appearance="maximized" />
+            <Field source="CustomerRemark18" appearance="maximized" />
+            <Field source="CustomerRemark19" appearance="maximized" />
+            <Field source="CustomerRemark20" appearance="maximized" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Custom_CustomerHomeKPI">
+        <Actions>
+          <!-- <Action source="primary->CompanyCustomerCard.Create" wizard="MDK_CreateCompanyCustomerWizard" title="New Company Specific Customer" /> -->
+          <!-- <Create wizard="MDK_CreateCompanyCustomerWizard" disabled="false" title="New Company Specific Customer" appearance="standard" /> -->
+        </Actions>
+        <Row>
+          <Group title="Ship to Customer{Debitor}">
+            <Field source="CustomerNumber" />
+            <Field source="Name1" appearance="maximized" />
+            <If condition="Name2 != ''">
+              <Field source="Name2" appearance="maximized" />
+            </If>
+            <Field source="Country" appearance="maximized" />
+            <EmptyLabel />
+            <Field source="Attention" />
+            <Field source="Telephone" />
+            <Field source="Blocked" />
+          </Group>
+          <Group title="Bill to Customer{Debitor}">
+            <Field source="PaymentCustomer" title="Customer No.{Debitor}" />
+            <Field source="Name1Var" appearance="maximized" />
+            <If condition="Name2Var != ''">
+              <Field source="Name2Var" appearance="maximized" />
+            </If>
+            <Field source="Country" appearance="maximized" />
+            <EmptyLabel />
+            <Field source="AttentionVar" title="Attn." />
+            <Field source="TelephoneVar" title="Phone" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Parent Customer">
+            <Field source="ParentCustomer" title="Customer No.{Debitor}" />
+            <Field source="ParentCustomerNameVar" title="Name" />
+            <Field source="LinkingRuleName" />
+          </Group>
+          <Group title="Settling Company">
+            <Field source="SettlingCompany" title="Company No." />
+            <Field source="SettlingCompanyNameVar" title="Name" />
+            <Field source="BaseCurrencyVar" title="Base Currency" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CustomerHomeKPI">
+        <Actions>
+          <!-- <Action source="primary->CompanyCustomerCard.Create" wizard="MDK_CreateCompanyCustomerWizard" title="New Company Specific Customer" /> -->
+          <!-- <Create wizard="MDK_CreateCompanyCustomerWizard" disabled="false" title="New Company Specific Customer" appearance="standard" /> -->
+        </Actions>
+        <Row>
+          <Group title="Ship to Customer{Debitor}">
+            <Field source="CustomerNumber" />
+            <Field source="Name1" appearance="maximized" />
+            <If condition="Name2 != ''">
+              <Field source="Name2" appearance="maximized" />
+            </If>
+            <Field source="Country" appearance="maximized" />
+            <EmptyLabel />
+            <Field source="Attention" />
+            <Field source="Telephone" />
+            <Field source="Blocked" />
+          </Group>
+          <Group title="Bill to Customer{Debitor}">
+            <Field source="PaymentCustomer" title="Customer No.{Debitor}" />
+            <Field source="Name1Var" appearance="maximized" />
+            <If condition="Name2Var != ''">
+              <Field source="Name2Var" appearance="maximized" />
+            </If>
+            <Field source="Country" appearance="maximized" />
+            <EmptyLabel />
+            <Field source="AttentionVar" title="Attn." />
+            <Field source="TelephoneVar" title="Phone" />
+          </Group>
+        </Row>
+        <Row>
+          <Group title="Parent Customer">
+            <Field source="ParentCustomer" title="Customer No.{Debitor}" />
+            <Field source="ParentCustomerNameVar" title="Name" />
+            <Field source="LinkingRuleName" />
+          </Group>
+          <Group title="Settling Company">
+            <Field source="SettlingCompany" title="Company No." />
+            <Field source="SettlingCompanyNameVar" title="Name" />
+            <Field source="BaseCurrencyVar" title="Base Currency" />
+          </Group>
+        </Row>
+        <If condition="not hasWorkspace('CustomerHome')">
+          <Row>
+            <Group>
+              <Link workspace="Customers" template="More details..." title=" " appearance="maximized" icon="WorkspaceLink">
+                <Target pane="Customers_Filter">
+                  <Restriction template="Selected Customer" expression="CustomerNumber=target.CustomerNumber" />
+                  <Focus>
+                    <Match field="CustomerNumber" value="CustomerNumber" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </Row>
+        </If>
+      </Form>
+      <Form name="Custom_RoleRestricted_IntercompanyCustomer" open="hasRole('Finance Admin')">
+        <Column style="fullWidth">
+          <Group title="Ship to Customer{Debitor}">
+            <Reference foreignKey="CustomerNumber_Customer" title="Customer" />
+            <Field source="Name2" appearance="maximized" />
+            <Field source="Name3" appearance="maximized" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+            <Field source="Attention" />
+            <Field source="Telephone" />
+            <Field source="ContactPerson" />
+            <Field source="Country" />
+          </Group>
+          <Group title="Bill to Customer{Debitor}">
+            <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="Name1Var" title="Customer {Debitor}" />
+            <Field source="Name2Var" appearance="maximized" />
+            <Field source="Name3Var" appearance="maximized" />
+            <ZipCity citySource="PostalDistrictVar" zipSource="ZipCodeVar" appearance="maximized" />
+            <Field source="AttentionVar" title="Attn." />
+            <Field source="TelephoneVar" title="Phone" />
+            <Field source="CountryVar" title="Country" />
+          </Group>
+          <Group title="Parent Customer">
+            <Reference foreignKey="ParentCustomer_Customer" descriptionSource="ParentCustomerNameVar" title="Customer {Debitor}" />
+            <Field source="LinkingRuleName" />
+          </Group>
+          <Group title="Settling Company">
+            <Reference foreignKey="SettlingCompany_CompanyInformation" descriptionSource="SettlingCompanyNameVar" title="Company" />
+            <Field source="BaseCurrencyVar" title="Base Currency" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="IntercompanyCustomer">
+        <Column style="fullWidth">
+          <Group title="Ship to Customer{Debitor}">
+            <Reference foreignKey="CustomerNumber_Customer" title="Customer" />
+            <Field source="Name2" appearance="maximized" />
+            <Field source="Name3" appearance="maximized" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+            <Field source="Attention" />
+            <Field source="Telephone" />
+            <Field source="ContactPerson" />
+            <Field source="Country" />
+          </Group>
+          <Group title="Bill to Customer{Debitor}">
+            <Reference foreignKey="PaymentCustomer_Customer" descriptionSource="Name1Var" title="Customer {Debitor}" />
+            <Field source="Name2Var" appearance="maximized" />
+            <Field source="Name3Var" appearance="maximized" />
+            <ZipCity citySource="PostalDistrictVar" zipSource="ZipCodeVar" appearance="maximized" />
+            <Field source="AttentionVar" title="Attn." />
+            <Field source="TelephoneVar" title="Phone" />
+            <Field source="CountryVar" title="Country" />
+          </Group>
+          <Group title="Parent Customer">
+            <Reference foreignKey="ParentCustomer_Customer" descriptionSource="ParentCustomerNameVar" title="Customer {Debitor}" />
+            <Field source="LinkingRuleName" />
+          </Group>
+          <Group title="Settling Company">
+            <Reference foreignKey="SettlingCompany_CompanyInformation" descriptionSource="SettlingCompanyNameVar" title="Company" />
+            <Field source="BaseCurrencyVar" title="Base Currency" />
+          </Group>
+        </Column>
+      </Form>
+      <Form name="Standard" style="fullWidth">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+            <Action source="AttachDocument" />
+          </Exclude>
+        </Actions>
+        <Column>
+          <Group title="Ship to Customer{Debitor}">
+            <Field source="CustomerNumber" shadowTitle="Number" />
+            <Field source="Name1" appearance="maximized" shadowTitle="Name" />
+            <Field source="Name2" appearance="maximized" shadowTitle="Address 1" />
+            <Field source="Name3" appearance="maximized" shadowTitle="Address 2" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" cityShadowTitle="City" zipShadowTitle="Postal Code" />
+            <Field source="Name4" appearance="maximized" shadowTitle="Address 3" />
+            <Field source="Name5" appearance="maximized" shadowTitle="Address 4" />
+            <Field source="Attention" />
+            <Field source="Country" />
+            <Field source="Telephone" />
+            <Field source="Telefax" />
+            <Field source="Telex" />
+            <Field source="ElectronicMailAddress" />
+            <Field source="ContactPerson" />
+            <Reference foreignKey="OurContact_Employee" titleSource="OurContact" />
+            <Field source="TerminationDate" />
+            <Field source="Currency" />
+            <Field source="Giro" />
+          </Group>
+          <Group title="Settling Company">
+            <Field source="SettlingCompany" title="Company No." />
+            <Field source="SettlingCompanyNameVar" title="Name" />
+            <Field source="BaseCurrencyVar" title="Base Currency" />
+          </Group>
+          <Group title="General Information">
+            <Field source="DepartmentNumber" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="CustomerType" />
+            <Field source="CustomerGroup" />
+            <Field source="Enterprise" />
+            <Field source="Segment" />
+            <Field source="Area" />
+            <Field source="CompanyVATCode" />
+            <Boolean source="VAT" />
+            <Field source="VATNumber" />
+            <Field source="CompanyRegistrationNumber" title="Comp. Reg. No." />
+            <Field source="CNRNumber" title="CNR No." />
+            <Field source="Agreement" />
+            <Field source="Remark" />
+            <Field source="HolidayCalendarName" />
+          </Group>
+          <Group title="Job Cost">
+            <Reference foreignKey="CostJobPriceList_JobPriceListInformation" title="Job Price List, Cost" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            <Reference foreignKey="IntercompanyJobPriceList_JobPriceListInformation" title="Job Price List, Intercomp." keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            <Reference foreignKey="JobPriceList_JobPriceListInformation" title="Job Price List, Sales" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            <Reference foreignKey="StandardBillingPriceList_JobPriceListInformation" title="Job Price List, Std. Sales" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            <Field source="JobMarkUpPercentage" />
+            <Field source="JobSurchargeRuleName" />
+            <Field source="InvoiceLayout" />
+          </Group>
+          <Group title="Vendor Payment Exchange Rate Variances">
+            <Boolean source="PostVendorPaymentExchangeRateVariancesOnJob" title="Post Variances on Job" />
+          </Group>
+          <Group title="Employees">
+            <Reference foreignKey="EmployeeNumber1_Employee" title="Employee 1" />
+            <Reference foreignKey="EmployeeNumber2_Employee" title="Employee 2" />
+            <Reference foreignKey="EmployeeNumber3_Employee" title="Employee 3" />
+            <Reference foreignKey="EmployeeNumber4_Employee" title="Employee 4" />
+            <Reference foreignKey="EmployeeNumber5_Employee" title="Employee 5" />
+            <Reference foreignKey="EmployeeNumber6_Employee" title="Employee 6" />
+            <Reference foreignKey="EmployeeNumber7_Employee" title="Employee 7" />
+            <Reference foreignKey="EmployeeNumber8_Employee" title="Employee 8" />
+            <Reference foreignKey="EmployeeNumber9_Employee" title="Employee 9" />
+            <Reference foreignKey="EmployeeNumber10_Employee" title="Employee 10" />
+          </Group>
+          <Group title="Print Control">
+            <Pair firstSource="Statistic1" secondSource="Statistic1List" firstShadowTitle="Value" secondShadowTitle="List" />
+            <Pair firstSource="Statistic2" secondSource="Statistic2List" firstShadowTitle="Value" secondShadowTitle="List" />
+            <Pair firstSource="Statistic3" secondSource="Statistic3List" firstShadowTitle="Value" secondShadowTitle="List" />
+            <Pair firstSource="Statistic4" secondSource="Statistic4List" firstShadowTitle="Value" secondShadowTitle="List" />
+          </Group>
+          <Group title="Teams">
+            <Reference foreignKey="Team1Number_Team" title="Team 1" />
+            <Reference foreignKey="Team2Number_Team" title="Team 2" />
+            <Reference foreignKey="Team3Number_Team" title="Team 3" />
+            <Reference foreignKey="Team4Number_Team" title="Team 4" />
+            <Reference foreignKey="Team5Number_Team" title="Team 5" />
+            <Reference foreignKey="Team6Number_Team" title="Team 6" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Bill to Customer{Debitor}">
+            <Field source="PaymentCustomer" title="Customer No.{Debitor}" shadowTitle="Number" />
+            <Field source="Name1Var" appearance="maximized" shadowTitle="Name" />
+            <Field source="Name2Var" appearance="maximized" shadowTitle="Address 1" />
+            <Field source="Name3Var" appearance="maximized" shadowTitle="Address 2" />
+            <ZipCity citySource="PostalDistrictVar" zipSource="ZipCodeVar" appearance="maximized" cityShadowTitle="City" zipShadowTitle="Postal Code" />
+            <Field source="Name4Var" appearance="maximized" shadowTitle="Address 3" />
+            <Field source="Name5Var" appearance="maximized" shadowTitle="Address 4" />
+            <Field source="AttentionVar" title="Attn." />
+            <Field source="CountryVar" title="Country" />
+            <Field source="TelephoneVar" title="Phone" />
+            <Field source="TelefaxVar" title="Fax" />
+            <Field source="TelexVar" title="Telex" />
+            <Field source="ElectronicMailAddressVar" title="E-mail{native}" />
+          </Group>
+          <Group title="Parent Customer">
+            <Field source="ParentCustomer" title="Customer No.{Debitor}" />
+            <Field source="ParentCustomerNameVar" title="Name" />
+            <Field source="LinkingRuleName" />
+          </Group>
+          <Group title="Account Statement Customer">
+            <Field source="AccountStatementCustomer" title="Customer No.{Debitor}" />
+            <Field source="StatementName1" title="Name" />
+          </Group>
+          <Group title="Contact Management">
+            <Field source="ContactCompanyNumber" title="Company No.{CustomerCard}" />
+            <Field source="CampaignNumber" />
+          </Group>
+          <Group title="Delivery">
+            <Boolean source="BlanketOrder" />
+            <Field source="BackOrderProcessing" />
+            <Field source="InventoryNumber" />
+            <Field source="DeliveryTerms" title="Delivery Terms{abbr}" />
+            <Field source="DeliveryMode" />
+            <Field source="Transporter" />
+            <Field source="ConsignmentType" />
+            <Field source="DestinationNumber" />
+            <Field source="FreightTableName" />
+            <Field source="FreightDiscountPercentage" />
+          </Group>
+          <Group title="Sales Orders{General}">
+            <Field source="SalesPersonNumber" />
+            <Field source="SalesPersonNameVar" title="Sales Rep." />
+            <Field source="EUTradeType" />
+            <Field source="InvoiceDiscountPercentage" />
+            <Field source="PriceListNumber" />
+            <Field source="PriceLevel" />
+            <Boolean source="MaintainPrice" />
+            <Boolean source="BlockedForDelivery" />
+            <Boolean source="ShowPlusMinus" />
+            <Boolean source="ShowPricesOnDeliveryNote" title="Show Price on Packing Slip{CustomerInformationCard}" />
+            <Boolean source="ToBeBlanketInvoiced" />
+            <Boolean source="JointPickingList" title="Total Packing List" />
+          </Group>
+          <Group title="Document Archive">
+            <Field source="DocumentArchiveNumber" title="Archive No.{Document}" />
+            <Field source="DocumentDescriptionVar" title="Description{0}" />
+          </Group>
+          <Group title="Catalog">
+            <Field source="CatalogNumber" />
+          </Group>
+          <Group title="Subscription">
+            <Field source="PriceAdjustmentPrincipleName" />
+          </Group>
+          <Group title="Access Level">
+            <Field source="AccessLevelName" title="Name" />
+          </Group>
+          <Group title="Charges">
+            <Field source="ChargeCode1" />
+            <Field source="ChargeCode2" />
+            <Field source="ChargeCode3" />
+            <Field source="ChargeCode4" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Demo_ContactCompanyHome">
+        <Column>
+          <Group title="General Information">
+            <Field source="ContactPerson" />
+            <Reference foreignKey="OurContact_Employee" titleSource="OurContact" />
+            <Field source="CustomerType" />
+            <Field source="CustomerGroup" />
+            <Field source="Language" />
+            <Field source="Currency" />
+            <Field source="CreditMax" />
+            <Boolean source="Blocked" />
+            <Reference foreignKey="PaymentCustomer_Customer" title="Payment Customer" />
+            <Reference foreignKey="SettlingCompany_CompanyInformation" title="Settling Company" />
+          </Group>
+          <Group>
+            <Link workspace="Customers" template="More details..." icon="WorkspaceLink">
+              <Waypoint pane="Customers_Filter">
+                <Restriction template="Selected Customer" expression="CustomerNumber=target.CustomerNumber" />
+                <Focus>
+                  <Match field="CustomerNumber" value="CustomerNumber" />
+                </Focus>
+              </Waypoint>
+              <Target pane="CustomerCard_Overview" />
+            </Link>
+          </Group>
+        </Column>
+      </Form>
+      <Browser name="Request_for_Customer" title="Request for Customer">
+        <ControlBar progress="true" address="false" navigation="false" />
+        <!-- <Url value="'http://grpcpherp04d:82/cgi-bin/maconomy/MaconomyPortal.macodev.W_MCS.exe/custom/customer/cus.ms'"> -->
+        <!--  -->
+        <Url value="urlOpenMacPortal() + '/Custom/customer/cus.ms'" />
+      </Browser>
+    </Pane>
+  </Layout>
+</MDML>
+

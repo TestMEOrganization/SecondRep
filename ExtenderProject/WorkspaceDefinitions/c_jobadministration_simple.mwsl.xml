@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PSZ, 02/08/11: New workspace (39803).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_JobAdministration_Simple" title="Job Administration">
+    <Formation>
+      <Section title="Reallocation">
+        <Mount>
+          <Filter source="JobReallocation" view="Standard" title="Job Reallocation">
+            <With>
+              <Card view="Custom">
+                <With>
+                  <Table />
+                </With>
+              </Card>
+            </With>
+          </Filter>
+          <Card source="BatchJobReallocation" view="Custom">
+            <With>
+              <Table />
+            </With>
+          </Card>
+        </Mount>
+      </Section>
+      <Section title="Accrual">
+        <Mount>
+          <Filter source="JobAccruals" view="Standard" title="Job Accrual">
+            <With>
+              <Card view="Full">
+                <With>
+                  <Table />
+                </With>
+              </Card>
+            </With>
+          </Filter>
+          <Card source="BatchJobAccrual" view="Full">
+            <With>
+              <Table />
+            </With>
+          </Card>
+          <Filter source="JobAccrualPlans" view="Standard" title="Job Accrual Plans">
+            <With>
+              <Card view="Full">
+                <With>
+                  <Table />
+                </With>
+              </Card>
+            </With>
+          </Filter>
+        </Mount>
+      </Section>
+      <Section title="Revenue Recognition">
+        <Mount>
+          <Workspace source="JobRevenueRecognition" />
+        </Mount>
+      </Section>
+    </Formation>
+  </Workspace>
+</MWSL>
+

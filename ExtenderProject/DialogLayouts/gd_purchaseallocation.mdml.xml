@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- KUN, 20/01/11: New layout file for purchase process allocation and vendor invoice allocation (39360).-->
+<!-- KUN, 20/01/11: Change layout error related to multiple sales tax (39360).-->
+<!-- KUN, 20/01/11: Change layout error related to multiple sales tax again (39360).-->
+<!-- PSZ, 07/09/11: Remove onDemand suggestions as they are placed in ODL/DDL (39258).-->
+<!-- KUN, 04/10/11: Better support for intercompany invoices (39989).-->
+<!-- KUN, 11/10/11: Highlight current row in approvals workspace (40000).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Fragment name="GD_PurchaseAllocation">
+    <Define>
+      <Columns name="JobColumns">
+        <Field source="JobNumber" />
+        <Field source="JobNameVar" title="Job Name" />
+        <Field source="ActivityNumber" />
+        <Field source="AccountActivityText" title="Activity Text" />
+        <Field source="TaskName" />
+        <Field source="TaskTextVar" title="Task Description{1}" />
+        <Field source="EmployeeNumber" />
+        <Field source="EmployeeNameVar" title="Employee Name" />
+      </Columns>
+      <Columns name="C_JobColumns">
+      	<Field source="LineNumber" size="tiny" />
+        <Field source="JobNumber" />
+        <Field source="ActivityNumber" open="false" visibility="hidden" />
+        <Field source="TaskTextVar" title="Task Description{1}" size="small" />
+      </Columns>
+      <Columns name="InvoiceAllocationColumns">
+        <If condition="parent.PurchaseTransactionType = PurchaseTransactionTypeType'\Job Cost\ or parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Columns ref="JobColumns" />
+        </If>
+        <If condition="(parent.PurchaseTransactionType = PurchaseTransactionTypeType'\G/L\ and not parent.IntercompanyInvoice)             or parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" title="Account Text" />
+        </If>
+        <If condition="parent.PurchaseTransactionType = PurchaseTransactionTypeType'Item or parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="ItemNumber" />
+          <Field source="InventoryControl" />
+        </If>
+        <Field source="EntryText" />
+        <Field source="NumberOf" />
+        <If condition="not parent.IntercompanyInvoice">
+          <Field source="Unit" />
+        </If>
+        <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" />
+        <If condition="not parent.IntercompanyInvoice">
+          <UnitField source="DiscountCurrency" unitSource="parent.Currency" />
+        </If>
+        <UnitField source="AmountCurrency" unitSource="parent.Currency" />
+        <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+          <UnitField source="VATCurrency" unitSource="parent.Currency" title="Tax Amount Total" />
+          <Field source="FinanceVATCode" />
+          <UnitField source="VAT1Currency" unitSource="parent.Currency" title="Tax Amount 1" />
+          <Field source="FinanceVATCode2" />
+          <UnitField source="VAT2Currency" unitSource="parent.Currency" title="Tax Amount 2" />
+          <Field source="VAT2Currency" />
+          <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+            <Field source="FinanceVATCode3" />
+            <UnitField source="VAT3Currency" unitSource="parent.Currency" title="Tax Amount 3" />
+          </If>
+        </If>
+        <Else>
+          <Field source="FinanceVATCode" title="Tax Code" />
+          <UnitField source="VATCurrency" unitSource="parent.Currency" title="Tax Amount" />
+        </Else>
+        <UnitField source="AmountInclVATCurrency" unitSource="parent.Currency" />
+        <Field source="ItemVATCode" />
+        <Field source="ReferenceDate" />
+        <If condition="not parent.IntercompanyInvoice">
+          <Field source="RegistrationCodeName" />
+        </If>
+        <Field source="CompanyNumber" />
+        <Columns ref="DimensionColumns" />
+        <If condition="not parent.IntercompanyInvoice">
+          <Field source="AllocationCodeName" />
+        </If>
+        <If condition="not parent.IntercompanyInvoice">
+          <Field source="QuantityA" />
+          <Field source="QuantityB" />
+        </If>
+        <Field source="TaxFree" />
+        <If condition="not parent.IntercompanyInvoice">
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+        </If>
+        <Field source="TransactionType" />
+        <If condition="parent.PurchaseTransactionType = PurchaseTransactionTypeType'\Job Cost\ or parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="SelectedForSubcontractorReconciliation" />
+          <Field source="TotalForSubcontractorReconciliation" />
+        </If>
+        <If condition="parent.PurchaseTransactionType = PurchaseTransactionTypeType'Item or parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="SupplierDeliveryNoteNumber" />
+          <Field source="MovementTransactionNumber" />
+          <Field source="MovementTransactionLineNumber" />
+        </If>
+        <If condition="not parent.IntercompanyInvoice">
+          <Field source="PurchaseOrderNumber" />
+          <Field source="PurchaseOrderLineNumber" title="Line No." />
+          <Field source="ClosePurchaseOrderLine" />
+        </If>
+      </Columns>
+      <Columns name="RequisitionLineColumns">
+        <If condition="parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\Job Cost\ or parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Columns ref="JobColumns" />
+        </If>
+        <If condition="parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\G/L\ or parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" title="Account Text" />
+        </If>
+        <Field source="LineText" />
+        <Field source="TextLine" />
+        <Field source="NumberOf" />
+        <Field source="DateOfDelivery" />
+        <Field source="RegistrationCodeName" />
+        <Field source="CompanyNumber" />
+        <Columns ref="DimensionColumns" />
+        <Field source="NoteNumber" />
+        <Field source="NoteDescriptionVar" title="Note Description" />
+      </Columns>
+      <Columns name="C_RequisitionLineColumns">
+        <If condition="parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\Job Cost\ or parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Columns ref="C_JobColumns" />
+        </If>
+        <If condition="parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\G/L\ or parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" title="Account Text" />
+        </If>
+        <Field source="LineText" title="Text" size="huge" />
+        <UnitField source="NumberOf" size="small" />
+        <Field source="DateOfDelivery" />
+      </Columns>
+      <Columns name="RequestForQuoteLineColumns">
+        <If condition="parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\Job Cost\ or parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Columns ref="JobColumns" />
+        </If>
+        <If condition="parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\G/L\ or parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" title="Account Text" />
+        </If>
+        <Field source="LineText" />
+        <Field source="TextLine" />
+        <Field source="NumberOf" />
+        <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" />
+        <UnitField source="DiscountCurrency" unitSource="parent.Currency" />
+        <UnitField source="PriceCurrency" unitSource="parent.Currency" />
+        <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+          <UnitField source="VATCurrency" unitSource="parent.Currency" title="Tax Amount Total" />
+          <Field source="FinanceVATCode" />
+          <UnitField source="VAT1CurrencyVar" unitSource="parent.Currency" title="Tax Amount 1" />
+          <Field source="FinanceVATCode2" />
+          <UnitField source="VAT2CurrencyVar" unitSource="parent.Currency" title="Tax Amount 2" />
+          <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+            <Field source="FinanceVATCode3" />
+            <UnitField source="VAT3CurrencyVar" unitSource="parent.Currency" title="Tax Amount 3" />
+          </If>
+        </If>
+        <Else>
+          <Field source="FinanceVATCode" title="Tax Code" />
+          <UnitField source="VATCurrency" unitSource="parent.Currency" title="Tax Amount" />
+        </Else>
+        <Field source="ItemVATCode" />
+        <Field source="DateOfDelivery" />
+        <Field source="RegistrationCodeName" />
+        <Field source="CompanyNumber" />
+        <Columns ref="DimensionColumns" />
+        <Field source="Closed" />
+      </Columns>
+      <Columns name="C_RequestForQuoteLineColumns">
+        <If condition="parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\Job Cost\ or parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Columns ref="C_JobColumns" />
+        </If>
+        <If condition="parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'\G/L\ or parent.parent.parent.PurchaseTransactionType = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" title="Account Text" />
+        </If>
+        <Field source="LineText" title="Text" size="huge" />
+        <UnitField source="NumberOf" size="small" />
+        <Field source="DateOfDelivery" />
+      </Columns>
+      <Columns name="PurchaseOrderLineColumns">
+        <If condition="parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'\Job Cost\             or parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Miscellaneous">
+          <Columns ref="JobColumns" />
+        </If>
+        <If condition="parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'\G/L\             or parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" title="Account Text" />
+        </If>
+        <If condition="parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Item             or parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="ItemNumber" />
+          <Field source="ItemText1" />
+        </If>
+        <Field source="LineText" />
+        <Field source="TextLine" />
+        <UnitField source="NumberOf" unitSource="Unit" />
+        <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" />
+        <Field source="DiscountPercentage" />
+        <UnitField source="DiscountCurrency" unitSource="parent.Currency" />
+        <Field source="PriceUnit" />
+        <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+          <UnitField source="VATCurrency" unitSource="parent.Currency" title="Tax Amount Total" />
+          <Field source="FinanceVATCode" />
+          <UnitField source="VAT1CurrencyVar" unitSource="parent.Currency" title="Tax Amount 1" />
+          <Field source="FinanceVATCode2" />
+          <UnitField source="VAT2CurrencyVar" unitSource="parent.Currency" title="Tax Amount 2" />
+          <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+            <Field source="FinanceVATCode3" />
+            <UnitField source="VAT3CurrencyVar" unitSource="parent.Currency" title="Tax Amount 3" />
+          </If>
+        </If>
+        <Else>
+          <Field source="FinanceVATCode" title="Tax Code" />
+          <UnitField source="VATCurrency" unitSource="parent.Currency" title="Tax Amount" />
+        </Else>
+        <Field source="ItemVATCode" />
+        <Field source="DateOfDelivery" />
+        <Field source="ConfirmedDeliveryDate" />
+        <Field source="ExpectedCommitmentDate" />
+        <Field source="DateOfReceipt" />
+        <UnitField source="NumberReceived" unitSource="Unit" />
+        <Field source="RegistrationCodeName" />
+        <Field source="CompanyNumber" />
+        <Columns ref="DimensionColumns" />
+        <Field source="Closed" />
+        <Field source="LocationNumber" />
+        <Field source="DeliveryRemark" title="Remarks{sg}" />
+        <Field source="InternalText" />
+        <Field source="DiscountText" />
+        <Field source="NoteNumber" />
+        <Field source="NoteDescriptionVar" title="Note Description" />
+        <UnitField source="NumberInvoiced" unitSource="Unit" />
+        <Field source="InvoicedCurrency" title="Invoiced, Currency" />
+        <Field source="InvoicedBase" />
+        <UnitField source="NumberAccrued" unitSource="Unit" />
+        <Field source="AccruedAmountCurrency" />
+        <Field source="AccruedAmountBase" />
+        <Field source="BaseCurrencyCompany" />
+        <Field source="AccrualType" />
+        <Field source="FromAccrualPeriod" />
+        <Field source="ToAccrualPeriod" />
+        <Field source="TransactionType" />
+        <Field source="OriginalNumberOrdered" title="Orig. Quantity" />
+        <Field source="SupplierItemNumber" title="Vendor Item No.{abbr}" />
+        <Field source="SupplierItemText" title="Vendor Item Desc.{abbr}" />
+        <Field source="UnitPrice1Currency" />
+        <Field source="QuantityDiscountCurrency" />
+        <Field source="DutyCode" />
+        <Field source="Unit" />
+        <If condition="parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'\G/L\             or pparent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="CommittedCompany" />
+          <Field source="CommittedBase" />
+          <Field source="CommittedCurrency" />
+          <Field source="CommitmentDate" />
+        </If>
+      </Columns>
+      <Columns name="C_PurchaseOrderLineColumns">
+        <If condition="parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'\Job Cost\             or parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Miscellaneous">
+          <Columns ref="C_JobColumns" />
+        </If>
+        <If condition="parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'\G/L\             or parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" title="Account Text" />
+        </If>
+        <If condition="parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Item             or parent.PurchaseTransactionTypeVar = PurchaseTransactionTypeType'Miscellaneous">
+          <Field source="ItemNumber" />
+          <Field source="ItemText1" />
+        </If>
+        <Field source="LineText" title="Text" size="huge" />
+        <Field source="SupplementaryText1" title="Inspection Required (Y/N)" size="small" />
+        <UnitField source="NumberOf" unitSource="Unit" size="small" />
+        <Field source="Unit" size="tiny" />
+        <UnitField source="UnitPriceCurrency" unitSource="parent.Currency" size="medium" />
+        <Field source="DiscountPercentage" size="small" />
+        <UnitField source="DiscountCurrency" unitSource="parent.Currency" size="medium" />
+        <Field source="PriceCurrency" />
+        <Field source="DateOfDelivery" />
+        <Field source="ConfirmedDeliveryDate" />
+        <Field source="DateOfReceipt" />
+        <UnitField source="NumberReceived" unitSource="Unit" size="small" />
+        <Field source="Closed" size="tiny" />
+      </Columns>
+    </Define>
+  </Fragment>
+</MDML>
+

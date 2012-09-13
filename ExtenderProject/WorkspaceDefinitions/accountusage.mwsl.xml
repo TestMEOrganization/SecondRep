@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 10/10/11: New Account Usage embedded workspace (39492).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="AccountUsage" title="Account Usage">
+    <Hidden source="ShowAccountUsage">
+      <Bind foreignKey="UsedInRelation_Activity_Reference">
+        <Card source="Activities" view="Overview_Vertical" title="Activity" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\activity reference\">
+          <With>
+          	<Table view="Custom_RoleRestricted_DimensionOrigin" />
+          </With>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Posting_Reference">
+        <Card source="PostingReferences" view="Full" title="Posting Reference" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\posting reference\">
+          <Expansions parentSize="small">
+            <With>
+	          	<Table view="Custom_RoleRestricted_DimensionOrigin" />
+	        </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Job_Posting_Reference">
+        <Card source="JobPostingReferences" view="Full" title="Job Posting Reference" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\job posting reference\">
+          <Expansions parentSize="small">
+            <With>
+	          	<Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Intercompany_Account">
+        <Card source="IntercompanyAccounts" view="Full" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\intercompany account\">
+          <Expansions parentSize="small">
+            <With>
+	          	<Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Warehouse">
+        <Card source="InventoryCard" view="Custom_RoleRestricted_DimensionOrigin" title="Warehouse" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\warehouse\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Tax_Code">
+        <Card source="VATCodes" view="Custom_RoleRestricted_DimensionOrigin" title="Tax Code" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\tax code\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_GL_Tax_Code">
+        <Card source="FinanceVATCodes" view="Custom_RoleRestricted_DimensionOrigin" title="G/L Tax Code" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\g/l tax code\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Tax_Reporting_Unit">
+        <Card source="VATReporingUnits" view="Custom_RoleRestricted_DimensionOrigin" title="Tax Reporting Unit" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\tax reporting unit\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Asset_Group">
+        <Card source="AssetGroups" view="Custom_RoleRestricted_DimensionOrigin" title="Asset Group" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\asset group\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Job_Group">
+        <Card source="JobGroups" view="Custom_RoleRestricted_DimensionOrigin" title="Job Group" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\job group\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Item_Group">
+        <Card source="ItemGroupCard" view="ReadOnly" title="Item Group" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\item group\">
+          <With>
+            <Table view="Custom_RoleRestricted_DimensionOrigin" />
+          </With>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Retained_Earnings_Account">
+        <Card source="SystemInformation" view="DimensionOrigin" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\retained earnings account\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Customer_Control_Account">
+        <Card source="PopupFields" view="Full" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\customer control account\">
+          <Expansions parentSize="small">
+            <With>
+              <Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Vendor_Control_Account">
+        <Card source="PopupFields" view="Full" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\vendor control account\">
+          <Expansions parentSize="small">
+            <With>
+              <Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Offset_Code">
+        <Card source="PopupFields" view="Full" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\offset code\">
+          <Expansions parentSize="small">
+            <With>
+              <Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Prior_Period">
+        <Card source="PopupFields" view="Full" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\prior period\">
+          <Expansions parentSize="small">
+            <With>
+              <Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Accrual_Type">
+        <Card source="PopupFields" view="Full" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\accrual type\">
+          <Expansions parentSize="small">
+            <With>
+              <Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Payment_Agents">
+        <Card source="PaymentAgentCard" view="Custom_RoleRestricted_DimensionOrigin" title="Payment Agent" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\payment agents\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Data_Agent">
+        <Card source="DataAgents" view="Custom_RoleRestricted_DimensionOrigin" title="Data Agent" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\data agent\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Budget_Model">
+        <Card source="BudgetModels" view="Custom_RoleRestricted_DimensionOrigin" title="Budget Model" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\budget model\">
+          <With>
+            <Table view="Custom_RoleRestricted_Full" />
+          </With>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Employee_Reference">
+        <Card source="Employees" view="Custom_RoleRestricted_DimensionOrigin" title="Employee" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\employee reference\">
+          <Expansions parentSize="large">
+            <With>
+              <Table view="Custom_RoleRestricted_DimensionOrigin" />
+            </With>
+          </Expansions>
+        </Card>
+      </Bind>
+      <Bind foreignKey="UsedInRelation_Import_Mode">
+        <Card source="ImportModes" view="Custom_RoleRestricted_DimensionOrigin" title="Import Mode" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\import mode\" />
+      </Bind>
+      <Bind foreignKey="UsedInRelation_External_Account">
+        <Card source="ExternalAccounts" view="ReadOnly" title="External Account" hidden="Parent.Parent.UsedInRelation!=DimensionCombUsageType'\external account\">
+          <With>
+            <Table view="Custom_RoleRestricted_DimensionOrigin" />
+          </With>
+        </Card>
+      </Bind>
+    </Hidden>
+  </Workspace>
+</MWSL>
+

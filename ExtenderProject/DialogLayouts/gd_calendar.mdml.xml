@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--8d541456326089ce9901b3a40e3772cfe1657f24-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--a50b529d42d6d22863cebeb0498e6e72a66c980d-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 6cc1f32f369a92e819264b1c39023e2c   3 _ _   209
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:9
+  TAC*MaconomyHQ: yes
+-->
+<!-- JSV, 17/11/10: Calendar group for both daily and weekly time registration (38848).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Fragment name="GD_Dimensions">
+    <Define>
+      <Group name="Calendar">
+        <Calendar source="DateVar" inputField="false" autoSelection="true" appearance="maximized">
+          <Style fontSize="medium">
+            <Switch source="TimeSheetStatusVar">
+              <Case char="1">
+                <!-- Changed for Rambøll to correspond to their naming convention Due -> Not Submitted -->
+                <Tooltip text="Not Submitted" />
+                <Style ref="calendarTimeDue" />
+              </Case>
+              <Case char="2">
+                <Tooltip text="Submitted" />
+                <Style ref="calendarTimeSubmitted" />
+              </Case>
+              <Case char="3">
+                <Tooltip text="Approved" />
+                <Style ref="calendarTimeApproved" />
+              </Case>
+              <Case char="4">
+                <Tooltip text="Line Rejected by Project Manager" />
+                <Style ref="calendarTimeRejected" />
+              </Case>
+              <Case char="5">
+                <Tooltip text="Line Rejected by Project Manager" />
+                <Style ref="calendarTimeRejected" />
+              </Case>
+              <Case char="6">
+                <Tooltip text="Line Rejected by Project Manager" />
+                <Style ref="calendarTimeRejected" />
+              </Case>
+            </Switch>
+          </Style>
+        </Calendar>
+      </Group>
+    </Define>
+  </Fragment>
+</MDML>
+

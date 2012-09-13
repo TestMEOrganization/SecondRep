@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 10/08/11: New Manager Reporting workspace (39838).-->
+<!-- CSK, 01/09/11: Rename Analytix Prompts dialog to Report Criteria (39911).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="ManagerReporting" title="Manager Reporting">
+	<Card source="Jobs" title="Reports" view="Custom_Reports_In_ManagerReporting_WS" />
+  </Workspace>
+</MWSL>
+

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--bcd662738e22f8f9fa6a37d4ff143eedb0b722b8-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!-- MKJ, 19/04/12: New custom workspace for the RFI Quality Management System.-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_CommerceItem" title="Items">
+      <Formation>
+        <Section title="Items">
+        <Mount>
+			<Filter name="Items_Filter" source="ItemInformation" title="Item List" >
+	          <Bind foreignKey="primary">
+	            <Card source="ItemCard" view="Custom">
+	          		<With>
+	          			<Table view="Full" />
+	          		</With>
+		         </Card>
+	          </Bind>
+        	</Filter>
+        </Mount>
+		<Mount>
+			<Filter name="ItemGroup_Filter" source="ItemGroupCard" title="ItemGroup List" >
+				<Bind foreignKey="primary">
+					<Card source="ItemGroupCard" view="Full" >
+						<With>
+							<Table view="Full" />
+						</With>
+					</Card>
+				</Bind>
+			</Filter>
+		</Mount>
+		<Mount>
+			<Filter name="Inventory_Filter" source="InventoryCard" title="Inventory List" >
+				<Bind foreignKey="primary">
+					<Card source="InventoryCard" title="Warehouse Information Card" >
+						<With>
+							<Table view="Full" />
+						</With>
+					</Card>
+				</Bind>
+			</Filter>
+		</Mount>
+        </Section>
+        <Section title="Pricelist">
+        	<Mount>
+	        	<Filter name="PriceList_Filter" source="PriceLists" title="PriceLists" >
+					<Bind foreignKey="primary">
+		          		<Card source="PriceLists" view="Full" >
+		          			<With>
+		          				<Table view="Full" />
+		          			</With>
+						</Card>
+					</Bind>
+					<Mount>
+						<Card source="ChangeInPriceLists" view="Full" />
+			          	<Card source="ImportPriceLists" view="Full" />
+			          	<Card source="ItemDiscountAgreements" view="Full" >
+			          		<With>
+			          			<Table view="Full" />
+			          		</With>
+			    	    </Card>
+	          			<Card source="DiscountTable" view="Full" >
+			          		<With>
+			          			<Table view="Full" />
+			          		</With>
+		       			 </Card>
+	         		 </Mount>
+         		 </Filter>
+			</Mount>
+        </Section>
+        <!-- <Section title="BOM">
+        <Mount>
+		<Filter name="Items_Filter" source="ItemInformation" title="Item List" >
+        	<Bind foreignKey="primary">
+        		<Card source="BOMCard" view="Full" >
+		          		<With>
+		          			<Table view="Full" />
+		          		</With>
+		        </Card>
+        		<Card source="BOMCopying" view="Full" >
+		          		<With>
+		          			<Table view="Full" />
+		          		</With>
+		        </Card>
+        	</Bind>
+        </Filter>
+        </Mount>
+        </Section> -->
+        <Section title="Lookup">
+        	<Mount>
+	        	<Card source="p_ItemStatistics" view="Full" />
+	        	<Card source="p_ItemGroupStatistics" view="Full" />
+			    <Card source="ItemList" >
+		          		<With>
+		          			<Table view="Full" />
+		          		</With>
+		        </Card>
+        	</Mount>
+        </Section>
+      </Formation>
+  </Workspace>
+</MWSL>
+

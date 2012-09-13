@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AMC, 23/02/09: First draft Job Invoicing Workspace (37480).-->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- KRN, 20/05/09: Complete original view (37560).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 08/07/09: Remove temporary "Standard" views (37816).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- KRN, 27/10/09: Demo layout (38072).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- KRN, 15/07/10: Remove Create action from demo layout (38189).-->
+<!-- BPE, 17/09/10: Changed layout to use global definition dimensions (38828). -->
+<!-- KUN, 18/10/10: Improved approval process (38979). -->
+<!-- BPE, 05/11/10: Purchase order number field open depend on system parameter (39010). -->
+<!-- KRN, 17/11/10: Compact description template (39111).-->
+<!-- KRN, 29/11/10: Demo layout indented correctly (38950) -->
+<!-- JSV, 01/12/10: Standard compact filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- KUN, 13/12/10: Remove approval information (39215).-->
+<!-- KUN, 21/12/10: New table layout to support the purchase process (39095).-->
+<!-- KUN, 20/01/11: Table layout moved to GD_PurchaseAllocation. (39360).-->
+<!-- KUN, 20/01/11: Purchase order assistant should be read-only in the vendor invoice workspace (39360).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 14/07/11: Demo form is readonly in Vendors workspaces (39413).-->
+<!-- CSK, 22/07/11: Alignment adjustments (39781).-->
+<!-- CSK, 22/07/11: Workspace link added to Demo form (39786).-->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- CSK, 06/09/11: Use waypoint for workspace link (39786).-->
+<!-- KUN, 04/10/11: Highlight current row in purchase order line workspace (39994).-->
+<!-- KUN, 11/10/11: Highlight current row in approvals workspace (40000).-->
+<!-- CSK, 05/12/11: New InVendorContext filter added (40259).-->
+<!-- KUN, 01/12/11: Added wizard to be used when coping from PO (40226) -->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="PurchaseOrders">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="Purch. Order No. ^1" arguments="PurchaseOrderNumber" />
+        </Compact>
+        <Columns>
+          <Field source="PurchaseOrderNumber" />
+          <Field source="PurchaseOrderStatusCode" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="PurchaseProcessNumber" />
+          <Field source="SupplierNumber" />
+          <Field source="Name1" />
+          <Field source="Name2" />
+          <Field source="Name3" />
+          <Field source="ZipCode" />
+        </Columns>
+      </Filter>
+      <Filter name="InVendorContext">
+        <Compact>
+          <Description template="Purch. Order No. ^1" arguments="PurchaseOrderNumber" />
+        </Compact>
+        <Columns>
+          <Field source="PurchaseOrderNumber" />
+          <Field source="PurchaseProcessNumber" />
+          <Field source="PurchaseOrderStatusCode" />
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Wizard name="CopyPurchaseOrderWizard" title="Copy Purchase Order">
+        <Page form="CopyPurchaseOrderPage1" title=" " description="The lines from the selected purchase order will be added to the current purchase order" />
+      </Wizard>
+      <Form name="Custom">
+        <Actions>
+          <If condition="not (workspace() like 'VendorInvoices')                  and not (workspace() like 'Vendors')                  and not (workspace() like 'CompanyVendors')">
+            <Update />
+            <Delete />
+            <Print />
+            <PrintThis />
+            <Action source="SubmitPurchaseOrder" />
+            <Action source="ApprovePurchaseOrder" />
+            <Action source="ClosePurchaseOrder" />
+            <Action source="ReopenPurchaseOrder" />
+            <Action source="CopyPurchaseOrder" wizard="CopyPurchaseOrderWizard" />
+            <Action source="AttachDocument" />
+          </If>
+        </Actions>
+        <Column>
+          <Group title="Purchase Orders">
+            <Field source="PurchaseOrderNumber" />
+            <Field source="PurchaseOrderStatusCode" />
+            <Field source="OurReference" title="Our Ref." />
+            <Reference foreignKey="PurchaserEmployeeNumber_Employee" />
+            <Reference foreignKey="RequisitionerEmployeeNumber_Employee" />
+            <Pair firstSource="JobName" secondSource="JobNumber" secondSize="small" title="Job" />
+        	<Field source="Purchaser" shadowTitle="On behalf of" />
+          </Group>
+          <Group title="Contact Info">
+          	<Field source="Text4" title="Dir. Telephone" shadowTitle="Remember to fill in" />
+          	<Field source="Text5" title="Email Address" shadowTitle="Remember to fill in" />
+          </Group>
+          <Group title="Remarks for print">
+            <Field source="Remark1" appearance="maximized" shadowTitle="Remark 1" >
+            	<Style height="3" />
+            </Field>
+            <Field source="Remark2" appearance="maximized" shadowTitle="Remark 2" >
+            	<Style height="3" />
+            </Field>
+            <Field source="Remark3" appearance="maximized" shadowTitle="Remark 3" >
+            	<Style height="3" />
+            </Field>
+          </Group>
+          <Group title="Price, Currency" style="textAlignment">
+            <Field source="Currency" />
+            <Field source="PriceListNumber" title="Item Price List" />
+            <Field source="PurchaseOrderSumCurrency" title="Line Sum" />
+            <Field source="InvoiceDiscountPercentage" />
+            <Field source="InvoiceDiscount" title="Invoice Discount" />
+            <Field source="CostPercentage" />
+            <Field source="Costs" />
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Field source="InvoiceVATVar" title="Invoice Tax Sum" />
+              <Field source="SumVAT1CurrencyVar" title="Invoice Tax, Level 1" />
+              <Field source="SumVAT2CurrencyVar" title="Invoice Tax, Level 2" />
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Field source="SumVAT3CurrencyVar" title="Invoice Tax, Level 3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="InvoiceVATVar" title="Invoice Tax" />
+            </Else>
+            <Field source="InvoiceAmountVar" title="Invoice Amount" />
+          </Group>
+          <Group title="Terms and Conditions">
+            <Field source="VendorPopup5" title="Purchase Terms" size="vast" />
+            <Field source="DeliveryTerms" title="Delivery Terms" size="vast" />
+            <Field source="DeliveryMode" size="vast" />
+            <Field source="PaymentTerms" title="Payment Terms" size="vast" />
+            <Field source="Remark7" title="Destination" size="vast" /> 
+            <Field source="VendorPopup4" title="PO Type" size="vast" />
+            <Field source="PreferredDeliveryDate" title="Pref. Deliv. Date" size="vast" />
+          </Group>
+          <Group title="Remarks for internal use">
+            <Field source="Remark4" appearance="maximized" shadowTitle="Remark 4" >
+            	<Style height="3" />
+            </Field>
+            <Field source="Remark5" appearance="maximized" shadowTitle="Remark 5" >
+            	<Style height="3" />
+            </Field>
+            <Field source="Remark6" appearance="maximized" shadowTitle="Remark 6" >
+            	<Style height="3" />
+            </Field>
+          </Group>
+          <Group>
+            <Link workspace="C_PurchaseProcesses" template="Purchase Process: ^1" title="" tooltip="Open Current Purchase Process" arguments="PurchaseProcessNumber" appearance="maximized" icon="WorkspaceLink">
+              <Waypoint pane="PurchaseProcessFilter">
+                  <Restriction template="Selected Purchase Process" expression="PurchaseProcessNumber=target.PurchaseProcessNumber" />
+                <Focus>
+                  <Match field="PurchaseProcessNumber" value="PurchaseProcessNumber" />
+                </Focus>
+              </Waypoint>
+              <Target pane="PurchaseProcesses_Card" >
+                  <Restriction template="Selected Purchase Process" expression="PurchaseProcessNumber=target.PurchaseProcessNumber" />
+                  <Focus>
+                    <Match field="PurchaseProcessNumber" value="PurchaseProcessNumber" />
+                  </Focus>
+              </Target>
+            </Link>
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Vendor's Order">
+            <Field source="SupplierOrderNumber" title="Order No." />
+            <Field source="YourReference" title="Your Reference" />
+            <Field source="OurCustomerNumber" />
+          </Group>
+          <Group title="Dispatching Address">
+            <Field source="SupplierNumber" size="large" shadowTitle="Vendor Number" />
+            <Field source="Name1" appearance="maximized" shadowTitle="Name" />
+            <Field source="Name2" appearance="maximized" shadowTitle="Address 1" />
+            <Field source="Name3" appearance="maximized" shadowTitle="Address 2" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" zipShadowTitle="Zip Code" cityShadowTitle="Postal District" />
+            <Field source="Name4" appearance="maximized" shadowTitle="Address 3" />
+            <Field source="Name5" appearance="maximized" shadowTitle="Address 4" />
+            <Field source="Attention" title="Attn." />
+            <Field source="Country" />
+            <Field source="Telephone" />
+            <Field source="Telefax" />
+            <Field source="Telex" />
+            <Field source="ElectronicMailAddress" />
+          </Group>
+          <Group title="Ship to Address">
+            <Field source="DeliveryCustomer" />
+            <Field source="DeliveryName1Var" appearance="maximized" />
+            <Field source="DeliveryName2Var" appearance="maximized" />
+            <Field source="DeliveryName3Var" appearance="maximized" />
+            <ZipCity citySource="DeliveryPostalDistrictVar" zipSource="DeliveryZipCodeVar" appearance="maximized" />
+            <Field source="DeliveryName4Var" appearance="maximized" />
+            <Field source="DeliveryName5Var" appearance="maximized" />
+            <Field source="DeliveryAttVar" title="Attn." />
+            <Field source="DeliveryCountryVar" title="Country" />
+          </Group>
+          <Group title="Billing Address">
+            <Field source="PaymentSupplier" title="Vendor" />
+            <Field source="PayerName1Var" appearance="maximized" />
+            <Field source="PayerName2Var" appearance="maximized" />
+            <Field source="PayerName3Var" appearance="maximized" />
+            <ZipCity citySource="PayerPostalDistrictVar" zipSource="PayerZipCodeVar" appearance="maximized" />
+            <Field source="PayerName4Var" appearance="maximized" />
+            <Field source="PayerName5Var" appearance="maximized" />
+            <Field source="PayerAttVar" title="Attn." />
+            <Field source="PayerCountryVar" title="Country" />
+          </Group>
+          <Group title="Status">
+            <Field source="LastPrintingDate" title="Date Printed" />
+            <Field source="NumberOfPrintouts" title="Quantity" />
+            <Field source="Submitted" />
+            <Field source="SubmittedBy" />
+            <Field source="DateSubmitted" title="Date" />
+            <Field source="Approved" />
+            <Field source="ApprovedBy" />
+            <Field source="ApprovalDate" title="Date" />
+            <Field source="Closed" />
+            <Field source="ClosedBy" />
+            <Field source="ClosingDate" title="Date" />
+          </Group>
+          <Group ref="DimensionGroup" />
+          <Group ref="UserUpdateGroup" />
+        </Column>
+        <Column>
+          <If condition="not hasWorkspace('PurchaseProcesses')">
+            <Group>
+              <Link workspace="PurchaseProcesses" template="More details..." tooltip="Detailed purchase order" appearance="maximized" icon="WorkspaceLink">
+                <Waypoint pane="PurchaseProcessFilter">
+                  <Restriction template="Selected Purchase Process" expression="PurchaseProcessNumber=target.PurchaseProcessNumber" />
+                  <Focus>
+                    <Match field="PurchaseProcessNumber" value="PurchaseProcessNumber" />
+                  </Focus>
+                </Waypoint>
+                <Target pane="PurchaseOrdersCard">
+                  <Restriction template="Selected Purchase Process" expression="PurchaseProcessNumber=target.PurchaseProcessNumber" />
+                  <Focus>
+                    <Match field="PurchaseProcessNumber" value="PurchaseProcessNumber" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </If>
+        </Column>
+      </Form>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Purchase Orders">
+              <If condition="maconomy:booleanSysPar('@AllowManualPurchaseOrderNumbers')">
+                <Field source="PurchaseOrderNumber" open="create" />
+              </If>
+              <Else>
+                <Field source="PurchaseOrderNumber" open="never" />
+              </Else>
+              <Field source="RequisitionNumber" title="Requisition No.{Internal2}" />
+              <Field source="RequestForQuoteNumber" />
+              <Reference foreignKey="PurchaseProcessNumber_PurchaseProcessHeader" />
+              <Field source="OurReference" title="Our Ref.{abbr}" />
+              <Field source="Purchaser" />
+              <Reference foreignKey="RequisitionerEmployeeNumber_Employee" />
+              <Reference foreignKey="PurchaserEmployeeNumber_Employee" />
+              <Field source="PurchaseOrderStatusCode" />
+            </Group>
+            <Group title="Billing Address">
+              <Field source="PaymentSupplier" title="Vendor{No.}" />
+              <Field source="PayerName1Var" appearance="maximized" />
+              <Field source="PayerName2Var" appearance="maximized" />
+              <Field source="PayerName3Var" appearance="maximized" />
+              <ZipCity citySource="PayerPostalDistrictVar" zipSource="PayerZipCodeVar" appearance="maximized" />
+              <Field source="PayerName4Var" appearance="maximized" />
+              <Field source="PayerName5Var" appearance="maximized" />
+              <Field source="PayerAttVar" title="Attn." />
+              <Field source="PayerCountryVar" title="Country" />
+            </Group>
+            <Group title="Delivery">
+              <Field source="PreferredDeliveryDate" title="Pref. Deliv. Date" />
+              <Field source="InventoryNumber" />
+              <Field source="LocationNumber" />
+              <Field source="DeliveryMode" />
+              <Field source="DeliveryTerms" title="Delivery Terms{abbr}" />
+              <Field source="ShippingNote" />
+            </Group>
+            <Group title="Price, Currency">
+              <Field source="Currency" />
+              <Field source="PriceListNumber" title="Item Price List" />
+              <!-- "Fasthold pris" .FastholdPris;-->
+              <Field source="PurchaseOrderSumCurrency" title="Line Sum" />
+              <Field source="InvoiceDiscountPercentage" />
+              <Field source="InvoiceDiscount" title="Invoice Discount" />
+              <Field source="CostPercentage" />
+              <Field source="Costs" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="InvoiceVATVar" title="Invoice Tax Sum" />
+                <Field source="SumVAT1CurrencyVar" title="Invoice Tax, Level 1" />
+                <Field source="SumVAT2CurrencyVar" title="Invoice Tax, Level 2" />
+                <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                  <Field source="SumVAT3CurrencyVar" title="Invoice Tax, Level 3" />
+                </If>
+              </If>
+              <Else>
+                <Field source="InvoiceVATVar" title="Invoice Tax" />
+              </Else>
+              <Field source="InvoiceAmountVar" title="Invoice Amount" />
+            </Group>
+            <Group title="Vendor Information">
+              <Field source="DepartmentNumber" />
+              <Field source="VendorGroup" />
+              <Field source="VATNumber" />
+              <Field source="Language" />
+              <Field source="CompanyVATCode" />
+            </Group>
+            <Group title="Statistics to Tax Authorities">
+              <Boolean source="IntrastatRegistration" />
+              <Field source="TransactionNature" />
+              <Field source="EUTradeType" />
+            </Group>
+            <Group title="Copying">
+              <Field source="PurchaseOrderNumberCopy" title="Purch. Order No." />
+            </Group>
+            <Group title="Approval">
+              <Field source="ApprovalRemarkVar" title="Remarks{sg}" />
+            </Group>
+            <Group title="Status">
+              <Field source="LastPrintingDate" title="Date Printed" />
+              <Field source="NumberOfPrintouts" title="Quantity{Number}" />
+              <Field source="Submitted" />
+              <Field source="SubmittedBy" />
+              <Field source="DateSubmitted" title="Date" />
+              <Field source="Approved" />
+              <Field source="ApprovedBy" />
+              <Field source="ApprovalDate" title="Date" />
+              <Field source="Closed" />
+              <Field source="ClosedBy" />
+              <Field source="ClosingDate" title="Date" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Vendor's Order">
+              <Field source="SupplierOrderNumber" title="Order No.{0}" />
+              <Field source="YourReference" title="Your Reference" />
+              <Field source="OurCustomerNumber" />
+            </Group>
+            <Group title="Job">
+              <Field source="JobNumber" />
+              <Field source="JobName" />
+              <Field source="JobCustomerNumberVar" title="Customer No." />
+              <Field source="JobCustomerName1Var" title="Name" />
+            </Group>
+            <Group title="Dispatching Address">
+              <Field source="SupplierNumber" />
+              <Field source="Name1" appearance="maximized" />
+              <Field source="Name2" appearance="maximized" />
+              <Field source="Name3" appearance="maximized" />
+              <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+              <Field source="Name4" appearance="maximized" />
+              <Field source="Name5" appearance="maximized" />
+              <Field source="Attention" title="Attn." />
+              <Field source="Country" />
+              <Field source="Telephone" />
+              <Field source="Telefax" />
+              <Field source="Telex" />
+              <Field source="ElectronicMailAddress" />
+            </Group>
+            <Group title="Ship to Address">
+              <Field source="DeliveryCustomer" />
+              <Field source="DeliveryName1Var" appearance="maximized" />
+              <Field source="DeliveryName2Var" appearance="maximized" />
+              <Field source="DeliveryName3Var" appearance="maximized" />
+              <ZipCity citySource="DeliveryPostalDistrictVar" zipSource="DeliveryZipCodeVar" appearance="maximized" />
+              <Field source="DeliveryName4Var" appearance="maximized" />
+              <Field source="DeliveryName5Var" appearance="maximized" />
+              <Field source="DeliveryAttVar" title="Attn." />
+              <Field source="DeliveryCountryVar" title="Country" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="PurchaseOrderHeaderCompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrencyVar" title="Base Currency" />
+            </Group>
+            <Group title="Transaction">
+              <Field source="TransactionType" />
+            </Group>
+            <Group title="Purchase Process Access Level">
+              <Field source="PurchaseProcessAccessLevelNameVar" title="Name" />
+              <Field source="LevelDescriptionVar" title="Description{0}" />
+            </Group>
+            <Group title="Payment">
+              <Field source="PaymentTerms" title="Pmt. Terms" />
+            </Group>
+            <Group ref="DimensionGroup" />
+            <Group title="Document Archive">
+              <Reference foreignKey="DocumentArchiveNumber_DocumentArchiveHeader" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+            <Group title="Extra Fields">
+              <Field source="Vendorpopup1" />
+              <Field source="Vendorpopup2" />
+              <Field source="Vendorpopup3" />
+              <Field source="Vendorpopup4" />
+              <Field source="Vendorpopup5" />
+            </Group>
+          </Column>
+        </Row>
+        <Row>
+          <Group title="Remarks{pl}">
+            <Field source="Remark1" />
+            <Field source="Remark2" />
+            <Field source="Remark3" />
+            <Field source="Remark4" />
+            <Field source="Remark5" />
+            <Field source="Remark6" />
+            <Field source="Remark7" />
+            <Field source="Remark8" />
+            <Field source="Remark9" />
+            <Field source="Remark10" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Demo">
+        <Actions>
+          <If condition="not (workspace() like 'VendorInvoices')                  and not (workspace() like 'Vendors')                  and not (workspace() like 'CompanyVendors')">
+            <Update />
+            <Delete />
+            <Print />
+            <PrintThis />
+            <Action source="SubmitPurchaseOrder" />
+            <Action source="ApprovePurchaseOrder" />
+            <Action source="ClosePurchaseOrder" />
+            <Action source="ReopenPurchaseOrder" />
+            <Action source="CopyPurchaseOrder" wizard="CopyPurchaseOrderWizard" />
+            <Action source="AttachDocument" />
+          </If>
+        </Actions>
+        <Column>
+          <Group title="Purchase Orders">
+            <Field source="PurchaseOrderNumber" />
+            <Field source="OurReference" title="Our Ref." />
+            <Field source="PurchaseOrderStatusCode" />
+            <Field source="JobNumber" />
+            <Field source="JobName" />
+          </Group>
+          <Group title="Vendor's Order">
+            <Field source="SupplierOrderNumber" title="Order No." />
+            <Field source="YourReference" title="Your Reference" />
+            <Field source="OurCustomerNumber" />
+          </Group>
+          <Group title="Dispatching Address">
+            <Field source="SupplierNumber" />
+            <Field source="Name1" appearance="maximized" />
+            <Field source="Name2" appearance="maximized" />
+            <Field source="Name3" appearance="maximized" />
+            <ZipCity citySource="PostalDistrict" zipSource="ZipCode" appearance="maximized" />
+            <Field source="Name4" appearance="maximized" />
+            <Field source="Name5" appearance="maximized" />
+            <Field source="Attention" title="Attn." />
+            <Field source="Country" />
+            <Field source="Telephone" />
+            <Field source="Telefax" />
+            <Field source="Telex" />
+            <Field source="ElectronicMailAddress" />
+          </Group>
+          <Group title="Delivery">
+            <Field source="PreferredDeliveryDate" title="Pref. Deliv. Date" />
+            <Field source="InventoryNumber" />
+            <Field source="LocationNumber" />
+            <Field source="DeliveryMode" />
+            <Field source="DeliveryTerms" title="Delivery Terms" />
+            <Field source="ShippingNote" />
+          </Group>
+          <Group title="Price, Currency" style="textAlignment">
+            <Field source="Currency" />
+            <Field source="PriceListNumber" title="Item Price List" />
+            <Field source="PurchaseOrderSumCurrency" title="Line Sum" />
+            <Field source="InvoiceDiscountPercentage" />
+            <Field source="InvoiceDiscount" title="Invoice Discount" />
+            <Field source="CostPercentage" />
+            <Field source="Costs" />
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Field source="InvoiceVATVar" title="Invoice Tax Sum" />
+              <Field source="SumVAT1CurrencyVar" title="Invoice Tax, Level 1" />
+              <Field source="SumVAT2CurrencyVar" title="Invoice Tax, Level 2" />
+              <If condition="maconomy:booleanSysPar('ShowThreeVATLevels')">
+                <Field source="SumVAT3CurrencyVar" title="Invoice Tax, Level 3" />
+              </If>
+            </If>
+            <Else>
+              <Field source="InvoiceVATVar" title="Invoice Tax" />
+            </Else>
+            <Field source="InvoiceAmountVar" title="Invoice Amount" />
+          </Group>
+        </Column>
+        <Column>
+          <Group title="Payment">
+            <Field source="PaymentTerms" title="Pmt. Terms" />
+          </Group>
+          <Group title="Ship to Address">
+            <Field source="DeliveryCustomer" />
+            <Field source="DeliveryName1Var" appearance="maximized" />
+            <Field source="DeliveryName2Var" appearance="maximized" />
+            <Field source="DeliveryName3Var" appearance="maximized" />
+            <ZipCity citySource="DeliveryPostalDistrictVar" zipSource="DeliveryZipCodeVar" appearance="maximized" />
+            <Field source="DeliveryName4Var" appearance="maximized" />
+            <Field source="DeliveryName5Var" appearance="maximized" />
+            <Field source="DeliveryAttVar" title="Attn." />
+            <Field source="DeliveryCountryVar" title="Country" />
+          </Group>
+          <Group title="Billing Address">
+            <Field source="PaymentSupplier" title="Vendor" />
+            <Field source="PayerName1Var" appearance="maximized" />
+            <Field source="PayerName2Var" appearance="maximized" />
+            <Field source="PayerName3Var" appearance="maximized" />
+            <ZipCity citySource="PayerPostalDistrictVar" zipSource="PayerZipCodeVar" appearance="maximized" />
+            <Field source="PayerName4Var" appearance="maximized" />
+            <Field source="PayerName5Var" appearance="maximized" />
+            <Field source="PayerAttVar" title="Attn." />
+            <Field source="PayerCountryVar" title="Country" />
+          </Group>
+          <Group title="Status">
+            <Field source="LastPrintingDate" title="Date Printed" />
+            <Field source="NumberOfPrintouts" title="Quantity" />
+            <Field source="Submitted" />
+            <Field source="SubmittedBy" />
+            <Field source="DateSubmitted" title="Date" />
+            <Field source="Approved" />
+            <Field source="ApprovedBy" />
+            <Field source="ApprovalDate" title="Date" />
+            <Field source="Closed" />
+            <Field source="ClosedBy" />
+            <Field source="ClosingDate" title="Date" />
+          </Group>
+          <Group ref="DimensionGroup" />
+          <Group ref="UserUpdateGroup" />
+        </Column>
+        <Column>
+          <If condition="not hasWorkspace('PurchaseProcesses')">
+            <Group>
+              <Link workspace="PurchaseProcesses" template="More details..." tooltip="Detailed purchase order" appearance="maximized" icon="WorkspaceLink">
+                <Waypoint pane="PurchaseProcessFilter">
+                  <Restriction template="Selected Purchase Process" expression="PurchaseProcessNumber=target.PurchaseProcessNumber" />
+                  <Focus>
+                    <Match field="PurchaseProcessNumber" value="PurchaseProcessNumber" />
+                  </Focus>
+                </Waypoint>
+                <Target pane="PurchaseOrdersCard">
+                  <Restriction template="Selected Purchase Process" expression="PurchaseProcessNumber=target.PurchaseProcessNumber" />
+                  <Focus>
+                    <Match field="PurchaseProcessNumber" value="PurchaseProcessNumber" />
+                  </Focus>
+                </Target>
+              </Link>
+            </Group>
+          </If>
+        </Column>
+      </Form>
+      <Form name="CopyPurchaseOrderPage1">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+          <Group>
+            <Field source="PurchaseOrderNumberCopy" mandatory="true" searchView="CopyFromPurchaseOrder" />
+          </Group>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+        <Include fragment="GD_PurchaseAllocation" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="ActivityNumber" />
+          <Field source="EmployeeNumber" title="Empl. No." />
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" />
+          <Field source="LineText" />
+          <Field source="ItemNumber" />
+          <Field source="ItemText1" />
+          <Field source="TextLine" />
+          <Field source="NumberOf" />
+          <Field source="Unit" />
+          <Field source="UnitPriceCurrency" title="Unit Price, Currency" />
+          <Field source="PriceUnit" />
+          <Field source="DiscountPercentage" />
+          <Field source="DiscountCurrency" title="Discount, Currency" />
+          <Field source="PriceCurrency" title="Price, Currency" />
+          <Field source="FinanceVATCode" />
+          <Field source="FinanceVATCode2" />
+          <Field source="FinanceVATCode3" />
+          <Field source="FinanceVATCode" title="Tax Code" />
+          <Field source="VATCurrency" title="Total Tax Amount, Currency" />
+          <Field source="VAT1CurrencyVar" title="Tax Amount 1, Currency" />
+          <Field source="VAT2CurrencyVar" title="Tax Amount 2, Currency" />
+          <Field source="VAT3CurrencyVar" title="Tax Amount 3, Currency" />
+          <Field source="VATCurrency" title="Tax Amount, Currency" />
+          <Field source="ItemVATCode" />
+          <Field source="DateOfDelivery" />
+          <Field source="ConfirmedDeliveryDate" />
+          <Field source="ExpectedCommitmentDate" />
+          <Field source="DateOfReceipt" />
+          <Field source="NumberReceived" />
+          <Field source="RegistrationCodeName" />
+          <Field source="CompanyNumber" />
+          <Columns ref="DimensionColumns" />
+          <Field source="TaskName" />
+          <Field source="LocationNumber" />
+          <Field source="DeliveryRemark" title="Remarks{sg}" />
+          <Field source="InternalText" />
+          <Field source="DiscountText" />
+          <Field source="NoteNumber" />
+          <Field source="NoteDescriptionVar" title="Note Description" />
+          <Field source="PriceBase" />
+          <Field source="VATBase" title="Total Tax Amount, Base" />
+          <Field source="VAT1BaseVar" title="Tax Amount 1, Base" />
+          <Field source="VAT2BaseVar" title="Tax Amount 2, Base" />
+          <Field source="VAT3BaseVar" title="Tax Amount 3, Base" />
+          <Field source="VATBase" />
+          <Field source="DiscountBase" />
+          <Field source="NumberInvoiced" />
+          <Field source="InvoicedCurrency" title="Invoiced, Currency" />
+          <Field source="InvoicedBase" />
+          <Field source="NumberAccrued" />
+          <Field source="AccruedAmountCurrency" />
+          <Field source="AccruedAmountBase" />
+          <Field source="Closed" />
+          <Field source="BaseCurrencyCompany" />
+          <Field source="CommittedCompany" />
+          <Field source="CommittedBase" />
+          <Field source="CommittedCurrency" />
+          <Field source="CommitmentDate" />
+          <Field source="AccrualType" />
+          <Field source="FromAccrualPeriod" />
+          <Field source="ToAccrualPeriod" />
+          <Field source="TransactionType" />
+          <Field source="JobNameVar" title="Job Name" />
+          <Field source="TaskTextVar" title="Task Description{1}" />
+          <Field source="JobBudgetLineNumberVar" title="Job Budget Line No." />
+          <Field source="JobBudgetLineWBSTextVar" />
+          <Field source="EmployeeNameVar" title="Employee Name" />
+          <Field source="OriginalNumberOrdered" title="Orig. Quantity" />
+          <Field source="SupplierItemNumber" title="Vendor Item No.{abbr}" />
+          <Field source="SupplierItemText" title="Vendor Item Desc.{abbr}" />
+          <Field source="UnitPrice1Currency" />
+          <Field source="QuantityDiscountCurrency" />
+          <Field source="DutyCode" />
+          <Field source="SupplementaryText1" />
+          <Field source="SupplementaryText2" />
+          <Field source="SupplementaryText3" />
+          <Field source="SupplementaryText4" />
+          <Field source="SupplementaryText5" />
+          <Field source="SupplementaryText6" />
+          <Field source="SupplementaryText7" />
+          <Field source="SupplementaryText8" />
+          <Field source="SupplementaryText9" />
+          <Field source="SupplementaryText10" />
+          <Field source="ItemPopup1" />
+          <Field source="ItemPopup2" />
+          <Field source="ItemPopup3" />
+          <Field source="ItemPopup4" />
+          <Field source="ItemPopup5" />
+          <Field source="Date1" />
+          <Field source="Date2" />
+          <Field source="Date3" />
+          <Field source="Date4" />
+          <Field source="Date5" />
+        </Columns>
+      </Table>
+      <Table name="PurchaseProcess">
+        <Actions all="true" />
+        <Columns>
+          <Columns ref="C_PurchaseOrderLineColumns" />
+        </Columns>
+      </Table>
+      <Table name="ShowPurchaseProcess">
+        <Columns>
+          <Columns ref="PurchaseOrderLineColumns" />
+        </Columns>
+      </Table>
+      <Table name="PurchaseProcessHighlightRow">
+        <Columns>
+          <Style ref="highlightRow" condition="InstanceKey=Parent.Parent.Parent.Parent.InstanceKey" />
+          <Columns ref="PurchaseOrderLineColumns" />
+        </Columns>
+      </Table>
+      <Table name="ApprovalsHighlightRow">
+        <Columns>
+          <Style ref="highlightRow" condition="InstanceKey=Parent.Parent.Parent.ApprovalRelationInstanceKey" />
+          <Columns ref="PurchaseOrderLineColumns" />
+        </Columns>
+      </Table>
+      <Table name="Demo">
+        <Actions all="not (workspace() like 'Vendors')                 and not (workspace() like 'CompanyVendors')" />
+        <Columns>
+          <Field source="TaskName" />
+          <Field source="TaskTextVar" title="Task Description" />
+          <Field source="ActivityNumber" />
+          <Field source="NumberOf" />
+          <Field source="Unit" />
+          <Field source="UnitPriceCurrency" title="Unit Price, Currency" />
+          <Field source="PriceCurrency" title="Price, Currency" />
+          <Field source="DiscountCurrency" title="Discount, Currency" />
+          <Field source="EmployeeNumber" title="Empl. No." />
+          <Field source="LineText" />
+          <Field source="TextLine" />
+          <Field source="ItemNumber" />
+          <Field source="ItemText1" />
+          <Field source="DateOfDelivery" />
+          <Field source="AccountNumber" />
+          <Field source="AccountActivityText" />
+          <Field source="RegistrationCodeName" />
+          <Field source="FinanceVATCode" title="Tax Code" />
+          <Field source="VATCurrency" title="Tax Amount, Currency" />
+          <Field source="ItemVATCode" />
+          <Field source="Closed" />
+          <Field source="CompanyNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

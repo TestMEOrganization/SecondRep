@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- MJA, 27/06/10: Implement conditional layout (38461).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- KUN, 11/04/11: Added supplement fields for account references (39543).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- KUN, 09/08/11: New layouts to support the Tax setup workspace (39543). -->
+<!-- KUN, 09/08/11: Added title to card (39546).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 10/10/11: Alignment in DimensionOrigin form (39547).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<!-- CSK, 19/10/11: New removed from creation wizard title (40064).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="VATCodes">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+          <Field source="VATRate" />
+          <Field source="SpecialTaxRate" />
+          <Field source="VATLevel" />
+          <Field source="CalculateVATOfVAT" />
+          <Field source="VATTypeVATSubj" />
+          <Field source="VATTypeExport" />
+          <Field source="VATNatureVATSubj" />
+          <Field source="VATNatureExport" />
+        </Columns>
+      </Filter>
+      <Filter name="VATSetup">
+        <Actions>
+          <Action source="with.Create" wizard="CreateVATCodeWizard" />
+        </Actions>
+        <Compact>
+          <Description template="^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+          <Field source="VATRate" />
+          <Field source="SpecialTaxRate" />
+          <Field source="VATLevel" />
+          <Field source="CalculateVATOfVAT" />
+          <Field source="VATTypeVATSubj" />
+          <Field source="VATTypeExport" />
+          <Field source="VATNatureVATSubj" />
+          <Field source="VATNatureExport" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Function name="isAccount" parameters="FieldPar" value="FieldPar=Parent.DimensionCombNumber" />
+      </Define>
+      <Wizard name="CreateVATCodeWizard" title="Create Tax Code">
+        <Page form="CreateVATCodePage1" title="Tax Code" />
+        <Page form="CreateVATCodePage2" title="Posting References" />
+      </Wizard>
+      <Form name="Full" title="Tax Code">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Tax Code">
+              <Field source="Name" />
+              <Field source="VATRate" />
+              <Field source="SpecialTaxRate" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATLevel" />
+                <Boolean source="CalculateVATOfVAT" />
+              </If>
+            </Group>
+            <Group title="Invoices Excl. Tax">
+              <Field source="VATNatureExport" title="Nature of Tax" />
+              <Field source="VATTypeExport" title="Tax Type{VAT}" />
+            </Group>
+            <Group title="Invoices Incl. Tax">
+              <Field source="VATNatureVATSubj" title="Nature of Tax" />
+              <Field source="VATTypeVATSubj" title="Tax Type{VAT}" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Posting References">
+              <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="DetailedVATSetup" title="Tax Code">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Tax Code">
+              <Field source="Name" />
+              <Field source="VATRate" />
+              <Field source="SpecialTaxRate" />
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATLevel" />
+                <Boolean source="CalculateVATOfVAT" />
+              </If>
+            </Group>
+            <Group title="Invoices Excl. Tax">
+              <Field source="VATNatureExport" title="Nature of Tax" />
+              <Field source="VATTypeExport" title="Tax Type{VAT}" />
+            </Group>
+            <Group title="Invoices Incl. Tax">
+              <Field source="VATNatureVATSubj" title="Nature of Tax" />
+              <Field source="VATTypeVATSubj" title="Tax Type{VAT}" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Posting References">
+              <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" />
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="VATSetup" title="Tax Code">
+        <Actions all="true">
+          <Exclude>
+            <Create />
+          </Exclude>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Tax Code">
+              <Field source="Name" />
+              <Field source="VATRate" />
+              <If condition="SpecialTaxRate != 0">
+                <Field source="SpecialTaxRate" />
+              </If>
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATLevel" open="false" />
+                <If condition="VATLevel!=VATLevelType'\Tax level 1\">
+                  <Boolean source="CalculateVATOfVAT" />
+                </If>
+              </If>
+            </Group>
+            <Group title="Invoices Excl. Tax">
+              <Field source="VATNatureExport" title="Nature of Tax" />
+              <Field source="VATTypeExport" title="Tax Type{VAT}" />
+            </Group>
+            <Group title="Invoices Incl. Tax">
+              <Field source="VATNatureVATSubj" title="Nature of Tax" />
+              <Field source="VATTypeVATSubj" title="Tax Type{VAT}" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Posting References">
+              <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" />
+              <If condition="SpecialTaxRate != 0">
+                <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" />
+                <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" />
+              </If>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CreateVATCodePage1">
+        <Actions>
+          <Create />
+        </Actions>
+        <Row>
+          <Group>
+            <Field source="Name" />
+            <Field source="VATRate" />
+            <Field source="SpecialTaxRate" />
+            <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+              <Field source="VATLevel" />
+              <Boolean source="CalculateVATOfVAT" />
+            </If>
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CreateVATCodePage2">
+        <Actions>
+          <Create />
+        </Actions>
+        <Row>
+          <Group>
+            <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" />
+            <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" />
+            <If condition="SpecialTaxRate != 0">
+              <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" />
+              <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" />
+            </If>
+          </Group>
+        </Row>
+      </Form>
+      <Form name="Custom_RoleRestricted_DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+        <If condition="hasRole('Finance Admin')" >
+          <Column>
+            <Group title="Tax Code" style="textAlignment">
+              <Field source="Name" />
+              <Field source="VATRate" />
+              <If condition="SpecialTaxRate != 0">
+                <Field source="SpecialTaxRate" />
+              </If>
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATLevel" />
+                <If condition="VATLevel!=VATLevelType'\Tax level 1\">
+                  <Field source="CalculateVATOfVAT" />
+                </If>
+              </If>
+            </Group>
+            <Group title="Invoices Excl. Tax">
+              <Field source="VATNatureExport" title="Nature of Tax" />
+              <Field source="VATTypeExport" title="Tax Type{VAT}" />
+            </Group>
+            <Group title="Invoices Incl. Tax">
+              <Field source="VATNatureVATSubj" title="Nature of Tax" />
+              <Field source="VATTypeVATSubj" title="Tax Type{VAT}" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Posting References">
+              <If condition="isAccount(FinanceAccountIncoming)">
+                <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountOutgoing)">
+                <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountTax)">
+                <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountSetOffAccount)">
+                <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          </If>
+          <Else>
+          <Column>
+            <Group title="Tax Code" style="textAlignment">
+              <Field source="Name" />
+              <Field source="VATRate" />
+              <If condition="SpecialTaxRate != 0">
+                <Field source="SpecialTaxRate" />
+              </If>
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATLevel" />
+                <If condition="VATLevel!=VATLevelType'\Tax level 1\">
+                  <Field source="CalculateVATOfVAT" />
+                </If>
+              </If>
+            </Group>
+            <Group title="Invoices Excl. Tax">
+              <Field source="VATNatureExport" title="Nature of Tax" />
+              <Field source="VATTypeExport" title="Tax Type{VAT}" />
+            </Group>
+            <Group title="Invoices Incl. Tax">
+              <Field source="VATNatureVATSubj" title="Nature of Tax" />
+              <Field source="VATTypeVATSubj" title="Tax Type{VAT}" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Posting References">
+              <If condition="isAccount(FinanceAccountIncoming)">
+                <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountOutgoing)">
+                <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountTax)">
+                <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountSetOffAccount)">
+                <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" open="false" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+          </Else>
+        </Row>
+      </Form>
+      <Form name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Tax Code" style="textAlignment">
+              <Field source="Name" />
+              <Field source="VATRate" />
+              <If condition="SpecialTaxRate != 0">
+                <Field source="SpecialTaxRate" />
+              </If>
+              <If condition="maconomy:booleanSysPar('UseMultipleVATLevels')">
+                <Field source="VATLevel" />
+                <If condition="VATLevel!=VATLevelType'\Tax level 1\">
+                  <Field source="CalculateVATOfVAT" />
+                </If>
+              </If>
+            </Group>
+            <Group title="Invoices Excl. Tax">
+              <Field source="VATNatureExport" title="Nature of Tax" />
+              <Field source="VATTypeExport" title="Tax Type{VAT}" />
+            </Group>
+            <Group title="Invoices Incl. Tax">
+              <Field source="VATNatureVATSubj" title="Nature of Tax" />
+              <Field source="VATTypeVATSubj" title="Tax Type{VAT}" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Posting References">
+              <If condition="isAccount(FinanceAccountIncoming)">
+                <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountIncoming_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountOutgoing)">
+                <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountOutgoing_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountTax)">
+                <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountTax_DimensionCombHeader" />
+              </Else>
+              <If condition="isAccount(FinanceAccountSetOffAccount)">
+                <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" open="true" style="highlightRow" />
+              </If>
+              <Else>
+                <Reference foreignKey="FinanceAccountSetOffAccount_DimensionCombHeader" />
+              </Else>
+            </Group>
+            <Group title="Access Level">
+              <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+            </Group>
+            <Group ref="UserUpdateGroup" />
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--39a3c1fc0ae89a5c36619eb1ca70a30feb83b3aa-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--45b6eefb552302234ceeca60e4005ba1f1e36712-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest 1b3f04e8816b2fa6243f3ae386140aa1   3 _ _   210
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 7.12.2011
+  TAC_CreationTime: 9:3:11
+  TAC*MaconomyHQ: yes
+-->
+<!-- CSK, 15/10/07: Test layouts for the new client (35632). -->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- CSK, 28/04/10: Remove test layouts (38473). -->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- JSV, 13/07/10: Show BudgetUpdateAccessLevelName (38352).-->
+<!-- PSZ, 23/07/10: New variable TaskListHeaderTimeBudgetingTaskNameVar (38685).-->
+<!-- PSZ, 05/08/10: New field IncludedInFixedPrice on TaskListLine (37713).-->
+<!-- KRN, 13/08/10: Demo layout (38644).-->
+<!-- PSZ, 20/08/10: New variable TaskListHeaderAmountBudgetingTaskNameVar (38685).-->
+<!-- JAM, 31/08/10: Adding fields to layouts in order to support Scope of Task Usage (38585).-->
+<!-- BPE, 17/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- PSZ, 20/09/10: IncludedInFixedPrice is opened/closed conditionally (37713). -->
+<!-- BPE, 22/09/10: Changed layout to use global definition dimensions (38745). -->
+<!-- KRN, 19/11/10: Supplement fields for descriptions (38986).-->
+<!-- PSZ, 30/11/10: Added CopyJobTasksWizard (39161).-->
+<!-- JSV, 30/11/10: Compact block for Original filter (39106).-->
+<!-- PSZ, 03/12/10: Use onDemand suggestions for relevant fields (39127).-->
+<!-- JSV, 17/12/10: Rearrange fields in the table view (39245).-->
+<!-- KRN, 13/08/10: Demo layout for table include parent actions (38644).-->
+<!-- SBA, 20/12/10: Layouts improved (38501).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- PSZ, 11/07/11: PSO Jobs workspace changes (39759).-->
+<!-- SBA, 16/09/11: Create as appearance all -> Add (39949). -->
+<!-- PSZ, 21/09/11: Use keyMandatory instead of mandatory on Reference elements (39595).-->
+<!-- PSZ, 17/11/11: Remove unused layouts (40178).-->
+<!-- MJA, 02/12/11: Updated User group (40195).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JobTasks">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="JobName;JobNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="JobGroup" />
+          <Field source="NotInvoiceable" />
+          <Field source="InternalJob" />
+          <Field source="Status" />
+          <Field source="ConvertedBy" />
+          <Field source="ConversionDate" />
+          <Field source="ProjectManagerNumber" />
+          <Field source="SalesPersonNumber" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Wizard name="CopyJobTasksWizard" title="Copy Job Tasks">
+        <Page form="CopyJobTasksWizardPage1" title="Select a Job for Copying Tasks" description="Choose a job to copy tasks from" />
+      </Wizard>
+      <Form name="Full">
+        <Actions all="true">
+          <Action source="CopyJobTasks" wizard="CopyJobTasksWizard" />
+          <Action source="MDK_CopyTaskList" title="Copy Tasks to Budget" icon="Dot" />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Job!">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+            </Group>
+            <Group title="Daily Descriptions">
+              <Boolean source="UseDailyDescriptions" />
+            </Group>
+            <Group title="Tasks">
+              <If condition="TaskListHeaderCreatedByVar != ''">
+                <Description template="^1 by ^2" arguments="TaskListHeaderCreationDateVar;TaskListHeaderCreatedByVar" title="Created" />
+              </If>
+              <Else>
+                <Description template="" title="Created" />
+              </Else>
+              <If condition="TaskListHeaderChangedByVar != ''">
+                <Description template="^1 by ^2" arguments="TaskListHeaderChangedDateVar;TaskListHeaderChangedByVar" title="Changed" />
+              </If>
+              <Else>
+                <Description template="" title="Changed" />
+              </Else>
+              <Field source="TaskListHeaderVersionNumberVar" title="List Version No." />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Customer">
+              <Reference foreignKey="CustomerNumber_Customer" descriptionSource="Name1" />
+            </Group>
+            <Group title="Standard Tasks">
+              <Field source="TaskListHeaderTimeBudgetingTaskNameVar" />
+              <Field source="TaskListHeaderAmountBudgetingTaskNameVar" />
+              <Field source="TaskListHeaderTaskNameVar" title="Registration" />
+              <Field source="TaskListHeaderRevenueRecognitionTaskNameVar" title="Revenue Recognition" />
+              <Field source="TaskListHeaderMileageTaskNameVar" title="Mileage" />
+              <Field source="TaskListHeaderInvoicingPlanTaskNameVar" title="Invoicing Plan" />
+              <Field source="TaskListHeaderInvoiceOnAccountTaskName1Var" title="Invoicing On Account 1" />
+              <Field source="TaskListHeaderInvoiceOnAccountTaskName2Var" title="Invoicing On Account 2" />
+              <Field source="TaskListHeaderWriteUpDownInvSelectionVar" title="Write Up/Down, Invoice Selection" />
+              <Field source="TaskListHeaderWriteUpDownJobInvAllocVar" title="Write Up/Down, Job Inv. Allocation" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="CopyJobTasksWizardPage1">
+        <Actions all="true" />
+        <Group>
+          <Reference foreignKey="Card_CopyFromJobVar_JobHeader" keyMandatory="true" />
+          <Boolean source="OverwriteAtDuplicateVar" title="Overwrite when duplicated" />
+          <!-- *** Rambøll customization ***- -->
+          <!-- <Boolean source="OverwriteDimensionDerivationsVar" title="Overwrite Derived Dimensions" /> -->
+        </Group>
+      </Form>
+      <Form name="Standard">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('Jobs')">
+              <Action source="MarkAllForDailyDescriptions" />
+              <Action source="UnmarkAllForDailyDescriptions" />
+            </If>
+          </Exclude>
+          <Action source="CopyJobTasks" wizard="CopyJobTasksWizard" />
+          <Action source="MDK_CopyTaskList" title="Copy Tasks to Budget"/>
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Standard Tasks">
+              <Field source="TaskListHeaderTimeBudgetingTaskNameVar" />
+              <Field source="TaskListHeaderAmountBudgetingTaskNameVar" />
+              <Field source="TaskListHeaderTaskNameVar" title="Registration" />
+              <Field source="TaskListHeaderRevenueRecognitionTaskNameVar" title="Revenue Recognition" />
+              <Field source="TaskListHeaderMileageTaskNameVar" title="Mileage" />
+              <Field source="TaskListHeaderInvoicingPlanTaskNameVar" title="Invoicing Plan" />
+              <Field source="TaskListHeaderInvoiceOnAccountTaskName1Var" title="Invoicing On Account 1" />
+              <Field source="TaskListHeaderInvoiceOnAccountTaskName2Var" title="Invoicing On Account 2" />
+              <Field source="TaskListHeaderWriteUpDownInvSelectionVar" title="Write Up/Down, Invoice Selection" />
+              <Field source="TaskListHeaderWriteUpDownJobInvAllocVar" title="Write Up/Down, Job Inv. Allocation" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Daily Descriptions">
+              <Boolean source="UseDailyDescriptions" />
+            </Group>
+            <Group title="User" name="UserUpdateGroup">
+              <If condition="TaskListHeaderCreatedByVar != ''">
+                <Description template="^1 by ^2" arguments="TaskListHeaderCreationDateVar;TaskListHeaderCreatedByVar" title="Created" />
+              </If>
+              <Else>
+                <Description template="" title="Created" />
+              </Else>
+              <If condition="TaskListHeaderChangedByVar != ''">
+                <Description template="^1 by ^2" arguments="TaskListHeaderChangedDateVar;TaskListHeaderChangedByVar" title="Changed" />
+              </If>
+              <Else>
+                <Description template="" title="Changed" />
+              </Else>
+              <Field source="TaskListHeaderVersionNumberVar" title="List Version No." />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="TaskName" title="Task!" />
+          <Field source="Description" />
+          <Field source="Blocked" size="small" />
+          <Field source="ActivityNumber" title="Derived Act. No." />
+          <Field source="OverwriteActivity" />
+          <Field source="ActivityTextVar" title="Activity Name" />
+          <Field source="JobPriceGroupNumber" />
+          <If condition="Parent.CanEditIncludedInFixedPriceVar">
+            <Field source="IncludedInFixedPrice" />
+          </If>
+          <Else>
+            <Field source="IncludedInFixedPrice" open="false" />
+          </Else>
+          <Field source="AllowTimeRegistration" />
+          <Field source="AllowExpenseRegistration" />
+          <Field source="AllowMileageRegistration" />
+          <Field source="AllowPurchasing" />
+          <Field source="AllowInvoicingOnAccount" />
+          <Field source="AllowInvoicingPlan" />
+          <Field source="AccessLevelName" />
+          <Field source="BudgetUpdateAccessLevelName" />
+          <Field source="UseDailyDescriptions" />
+          <Field source="Approved" />
+          <Field source="ApprovedBy" />
+          <Field source="ApprovalDate" />
+          <Field source="NoteNumber" title="Standard Note No." />
+          <Field source="NoteDescriptionVar" title="Note Description" />
+          <Field source="TaskGroup1" size="medium" />
+          <Field source="TaskGroup2" size="medium" />
+          <Field source="TaskGroup3" size="medium" />
+          <Field source="TaskGroup4" size="medium" />
+          <Field source="TaskGroup5" size="medium" />
+          <Field source="TaskGroup6" size="medium" />
+          <Field source="DimensionCombNumber" title="Dim. Comb. No." />
+          <Columns ref="DimensionNameOverwriteColumns" />
+        </Columns>
+      </Table>
+      
+      <Table name="Standard">
+        <Actions all="true">
+          <If condition="hasWorkspace('Jobs')">
+            <Action source="parent.MarkAllForDailyDescriptions" />
+            <Action source="parent.UnmarkAllForDailyDescriptions" />
+           <Action source="MDK_CopyTaskList" title="Copy Tasks to Budget"/>
+            
+          </If>
+        </Actions>
+        <Columns>
+          <Field source="TaskName" title="Task" />
+          <Field source="Description" />
+          <Field source="Blocked" size="small" />
+          <Field source="ActivityNumber" title="Derived Act. No." size="small" />
+          <Field source="ActivityTextVar" title="Activity Name" />
+          <Field source="OverwriteActivity" />
+          <Field source="UseDailyDescriptions" />
+          <If condition="parent.CanEditIncludedInFixedPriceVar">
+            <Field source="IncludedInFixedPrice" />
+          </If>
+          <Else>
+            <Field source="IncludedInFixedPrice" open="false" />
+          </Else>
+          <Field source="AllowTimeRegistration" />
+          <Field source="AllowExpenseRegistration" />
+          <Field source="AllowMileageRegistration" />
+          <Field source="AllowPurchasing" />
+          <Field source="AllowInvoicingOnAccount" />
+          <Field source="AllowInvoicingPlan" />
+        </Columns>
+      </Table>
+      <Table name="Tasks_Custom">
+        <Actions all="not HasPMReadOnly()">
+          <!-- <If condition="hasWorkspace('Jobs')">
+						<Action source="parent.MarkAllForDailyDescriptions" />
+						<Action source="parent.UnmarkAllForDailyDescriptions" />
+					</If> -->
+          <Action source="parent.CopyJobTasks" wizard="CopyJobTasksWizard" disabled="HasPMReadOnly()" />
+           <Action source="parent.MDK_CopyTaskList" title="Copy Tasks to Budget" icon="Dot" disabled="HasPMReadOnly()" />
+           
+        </Actions>
+        <Columns>
+          <Field source="TaskName" title="Task" />
+          <Field source="Description" mandatory="true" />
+          <Field source="Blocked" size="small" />
+          <Field source="ActivityNumber" title="Derived Act. No." size="small" />
+          <Field source="ActivityTextVar" title="Activity Name" />
+          <Field source="UseDailyDescriptions" />
+          <!-- <If condition="parent.CanEditIncludedInFixedPriceVar">
+            <Field source="IncludedInFixedPrice" />
+          </If> -->
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

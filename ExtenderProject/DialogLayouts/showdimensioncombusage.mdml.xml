@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- CSK, 01/05/09: Original layout added (37683).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 07/07/09: Standard views deleted (37683).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- BPE, 13/09/10: Changed layout to use global definition dimensions (38744). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="ShowDimensionCombUsage">
+    <FilterPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="Description;DimensionCombNumber;DimensionCombType" />
+        </Compact>
+        <Columns>
+          <Field source="DimensionCombNumber" />
+          <Field source="DimensionCombType" />
+          <Field source="Description" />
+          <Field source="CompanyNumber" />
+          <Field source="AccountNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Dimension Combination">
+            <Field source="DimensionCombNumber" />
+            <Field source="DimensionCombType" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Access Level">
+            <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Custom_RoleRestricted_Full" >
+        <Actions all="true" >
+          <Exclude>
+            <If condition="not hasRole('Finance Admin')">
+              <Create />
+              <Update />
+              <Delete />
+            </If>
+          </Exclude>
+        </Actions>
+        <Columns>
+          <Field source="UsedInRelation" title="Used In" />
+          <Field source="Key1NameVar" title="Key 1" />
+          <Field source="Key2NameVar" title="Key 2" />
+          <Field source="DepartmentNumber" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="UsedInRelation" title="Used In" />
+          <Field source="Key1NameVar" title="Key 1" />
+          <Field source="Key2NameVar" title="Key 2" />
+          <Field source="DepartmentNumber" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

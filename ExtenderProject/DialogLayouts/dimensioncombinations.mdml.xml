@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- CSK, 01/05/09: Original layout added (37683).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- CSK, 07/07/09: Standard views deleted (37683).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- BPE, 17/09/10: Changed layout to use global definition dimensions (38744). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- CSK, 05/04/11: Original layouts improved (39492).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- PSZ, 05/10/11: Add shadow titles for selected relations (40004).-->
+<!-- CSK, 10/10/11: Copy dimension combination wizard added (39492).-->
+<!-- CSK, 11/10/11: DimensionOrigin form and table added (39547).-->
+<!-- CSK, 19/10/11: Creation wizard improved (40068).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="DimensionCombinations">
+    <FilterPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Filter name="Custom_RoleRestricted_Standard">
+        <Actions>
+          <Exclude>
+            <If condition="not hasRole('Finance Admin')">
+              <Create />
+              <Update />
+              <Delete />
+            </If>
+          </Exclude>
+          <If condition="hasWorkspace('AdvancedDimensions') and hasRole('Finance Admin')" >
+            <Action source="with.Create" wizard="CreateDimensionCombination" title="New Dimension Combination" />
+          </If>
+        </Actions>
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="Description;DimensionCombNumber;DimensionCombType" />
+        </Compact>
+        <Columns>
+          <Field source="DimensionCombNumber" />
+          <Field source="DimensionCombType" />
+          <Field source="Description" />
+          <Field source="CompanyNumber" />
+          <Field source="AccountNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Filter>
+      <Filter name="Standard">
+        <Actions>
+          <If condition="hasWorkspace('AdvancedDimensions')">
+            <Action source="with.Create" wizard="CreateDimensionCombination" title="New Dimension Combination" />
+          </If>
+        </Actions>
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="Description;DimensionCombNumber;DimensionCombType" />
+        </Compact>
+        <Columns>
+          <Field source="DimensionCombNumber" />
+          <Field source="DimensionCombType" />
+          <Field source="Description" />
+          <Field source="CompanyNumber" />
+          <Field source="AccountNumber" />
+          <Columns ref="DimensionColumns" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+        <Trigger name="CreateDimensionCombinationTrigger">
+          <Assign source="OverwriteAccount" value="true" />
+        </Trigger>
+      </Define>
+      <Wizard name="CreateDimensionCombination" title="Create Dimension Combination">
+        <Page form="CreateDimensionCombination1" title="Dimension Combination" description="Please enter the number and type" />
+        <If condition="DimensionCombType=DimensionCombTypeType'\Posting Reference\">
+          <Page form="CreateDimensionCombination2" title="Posting Reference" description="Please enter the account number" preTrigger="CreateDimensionCombinationTrigger" />
+        </If>
+      </Wizard>
+      <Wizard name="CopyDimensionCombinationWizard" title="Copy Dimension Combination">
+        <Page form="CopyDimensionCombinationWizardPage1" title="" description="Please enter the new dimension combination number" />
+      </Wizard>
+      <Form name="Custom_RoleRestricted_Full" >
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('AdvancedDimensions') or not hasRole('Finance Admin')">
+              <Create />
+              <Update />
+              <Delete />
+            </If>
+          </Exclude>
+          <Action source="CopyDimensionCombination" wizard="CopyDimensionCombinationWizard" />
+        </Actions>
+        <Column>
+          <Group title="Dimension Combination">
+            <Field source="DimensionCombNumber" size="large" />
+            <Field source="DimensionCombType" size="large" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Access Level">
+            <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+        <Column>
+          <Group title="Derived Company and Account">
+            <Grid>
+              <Header cells="|Value|;|Description|;|Overwrite|" title="" />
+              <Row cells="CompanyNumber;MainCompanyNameVar;OverwriteCompany#" title="Company No." />
+              <Row cells="AccountNumber;MainAccountTextVar;OverwriteAccount#" title="Account No." />
+            </Grid>
+          </Group>
+          <Group ref="MainDerivedDimensionWithDescriptionGroup" />
+        </Column>
+      </Form>
+      <Form name="Full">
+        <Actions all="true">
+          <Exclude>
+            <If condition="hasWorkspace('AdvancedDimensions')">
+              <Create />
+            </If>
+          </Exclude>
+          <Action source="CopyDimensionCombination" wizard="CopyDimensionCombinationWizard" />
+        </Actions>
+        <Column>
+          <Group title="Dimension Combination">
+            <Field source="DimensionCombNumber" size="large" />
+            <Field source="DimensionCombType" size="large" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Access Level">
+            <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+        <Column>
+          <Group title="Derived Company and Account">
+            <Grid>
+              <Header cells="|Value|;|Description|;|Overwrite|" title="" />
+              <Row cells="CompanyNumber;MainCompanyNameVar;OverwriteCompany#" title="Company No." />
+              <Row cells="AccountNumber;MainAccountTextVar;OverwriteAccount#" title="Account No." />
+            </Grid>
+          </Group>
+          <Group ref="MainDerivedDimensionWithDescriptionGroup" />
+        </Column>
+      </Form>
+      <Form name="CreateDimensionCombination1">
+        <Actions all="true" />
+        <Row>
+          <Group title="" style="fullWidth">
+            <Field source="DimensionCombNumber" size="large" />
+            <Field source="DimensionCombType" size="large" />
+            <Field source="Description" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CreateDimensionCombination2">
+        <Actions all="true" />
+        <Row>
+          <Group title="" style="fullWidth">
+            <Field source="AccountNumber" size="large" mandatory="true" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="CopyDimensionCombinationWizardPage1">
+        <Actions all="true" />
+        <Row>
+          <Group title="">
+            <Field source="NewDimensionCombNumberVar" mandatory="true" />
+          </Group>
+        </Row>
+      </Form>
+      <Form name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Column>
+          <Group title="Dimension Combination">
+            <Field source="DimensionCombNumber" size="large" />
+            <Field source="DimensionCombType" size="large" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Access Level">
+            <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+          <Group title="Derived Company and Account">
+            <Grid>
+              <Header cells="|Value|;|Description|;|Overwrite|" title="" />
+              <Row cells="-CompanyNumber;-MainCompanyNameVar;-OverwriteCompany" title="Company No." />
+              <Row cells="AccountNumber;MainAccountTextVar;OverwriteAccount" title="Account No." style="highlightRow" />
+            </Grid>
+          </Group>
+          <Group ref="MainDerivedDimensionWithDescriptionReadOnlyGroup" />
+        </Column>
+      </Form>
+      <Form name="ReadOnly">
+        <Actions />
+        <Column>
+          <Group title="Dimension Combination">
+            <Field source="DimensionCombNumber" size="large" />
+            <Field source="DimensionCombType" size="large" />
+            <Field source="Description" />
+          </Group>
+          <Group title="Access Level">
+            <Reference foreignKey="AccessLevelName_AccessLevelHeader" keyShadowTitle="Name" descriptionShadowTitle="Description" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+        <Column>
+          <Group title="Derived Company and Account">
+            <Grid>
+              <Header cells="|Value|;|Description|;|Overwrite|" title="" />
+              <Row cells="CompanyNumber;MainCompanyNameVar;OverwriteCompany" title="Company No." />
+              <Row cells="AccountNumber;MainAccountTextVar;OverwriteAccount" title="Account No." />
+            </Grid>
+          </Group>
+          <Group ref="MainDerivedDimensionWithDescriptionReadOnlyGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Define>
+        <Include fragment="GD_Dimensions" />
+      </Define>
+      <Table name="Custom_RoleRestricted_Full" >
+        <Actions all="true" >
+          <Exclude>
+            <If condition="not hasRole('Finance Admin')">
+              <Create />
+              <Update />
+              <Delete />
+            </If>
+          </Exclude>
+        </Actions>
+        <Columns>
+          <Field source="FromCompanyNumber" />
+          <Field source="ToCompanyNumber" />
+          <Field source="Description" title="Line Description" />
+          <Field source="LineCompanyNameVar" title="Company Name" />
+          <Field source="AccountNumber" />
+          <Field source="LineAccountTextVar" title="Account Name" />
+          <Field source="OverwriteAccount" />
+          <Columns ref="DimensionLineNameDescriptionOverwriteColumns" />
+        </Columns>
+      </Table>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="FromCompanyNumber" />
+          <Field source="ToCompanyNumber" />
+          <Field source="Description" title="Line Description" />
+          <Field source="LineCompanyNameVar" title="Company Name" />
+          <Field source="AccountNumber" />
+          <Field source="LineAccountTextVar" title="Account Name" />
+          <Field source="OverwriteAccount" />
+          <Columns ref="DimensionLineNameDescriptionOverwriteColumns" />
+        </Columns>
+      </Table>
+      <Table name="ReadOnly">
+        <Actions />
+        <Columns>
+          <Field source="FromCompanyNumber" />
+          <Field source="ToCompanyNumber" />
+          <Field source="Description" title="Line Description" />
+          <Field source="LineCompanyNameVar" title="Company Name" />
+          <Field source="AccountNumber" />
+          <Field source="LineAccountTextVar" title="Account Name" />
+          <Field source="OverwriteAccount" />
+          <Columns ref="DimensionLineNameDescriptionOverwriteColumns" />
+        </Columns>
+      </Table>
+      <Table name="Custom_RoleRestricted_DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+        <If condition="hasRole('Finance Admin')" >
+          <Field source="FromCompanyNumber" open="false" />
+          <Field source="ToCompanyNumber" open="false" />
+          <Field source="Description" title="Line Description" open="false" />
+          <Field source="LineCompanyNameVar" title="Company Name" open="false" />
+          <Field source="AccountNumber" open="LineNumber=Parent.Parent.LineNumber">
+            <Style ref="highlightRow" condition="LineNumber=Parent.Parent.LineNumber" />
+          </Field>
+          <Field source="LineAccountTextVar" title="Account Name" open="false" />
+          <Field source="OverwriteAccount" open="false" />
+          <Columns ref="DimensionLineNameDescriptionOverwriteReadOnlyColumns" />
+          </If>
+          <Else>
+          <Field source="FromCompanyNumber" open="false" />
+          <Field source="ToCompanyNumber" open="false" />
+          <Field source="Description" title="Line Description" open="false" />
+          <Field source="LineCompanyNameVar" title="Company Name" open="false" />
+          <Field source="AccountNumber" open="false">
+            <Style ref="highlightRow" condition="LineNumber=Parent.Parent.LineNumber" />
+          </Field>
+          <Field source="LineAccountTextVar" title="Account Name" open="false" />
+          <Field source="OverwriteAccount" open="false" />
+          <Columns ref="DimensionLineNameDescriptionOverwriteReadOnlyColumns" />
+          </Else>
+        </Columns>
+      </Table>
+      <Table name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+        </Actions>
+        <Columns>
+          <Field source="FromCompanyNumber" open="false" />
+          <Field source="ToCompanyNumber" open="false" />
+          <Field source="Description" title="Line Description" open="false" />
+          <Field source="LineCompanyNameVar" title="Company Name" open="false" />
+          <Field source="AccountNumber" open="LineNumber=Parent.Parent.LineNumber">
+            <Style ref="highlightRow" condition="LineNumber=Parent.Parent.LineNumber" />
+          </Field>
+          <Field source="LineAccountTextVar" title="Account Name" open="false" />
+          <Field source="OverwriteAccount" open="false" />
+          <Columns ref="DimensionLineNameDescriptionOverwriteReadOnlyColumns" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

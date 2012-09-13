@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SJK, 09/06/11: new credit order workspace (39731).-->
+<!-- SJK, 19/08/11: Improvements after verification (39731).-->
+<!-- SJK, 01/11/11: Performance improvements (40121).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="CreditOrderHome" title="Credit Orders">
+    <Filter source="CreditOrders" view="C_CreditOrderHome_Commerce" title="Credit Orders">
+      <With>
+        <Card title="Credit Order" view="Custom">
+          <Expansions>
+            <With>
+              <Table view="Custom">
+                <Expansions minimized="true">
+                  <Bind foreignKey="primary">
+                    <Table source="SerialNumberReporting" view="Standard" title="Serial Numbers" />
+                  </Bind>
+                </Expansions>
+              </Table>
+            </With>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Bind foreignKey="JobNumber_JobHeader">
+              <Card source="Jobs" view="Overview_Vertical" hidden="parent.JobNumber = ''" title="Job" />
+            </Bind>
+            <Bind foreignKey="CustomerNumber_Customer">
+              <Card source="CustomerCard" view="Overview_Vertical" title="Customer" />
+            </Bind>
+          </Assistants>
+        </Card>
+        <Hidden>
+          <Bind foreignKey="Card_CreditMemoNumberVar_Invoice">
+            <Card source="ShowCreditMemo" view="Standard" hidden="parent.parent.Invoiced = OrderStatusType'\No\ or parent.parent.InvoiceInJobCost" title="Credit Memo">
+              <With>
+                <Table view="Standard" />
+              </With>
+            </Card>
+          </Bind>
+        </Hidden>
+      </With>
+    </Filter>
+  </Workspace>
+</MWSL>
+

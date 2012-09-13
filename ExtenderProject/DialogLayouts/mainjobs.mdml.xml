@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--fa841ec243c194cac68abb1faee14af72de13e4f-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--9c42c8bcbae9d900c555dbcda0de655107cbb496-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- KRN, 21/05/10: Layout structure updated (38501). -->
+<!-- KRN, 09/07/10: Main job or subjobs (38607). -->
+<!-- KRN, 13/09/10: Move Allocate Evenly action from card to table demo layout (38735). -->
+<!-- JSV, 29/11/10: Compact block for Original filter (39106).-->
+<!-- SBA, 07/12/10: Introducing links for main and sub jobs (39138). -->
+<!-- KRN, 20/12/10: Main job/sub job layouts (38607). -->
+<!-- SBA, 21/12/10: Layout improvements (38607).-->
+<!-- SBA, 07/06/11: Rewrite links (39699). -->
+<!-- JSV, 14/07/11: Apply style justifyLeft to group Main Job Invoicing in Demo_JobHome (39770). -->
+<!-- JSV, 17/08/11: Icon on links (39862).-->
+<!-- SBA, 18/08/11: Adding create action for sub job creation (39853). -->
+<!-- JSV, 24/08/11: Use reference element where possible (39874).-->
+<!-- JSV, 30/08/11: Description source for reference on CustomerNumber_Customer (39874).-->
+<!-- SBA, 22/11/11: Use disabled for action for creating sub jobs (40189). -->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="MainJobs">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2), ^3" arguments="JobName;JobNumber;Name1" />
+        </Compact>
+        <Columns>
+          <Field source="JobNumber" />
+          <Field source="JobName" />
+          <Field source="JobGroup" />
+          <Field source="NotInvoiceable" />
+          <Field source="InternalJob" />
+          <Field source="Status" />
+          <Field source="ConvertedBy" />
+          <Field source="ConversionDate" />
+          <Field source="ProjectManagerNumber" />
+          <Field source="SalesPersonNumber" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Row>
+          <Column>
+            <Group title="Job">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Field source="JobGroup" />
+              <Field source="Status" />
+              <Field source="Responsible" />
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+              <Field source="DepartmentNumber" />
+              <Field source="Closed" title="Closed" />
+              <Field source="InvoiceLayout" />
+            </Group>
+            <Group title="Invoicing Status">
+              <Field source="ApprovedForInvoiceEditing" title="Approved for Editing" />
+              <Field source="ApprovedForInvoicing" />
+              <Field source="ApprovedForInvoicingBy" title="Approved by" />
+              <Field source="ApprovedForInvoicingDate" title="Approval Date" />
+            </Group>
+            <Group title="Company">
+              <Reference foreignKey="CompanyNumber_CompanyInformation" />
+              <Field source="BaseCurrency" />
+            </Group>
+            <Group title="Settling Company">
+              <Reference foreignKey="SettlingCompany_CompanyInformation" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Main Job Invoicing">
+              <Field source="MainJobInvoicing" title="Includes Subjobs" />
+              <Field source="SelectInvoiceOnMainJob" title="Main Job Invoice Selection" />
+              <Field source="CombinePrintoutLines" title="Combine Invoice Printout Lines" />
+            </Group>
+            <Group title="Price">
+              <Field source="MainJobInvoicingPrincipleVar" title="Pricing Principle" />
+              <Field source="MainJobFixedPriceCurrencyVar" title="Fixed Price on Main Job" />
+              <Field source="FixedPriceInclSubjobsCurrencyVar" title="Fixed Price incl. Subjobs" />
+              <Field source="FixedPriceMainJobInvoicingCurrencyVar" title="Fixed Price for Main Job Inv." />
+            </Group>
+            <Group title="Customer">
+              <Reference foreignKey="CustomerNumber_Customer" descriptionSource="Name1" />
+              <Reference foreignKey="PaymentCustomer_Customer" />
+            </Group>
+            <Group title="Payment">
+              <Field source="PaymentTerms" title="Pmt. Terms" />
+              <Boolean source="ToBeBlanketInvoiced" />
+              <Boolean source="VAT" />
+              <Field source="CompanyVATCode" />
+              <Field source="Currency" />
+              <Field source="AllocationPercentageSumVar" title="Allocation %" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Standard">
+        <Actions all="true">
+          <Exclude>
+            <Action source="AllocateEvenly" title="" tooltip="" />
+          </Exclude>
+          <Action source="parent.Create" title="Create New Sub Job" wizard="CreateSubJobWizard" disabled="JobNumber = '' defaultTo true" />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Main Job Invoicing" style="textAlignment">
+              <Field source="MainJobInvoicing" title="Includes Subjobs" />
+              <Field source="SelectInvoiceOnMainJob" title="Main Job Invoice Selection" />
+              <Field source="CombinePrintoutLines" title="Combine Invoice Printout Lines" />
+              <Field source="AllocationPercentageSumVar" title="Allocation %" />
+            </Group>
+            <Group title="Invoicing Status">
+              <Field source="ApprovedForInvoiceEditing" title="Approved for Editing" />
+              <Field source="ApprovedForInvoicing" />
+              <If condition="ApprovedForInvoicingBy != ''">
+                <Description template="^1 by ^2" arguments="ApprovedForInvoicingDate;ApprovedForInvoicingBy" title="Approved" />
+              </If>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Price" style="compact_amountAlignment">
+              <Field source="MainJobInvoicingPrincipleVar" title="Pricing Principle" />
+              <Field source="MainJobFixedPriceCurrencyVar" title="Fixed Price on Main Job" />
+              <Field source="FixedPriceInclSubjobsCurrencyVar" title="Fixed Price incl. Subjobs" />
+              <Field source="FixedPriceMainJobInvoicingCurrencyVar" title="Fixed Price for Main Job Inv." />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Links">
+              <Link workspace="Jobs" template="All Sub Jobs For This Job" icon="WorkspaceLink" appearance="maximized" tooltip="Open list of sub jobs in the jobs workspace">
+                <Target pane="Jobs_Filter">
+                  <Restriction template="Sub Jobs for: ^1 (^2)" arguments="JobName;JobNumber" expression="target.MainJobNumber = JobNumber" />
+                </Target>
+              </Link>
+            </Group>
+            <Group title="Job Setup">
+              <Field source="InvoiceLayout" />
+              <Boolean source="ToBeBlanketInvoiced" />
+              <Field source="Closed" title="Closed" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="Custom_subjobs">
+        <Actions all="not HasPMReadOnly()">
+          <Exclude>
+            <Action source="AllocateEvenly" title="" tooltip="" />
+          </Exclude>
+          <Action source="parent.Create" title="Create New Sub Job" wizard="CreateSubJobWizard_ram" disabled="HasPMReadOnly() or JobNumber = '' defaultTo true" />
+        </Actions>
+        <Row>
+          <Column>
+            <Group title="Main Job Invoicing" style="textAlignment">
+              <Field source="MainJobInvoicing" title="Includes Subjobs" />
+              <Field source="SelectInvoiceOnMainJob" title="Main Job Invoice Selection" />
+              <Field source="CombinePrintoutLines" title="Combine Invoice Printout Lines" />
+              <Field source="AllocationPercentageSumVar" title="Allocation %" />
+            </Group>
+            <Group title="Invoicing Status">
+              <Field source="ApprovedForInvoiceEditing" title="Approved for Editing" />
+              <Field source="ApprovedForInvoicing" />
+              <If condition="ApprovedForInvoicingBy != ''">
+                <Description template="^1 by ^2" arguments="ApprovedForInvoicingDate;ApprovedForInvoicingBy" title="Approved" />
+              </If>
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Price" style="compact_amountAlignment">
+              <Field source="MainJobInvoicingPrincipleVar" title="Pricing Principle" />
+              <Field source="MainJobFixedPriceCurrencyVar" title="Fixed Price on Main Job" />
+              <Field source="FixedPriceInclSubjobsCurrencyVar" title="Fixed Price incl. Subjobs" />
+              <Field source="FixedPriceMainJobInvoicingCurrencyVar" title="Fixed Price for Main Job Inv." />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Links">
+              <Link workspace="Jobs" template="All Sub Jobs For This Job" icon="WorkspaceLink" appearance="maximized" tooltip="Open list of sub jobs in the jobs workspace">
+                <Style linkForegroundColor="rgb=161,191,54">
+                  <Label linkForegroundColor="rgb=161,191,54" />
+                </Style>
+                <Target pane="Jobs_Filter">
+                  <Restriction template="Sub Jobs for: ^1 (^2)" arguments="JobName;JobNumber" expression="target.MainJobNumber = JobNumber" />
+                </Target>
+              </Link>
+            </Group>
+            <Group title="Payment">
+              <Field source="PaymentTerms" title="Pmt. Terms" />
+              <Boolean source="ToBeBlanketInvoiced" />
+              <Boolean source="VAT" />
+              <Field source="CompanyVATCode" />
+              <Field source="Currency" />
+              <Field source="AllocationPercentageSumVar" title="Allocation %" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+      <Form name="MainJobReadonly">
+        <Row>
+          <Column>
+            <Group title="Main Job">
+              <Reference foreignKey="JobNumber_JobHeader" />
+              <Reference foreignKey="ProjectManagerNumber_Employee" />
+              <Field source="JobGroup" />
+              <Field source="Status" />
+              <Field source="Responsible" size="medium" />
+              <Field source="DepartmentNumber" />
+              <Field source="Closed" title="Closed" />
+              <Field source="InvoiceLayout" />
+            </Group>
+            <Group title="Customer">
+              <Reference foreignKey="CustomerNumber_Customer" descriptionSource="Name1" title="Ship to Customer" />
+              <Reference foreignKey="PaymentCustomer_Customer" />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Main Job Invoicing">
+              <Field source="MainJobInvoicing" title="Includes Subjobs" />
+              <Field source="SelectInvoiceOnMainJob" title="Main Job Invoice Selection" />
+              <Field source="CombinePrintoutLines" title="Combine Invoice Printout Lines" />
+            </Group>
+            <Group title="Invoicing Status">
+              <Field source="ApprovedForInvoiceEditing" title="Approved for Editing" />
+              <Field source="ApprovedForInvoicing" />
+              <Pair firstSource="ApprovedForInvoicingBy" secondSource="ApprovedForInvoicingDate" title="Approved By" firstSize="medium" />
+            </Group>
+            <Group title="Price" style="compact_amountAlignment">
+              <Field source="MainJobInvoicingPrincipleVar" title="Pricing Principle" />
+              <Field source="MainJobFixedPriceCurrencyVar" title="Fixed Price on Main Job" />
+              <Field source="FixedPriceInclSubjobsCurrencyVar" title="Fixed Price incl. Subjobs" />
+              <Field source="FixedPriceMainJobInvoicingCurrencyVar" title="Fixed Price for Main Job Inv." />
+            </Group>
+          </Column>
+          <Column>
+            <Group title="Links">
+              <Link workspace="Jobs" template="Open Main Job" appearance="maximized" tooltip="Open the main job in the jobs workspace" icon="WorkspaceLink">
+                <Target pane="Jobs_Filter">
+                  <Restriction template="Main Job: ^1 (^2)" arguments="JobName;JobNumber" expression="target.JobNumber = JobNumber" />
+                  <Focus>
+                    <Match field="JobNumber" value="JobNumber" />
+                  </Focus>
+                </Target>
+              </Link>
+              <Link workspace="Jobs" template="All Sub Jobs" appearance="maximized" tooltip="Open list of sub jobs in the jobs workspace" icon="WorkspaceLink">
+                <Target pane="Jobs_Filter">
+                  <Restriction template="Sub Jobs for: ^1 (^2)" arguments="JobName;JobNumber" expression="target.MainJobNumber = JobNumber" />
+                </Target>
+              </Link>
+            </Group>
+            <Group title="Payment">
+              <Field source="PaymentTerms" title="Pmt. Terms" />
+              <Boolean source="ToBeBlanketInvoiced" />
+              <Boolean source="VAT" />
+              <Field source="CompanyVATCode" />
+              <Field source="Currency" />
+              <Field source="AllocationPercentageSumVar" title="Allocation %" />
+            </Group>
+          </Column>
+        </Row>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="JobNumber" title="Sub Job No." />
+          <Field source="JobNameVar" title="Sub Job Name" />
+          <Field source="AllocationPercentage" title="Allocation Percentage" />
+          <Field source="CustomerNumberVar" title="Customer No." />
+          <Field source="CustomerNameVar" title="Customer Name" />
+          <Field source="SubJobPaymentCustomerNumberVar" title="Payment Customer No." />
+          <Field source="SubJobPaymentCustomerNameVar" title="Payment Customer Name" />
+          <Field source="MainJobInvoicingVar" title="Main Job Invoicing" />
+          <Field source="MainJobInvoiceSelectionVar" title="Main Job Inv. Selection" />
+          <Field source="CombinePrintoutLinesVar" title="Combine Printout Lines" />
+          <Field source="InvoicingPrincipleVar" title="Pricing Principle" />
+          <Field source="FixedPriceCurrencyVar" title="Fixed Price" />
+          <Field source="ApprovedForInvoiceEditingVar" title="Approved for Invoice Editing" />
+          <Field source="ApprovedForInvoicingVar" title="Approved for Invoicing" />
+          <Field source="ApprovedForInvoicingOnMainJobVar" title="Approved for Invoicing on Main Job" />
+          <Field source="ApprovedForInvoicingByVar" title="Approved for Invoicing by" />
+          <Field source="ApprovedForInvoicingDateVar" title="Approved for Invoicing Date" />
+          <Field source="ToBeBlanketInvoicedVar" title="Blanket Invoice{Pass}" />
+          <Field source="JobGroupVar" title="Job Group" />
+          <Field source="DepartmentNumberVar" title="Department No." />
+          <Field source="PaymentTermsVar" title="Payment Terms" />
+          <Field source="VATVar" title="Tax" />
+          <Field source="CurrencyVar" title="Currency" />
+          <Field source="StatusVar" title="Status" />
+          <Field source="ProjectManagerNumberVar" title="Project Manager No." />
+          <Field source="SubJobProjectManagerNameVar" title="Project Manager Name" />
+          <Field source="ResponsibleVar" title="Responsible" />
+          <Field source="BlockedForBudgetingVar" title="Blocked for Budgeting" />
+          <Field source="BlockedForTimeRegistrationsVar" title="Blocked for Time Registrations" />
+          <Field source="BlockedForAmountRegistrationsVar" title="Blocked for Amount Registrations" />
+          <Field source="BlockedForInvoicingVar" title="Blocked for Invoicing" />
+          <Field source="ClosedVar" title="Closed" />
+        </Columns>
+      </Table>
+      <Table name="Standard">
+        <Actions all="true">
+          <Action source="parent.AllocateEvenly" />
+        </Actions>
+        <Columns>
+          <Link workspace="Jobs" template="Open Job" title="Job workspace" size="medium" tooltip="Open the sub job in the jobs workspace" icon="WorkspaceLink">
+            <Target pane="Jobs_Filter">
+              <Restriction template="Sub Job: ^1 (^2)" arguments="JobNameVar;JobNumber" expression="target.JobNumber = JobNumber" />
+              <Focus>
+                <Match field="JobNumber" value="JobNumber" />
+              </Focus>
+            </Target>
+          </Link>
+          <Field source="JobNumber" title="Sub Job No." />
+          <Field source="JobNameVar" title="Sub Job Name" />
+          <Field source="AllocationPercentage" title="Allocation Percentage" />
+          <Field source="CustomerNumberVar" title="Customer No." />
+          <Field source="CustomerNameVar" title="Customer Name" />
+          <Field source="SubJobPaymentCustomerNumberVar" title="Payment Customer No." />
+          <Field source="SubJobPaymentCustomerNameVar" title="Payment Customer Name" />
+          <Field source="MainJobInvoicingVar" title="Main Job Invoicing" />
+          <Field source="MainJobInvoiceSelectionVar" title="Main Job Inv. Selection" />
+          <Field source="CombinePrintoutLinesVar" title="Combine Printout Lines" />
+          <Field source="InvoicingPrincipleVar" title="Pricing Principle" />
+          <Field source="FixedPriceCurrencyVar" title="Fixed Price" />
+          <Field source="ApprovedForInvoiceEditingVar" title="Approved for Invoice Editing" />
+          <Field source="ApprovedForInvoicingVar" title="Approved for Invoicing" />
+          <Field source="ApprovedForInvoicingOnMainJobVar" title="Approved for Invoicing on Main Job" />
+          <Field source="ApprovedForInvoicingByVar" title="Approved for Invoicing by" />
+          <Field source="ApprovedForInvoicingDateVar" title="Approved for Invoicing Date" />
+          <Field source="ToBeBlanketInvoicedVar" title="Blanket Invoice{Pass}" />
+          <Field source="JobGroupVar" title="Job Group" />
+          <Field source="DepartmentNumberVar" title="Department No." />
+          <Field source="PaymentTermsVar" title="Payment Terms" />
+          <Field source="VATVar" title="Tax" />
+          <Field source="CurrencyVar" title="Currency" />
+          <Field source="StatusVar" title="Status" />
+          <Field source="ProjectManagerNumberVar" title="Project Manager No." />
+          <Field source="SubJobProjectManagerNameVar" title="Project Manager Name" />
+          <Field source="ResponsibleVar" title="Responsible" />
+          <Field source="BlockedForBudgetingVar" title="Blocked for Budgeting" />
+          <Field source="BlockedForTimeRegistrationsVar" title="Blocked for Time Registrations" />
+          <Field source="BlockedForAmountRegistrationsVar" title="Blocked for Amount Registrations" />
+          <Field source="BlockedForInvoicingVar" title="Blocked for Invoicing" />
+          <Field source="ClosedVar" title="Closed" />
+        </Columns>
+      </Table>
+      <Table name="Custom_subjobs" open="false">
+        <Actions all="true" />
+        <Columns>
+          <Link workspace="Jobs" template="Open Job" title="Job workspace" size="medium" tooltip="Open the sub job in the jobs workspace" icon="WorkspaceLink">
+            <Target pane="Jobs_Filter">
+              <Restriction template="Sub Job: ^1 (^2)" arguments="JobNameVar;JobNumber" expression="target.JobNumber = JobNumber" />
+              <Focus>
+                <Match field="JobNumber" value="JobNumber" />
+              </Focus>
+            </Target>
+          </Link>
+          <Field source="JobNumber" title="Sub Job No." open="false" />
+          <Field source="JobNameVar" title="Sub Job Name" />
+          <Field source="CustomerNumberVar" title="Customer No." />
+          <Field source="CustomerNameVar" title="Customer Name" />
+          <Field source="SubJobPaymentCustomerNumberVar" title="Payment Customer No." />
+          <Field source="SubJobPaymentCustomerNameVar" title="Payment Customer Name" />
+          <Field source="MainJobInvoicingVar" title="Main Job Invoicing" />
+          <Field source="MainJobInvoiceSelectionVar" title="Main Job Inv. Selection" />
+          <Field source="CombinePrintoutLinesVar" title="Combine Printout Lines" />
+          <Field source="FixedPriceCurrencyVar" title="Fixed Price" />
+          <Field source="ApprovedForInvoiceEditingVar" title="Approved for Invoice Editing" />
+          <Field source="ApprovedForInvoicingVar" title="Approved for Invoicing" />
+          <Field source="ApprovedForInvoicingOnMainJobVar" title="Approved for Invoicing on Main Job" />
+          <Field source="ApprovedForInvoicingByVar" title="Approved for Invoicing by" />
+          <Field source="ApprovedForInvoicingDateVar" title="Approved for Invoicing Date" />
+          <Field source="ToBeBlanketInvoicedVar" title="Blanket Invoice{Pass}" />
+          <Field source="JobGroupVar" title="Job Group" />
+          <Field source="LocationDescriptionVar" title="Responsible Department{Pass}" />
+          <Field source="PaymentTermsVar" title="Payment Terms" />
+          <Field source="VATVar" title="Tax" />
+          <Field source="CurrencyVar" title="Currency" />
+          <Field source="StatusVar" title="Status" />
+          <Field source="ProjectManagerNumberVar" title="Project Manager No." />
+          <Field source="SubJobProjectManagerNameVar" title="Project Manager Name" />
+          <Field source="ResponsibleVar" title="Responsible" />
+          <Field source="BlockedForBudgetingVar" title="Blocked for Budgeting" />
+          <Field source="BlockedForTimeRegistrationsVar" title="Blocked for Time Registrations" />
+          <Field source="BlockedForAmountRegistrationsVar" title="Blocked for Amount Registrations" />
+          <Field source="BlockedForInvoicingVar" title="Blocked for Invoicing" />
+          <Field source="ClosedVar" title="Closed" />
+        </Columns>
+      </Table>
+      <Table name="MainJobReadonly">
+        <Columns>
+          <Link workspace="Jobs" template="Open Job" title="Job workspace" size="medium" tooltip="Open the sub job in the jobs workspace" icon="WorkspaceLink">
+            <Target pane="Jobs_Filter">
+              <Restriction template="Sub Job: ^1 (^2)" arguments="JobNameVar;JobNumber" expression="target.JobNumber = JobNumber" />
+              <Focus>
+                <Match field="JobNumber" value="JobNumber" />
+              </Focus>
+            </Target>
+          </Link>
+          <Field source="JobNumber" title="Sub Job No." />
+          <Field source="JobNameVar" title="Sub Job Name" />
+          <Field source="AllocationPercentage" title="Allocation Percentage" />
+          <Field source="CustomerNumberVar" title="Customer No." />
+          <Field source="CustomerNameVar" title="Customer Name" />
+          <Field source="SubJobPaymentCustomerNumberVar" title="Payment Customer No." />
+          <Field source="SubJobPaymentCustomerNameVar" title="Payment Customer Name" />
+          <Field source="MainJobInvoicingVar" title="Main Job Invoicing" />
+          <Field source="MainJobInvoiceSelectionVar" title="Main Job Inv. Selection" />
+          <Field source="CombinePrintoutLinesVar" title="Combine Printout Lines" />
+          <Field source="InvoicingPrincipleVar" title="Pricing Principle" />
+          <Field source="FixedPriceCurrencyVar" title="Fixed Price" />
+          <Field source="ApprovedForInvoiceEditingVar" title="Approved for Invoice Editing" />
+          <Field source="ApprovedForInvoicingVar" title="Approved for Invoicing" />
+          <Field source="ApprovedForInvoicingOnMainJobVar" title="Approved for Invoicing on Main Job" />
+          <Field source="ApprovedForInvoicingByVar" title="Approved for Invoicing by" />
+          <Field source="ApprovedForInvoicingDateVar" title="Approved for Invoicing Date" />
+          <Field source="ToBeBlanketInvoicedVar" title="Blanket Invoice{Pass}" />
+          <Field source="JobGroupVar" title="Job Group" />
+          <Field source="DepartmentNumberVar" title="Department No." />
+          <Field source="PaymentTermsVar" title="Payment Terms" />
+          <Field source="VATVar" title="Tax" />
+          <Field source="CurrencyVar" title="Currency" />
+          <Field source="StatusVar" title="Status" />
+          <Field source="ProjectManagerNumberVar" title="Project Manager No." />
+          <Field source="SubJobProjectManagerNameVar" title="Project Manager Name" />
+          <Field source="ResponsibleVar" title="Responsible" />
+          <Field source="BlockedForBudgetingVar" title="Blocked for Budgeting" />
+          <Field source="BlockedForTimeRegistrationsVar" title="Blocked for Time Registrations" />
+          <Field source="BlockedForAmountRegistrationsVar" title="Blocked for Amount Registrations" />
+          <Field source="BlockedForInvoicingVar" title="Blocked for Invoicing" />
+          <Field source="ClosedVar" title="Closed" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+

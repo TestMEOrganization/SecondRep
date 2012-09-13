@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--cda8cb92c2b138cf743e250a2458bad853065397-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!--1bca98c05b2bad740e75a1d14749f14548c2a3d9-->
+<!--
+  Revision=879fe3ff52aabe538ae6404343bf898b1abe6f1f
+  RevisionTag=v2012.03.02_01.15.33_MartinKjeldsen
+  Layer=Custom
+  Deployer=MartinKjeldsen
+  Time=02-03-12 01:16
+  StampVersion=1
+-->
+<!--
+  #Message-digest bcbd36647d922f9df9fba4de3dc1f018   3 _ _   213
+  TAC*Format: XML
+  TAC_isLicense: no
+  TAC_Version: 2
+  TAC_Author: Release Manager
+  TAC_Organization: Maconomy R&D
+  TAC_CreationDate: 28.10.2011
+  TAC_CreationTime: 14:31:39
+  TAC*MaconomyHQ: yes
+-->
+<!-- SBA, 16/03/09: First draft of Job Home (37269).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- RMA, 09/10/09: CardTable tags and other no longer allowed in new TPU (38028).-->
+<!-- KRN, 03/11/09: JobOverview instead of Jobs (38091).-->
+<!-- SBA, 12/11/09: Removing use of Hidden in JobHome and intro of Information tab (38115).-->
+<!-- KRN, 04/12/09: Removed customer from JobOverview (38109).-->
+<!-- KRN, 11/12/09: Original layout on JobInvoiceHistory (37999).-->
+<!-- KRN, 21/05/10: Workspace structure updated (38501). -->
+<!-- KRN, 01/06/10: Add document archive action from JobDescriptions (38514).-->
+<!-- JSV, 05/07/10: Set name on JobOverview for use in notification (38620).-->
+<!-- KRN, 08/07/10: Add bill to customers (38631).-->
+<!-- KRN, 09/07/10: Move documents to Information tab (38633).-->
+<!-- KRN, 09/07/10: Main job or subjobs (38607). -->
+<!-- KRN, 12/07/10: Price lists tabs (38645). -->
+<!-- KRN, 12/07/10: Exchange rate tab (38647). -->
+<!-- KRN, 12/07/10: Phases and Events (38646). -->
+<!-- MJA, 14/07/10: Invoice History tab removed (38570). -->
+<!-- KRN, 13/08/10: Demo layouts used (38644). -->
+<!-- JSV, 01/09/10: Table layout for Document Archives renamed (38778).-->
+<!-- KRN, 08/09/10: Hide card part of bill to customer distribution (38675). -->
+<!-- KRN, 13/09/10: Demo layout updated (38733). -->
+<!-- KRN, 13/09/10: Demo layout updated (38735). -->
+<!-- KRN, 13/09/10: Hide table for exchange rates if no data (38738).-->
+<!-- KRN, 13/09/10: Correct foreign key to main jobs (38735). -->
+<!-- KRN, 14/09/10: Titles on price and exchange rate tabs (38738). -->
+<!-- JSV, 02/12/10: Place DocumentRevisions in extension instead of assistant (39187).-->
+<!-- KRN, 17/12/10: Phases card-table splitter smaller (38646). -->
+<!-- KRN, 17/12/10: Title on Pending Job Actions tab (38644). -->
+<!-- KRN, 20/12/10: Actions on Task lines tab (38644). -->
+<!-- KRN, 20/12/10: Demo_JobHome layout name for JobCard (38644). -->
+<!-- KRN, 21/12/10: Foreign key to exchange rate table (38738). -->
+<!-- SBA, 20/12/10: Layouts improved (38501).-->
+<!-- PSZ, 11/07/11: PSO Jobs workspace changes (39759).-->
+<!-- SBA, 09/08/11: Using solutionconfiguration propertied (39759). -->
+<!-- PSZ, 15/08/11: Moved Distribute Favorities to Tasks, added Derived Dimensions (39850).-->
+<!-- SBA, 18/08/11: Adding name for main job pane (39853). -->
+<!-- SBA, 25/10/11: Improve performance of dynamic workspace (39977). -->
+<!-- PSZ, 26/10/11: Improve performance of dynamic workspace (40098).-->
+<!-- SBA, 21/11/11: Use of defaultTo for hidden expression (40189).-->
+
+
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_JobHome_PC" title="Home">
+    <Card name="JobOverview_Card" source="JobOverview" title="Overview" view="Standard" />
+    <Card source="Jobs" title="Information" view="JobHome_Information_Custom">
+      <!-- <Expansions minimized="true">
+				<Bind foreignKey="DimCombVersionNumber_DimCombVersionHeader">
+					<Table source="DerivedDimensions" view="Full" title="Derived Dimensions" />
+				</Bind>
+			</Expansions>-->
+			<Assistants minimized="true">
+			  
+			   <With><Card view="Additional_fields" /></With>
+			</Assistants>
+    </Card>
+    <Card source="JobInformation" title="Customer" view="Customer_Custom">
+      <Expansions minimized="true">
+        <Bind foreignKey="primary">
+          <Hidden source="BillToCustomerDistribution">
+            <With>
+              <Table title="Bill to Customers" view="Demo_JobHome" />
+            </With>
+          </Hidden>
+        </Bind>
+      </Expansions>
+    </Card>
+    <!-- **** Rambøll Customization - Tab for holding 'Black box' data **** -->
+    <Card source="JobOverview" view="BlackBox" title="Other Information" />
+    <!-- <Card source="JobInformation" title="Customer" view="JobHome_Customer"> -->
+    <Hidden source="JobTasks">
+      <With>
+        <Table name="JobTasks_table" title="Tasks" view="Tasks_Custom">
+          <!-- <Expansions>
+						<Bind foreignKey="primary">
+							<Hidden source="JobEmployees">
+								<With>
+									<Table title="Distribute Favorites" view="JobHome" />
+								</With>
+							</Hidden>
+						</Bind>
+					</Expansions> -->
+        </Table>
+      </With>
+    </Hidden>
+    <!-- <Card source="JobTasks" title="Tasks" view="Standard">
+			<Expansions>
+				<With>
+					<Table title="Tasks" />
+				</With>
+				<Bind foreignKey="primary">
+					<Hidden source="JobEmployees">
+						<With>
+							<Table title="Distribute Favorites" view="JobHome" />
+						</With>
+					</Hidden>
+				</Bind>
+			</Expansions>
+		</Card> --><!-- 
+    <Card source="JobCard" title="Job Card" view="Standard" hidden="isEnvVarDefined('solutionconfiguration.ShowJobCardInJobHome') and not booleanEnvVar('solutionconfiguration.ShowJobCardInJobHome')">
+      <With>
+        <Table title="Entries" />
+      </With>
+    </Card> -->
+    <Card source="JobPriceInformation" title="Prices" view="Custom" hidden="parent.JobGroup=jobgrouptype'\internal\ and NotInvoiceable" >
+      <Expansions>
+        <With>
+          <Table title="Job Specific Prices" />
+        </With>
+        <Bind foreignKey="CostJobPriceListCurrentIssue">
+          <Hidden source="JobPriceLists">
+            <With>
+              <Table title="Cost" view="Readonly" hidden="parent.parent.CostJobPriceList = ''" />
+            </With>
+          </Hidden>
+        </Bind>
+        <Bind foreignKey="JobPriceListCurrentIssue">
+          <Hidden source="JobPriceLists">
+            <With>
+              <Table title="Sales" view="Readonly_Sales" hidden="parent.parent.JobPriceList = ''" />
+            </With>
+          </Hidden>
+        </Bind>
+        <!-- <Bind foreignKey="StandardBillingPriceListCurrentIssue">
+          <Hidden source="JobPriceLists">
+            <With>
+              <Table title="Intracompany" view="Readonly_Intracompany" hidden="parent.parent.StandardBillingPriceList = ''" />
+            </With>
+          </Hidden>
+        </Bind>
+        <Bind foreignKey="IntercompanyJobPriceListCurrentIssue">
+          <Hidden source="JobPriceLists">
+            <With>
+              <Table title="Intercompany" view="Readonly_Intercompany" hidden="parent.parent.IntercompanyJobPriceList = ''" />
+            </With>
+          </Hidden>
+        </Bind> -->
+        <Bind foreignKey="primary">
+          <Hidden source="FixedExchRateInformation" />
+          <!-- Always hidden, but needed for JobPriceInformation.mdml.xml dependencies -->
+        </Bind>
+        <Bind foreignKey="ExchangeRateTableJobNumber_JobHeader">
+          <Hidden source="FixedExchRateInformation">
+            <With>
+              <Table title="Job Specific Exchange Rates" view="Demo_JobHome" hidden="parent.parent.ExchangeRateTableJobNumberVar = ''" />
+            </With>
+          </Hidden>
+        </Bind>
+      </Expansions>
+      <Assistants parentSize="huge">
+        <Bind foreignKey="primary">
+          <Card source="FixedExchRateInformation" view="JobHome_Prices" />
+        </Bind>
+      </Assistants>
+    </Card>
+    <Hidden source="Jobs" name="MainJob">
+      <Bind foreignKey="primary">
+        <Card source="MainJobs" title="Sub Jobs" view="Custom_subjobs" hidden="parent.parent.MainJobNumber != '' defaultTo false">
+          <With>
+            <Table title="Subjobs" view="Custom_subjobs" />
+          </With>
+        </Card>
+      </Bind>
+      <Bind foreignKey="MainJobNumber_JobHeader">
+        <Card source="MainJobs" title="Main Job" view="MainJobReadonly" hidden="parent.parent.MainJobNumber = ''">
+          <With>
+            <Table title="Subjobs" view="MainJobReadonly" />
+          </With>
+        </Card>
+      </Bind>
+    </Hidden>
+    <Card source="EmployeeControl" title="Employee Control" view="Custom">
+      <Expansions parentSize="small">
+        <With>
+          <Table title="Employees" view="Custom" />
+        </With>
+      </Expansions>
+    </Card>
+  <!--  <Card source="Jobs" view="Additional_fields" /> -->
+    <!-- **** Rambøll Customization - Tab for holding 'Request for Customer' custom web component made by Jacob Ramm **** -->
+    <Card source="Jobs" view="Request_for_Customer" />
+    <!-- **** Rambøll Customization - Tab for holding 'RamLink' data **** -->
+    <Card source="JobOverview" view="RamLink" title="RamLink" />
+    <!-- **** Rambøll Customization - Tab for holding 'Closure' data **** -->
+    <Card source="JobOverview" view="Closure" title="Closure" />
+    <!-- <Card source="JobPhases" title="Phases" view="Demo_JobHome" hidden="isEnvVarDefined('solutionconfiguration.UseJobPhases') 
+                                    and not booleanEnvVar('solutionconfiguration.UseJobPhases')">
+			<Expansions parentSize="small">
+				<With>
+					<Table title="Phases" view="Full" />
+				</With>
+			</Expansions>
+		</Card>
+
+		<Table source="JobEvents" view="Demo_JobHome" hidden="isEnvVarDefined('solutionconfiguration.UseJobEvents') 
+                             and not booleanEnvVar('solutionconfiguration.UseJobEvents')" />
+
+		<Hidden source="JobDescriptions">
+			<Bind foreignKey="DocumentArchiveNumber_DocumentArchiveHeader">
+				<Table source="DocumentArchives" view="AttachDocument_From_Parent" title="Documents">
+					<Expansions minimized="true">
+						<Bind foreignKey="primary">
+							<Table source="DocumentRevisions" view="Full" />
+						</Bind>
+					</Expansions>
+				</Table>
+			</Bind>
+		</Hidden>-->
+  </Workspace>
+</MWSL>
+

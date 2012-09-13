@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RMA, 06/04/09: Create empty forms for every dialog (37642).-->
+<!-- JSV, 02/07/09: Insert Original layout converted from mdl and filter layout (37802).-->
+<!-- MJA, 27/10/09: Update Original layout and remove Empty layout (37802).-->
+<!-- JSV, 29/04/10: Use FullBoolean for Boolean fields open in new or update state (38472).-->
+<!-- KUN, 07/07/10: Added group and columns for user update information (38625).-->
+<!-- JSV, 19/10/10: New field WIPAccountAdjustmentTime (38756).-->
+<!-- JSV, 19/10/10: Rename WIPAccountAdjustment to WIPAccountAdjustmentAmount (38756).-->
+<!-- PSZ, 22/11/10: Added supplement fields using Reference elements (39135).-->
+<!-- PSZ, 22/11/10: Added columns for filter compacting (39135).-->
+<!-- CSK, 27/04/11: DimensionOrigin view added (39547).-->
+<!-- PSZ, 20/06/11: Original layout should be placed as the first layout (39299).-->
+<!-- CSK, 11/10/11: Possible to edit account in DimensionOrigin (39547).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="JobGroups">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1" arguments="Name" />
+        </Compact>
+        <Columns>
+          <Field source="Name" />
+          <Field source="Capitalization" />
+          <Field source="WIPAccountTime" />
+          <Field source="WIPAccountAmount" />
+          <Field source="WIPAccountAdjustmentTime" />
+          <Field source="WIPAccountAdjustmentAmount" />
+          <Field source="StandardJobNumber" />
+          <Field source="EmployeeControl" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Define>
+        <Function name="isAccount" parameters="FieldPar" value="FieldPar=Parent.DimensionCombNumber" />
+      </Define>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Job Group">
+            <Field source="Name" />
+          </Group>
+          <Group title="Capitalize">
+            <Boolean source="Capitalization" />
+            <Field source="WIPAccountTime" />
+            <Field source="WIPAccountAmount" />
+            <Field source="WIPAccountAdjustmentTime" />
+            <Field source="WIPAccountAdjustmentAmount" />
+          </Group>
+          <Group title="Standard Budget">
+            <Reference foreignKey="StandardJobNumber_JobHeader" />
+          </Group>
+          <Group title="Standard Values">
+            <Field source="EmployeeControl" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+      <Form name="Custom_RoleRestricted_DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Column>
+        <If condition="hasRole('Finance Admin')" >
+          <Group title="Job Group">
+            <Field source="Name" />
+          </Group>
+          <Group title="Capitalize">
+            <Field source="Capitalization" />
+            <If condition="isAccount(WIPAccountTime)">
+              <Field source="WIPAccountTime" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountTime" />
+            </Else>
+            <If condition="isAccount(WIPAccountAmount)">
+              <Field source="WIPAccountAmount" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAmount" />
+            </Else>
+            <If condition="isAccount(WIPAccountAdjustmentTime)">
+              <Field source="WIPAccountAdjustmentTime" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAdjustmentTime" />
+            </Else>
+            <If condition="isAccount(WIPAccountAdjustmentAmount)">
+              <Field source="WIPAccountAdjustmentAmount" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAdjustmentAmount" />
+            </Else>
+          </Group>
+          <Group title="Standard Budget">
+            <Reference foreignKey="StandardJobNumber_JobHeader" />
+          </Group>
+          <Group title="Standard Values">
+            <Field source="EmployeeControl" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+          </If>
+          <Else>
+          <Group title="Job Group">
+            <Field source="Name" />
+          </Group>
+          <Group title="Capitalize">
+            <Field source="Capitalization" />
+            <If condition="isAccount(WIPAccountTime)">
+              <Field source="WIPAccountTime" open="false" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountTime" />
+            </Else>
+            <If condition="isAccount(WIPAccountAmount)">
+              <Field source="WIPAccountAmount" open="false" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAmount" />
+            </Else>
+            <If condition="isAccount(WIPAccountAdjustmentTime)">
+              <Field source="WIPAccountAdjustmentTime" open="false" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAdjustmentTime" />
+            </Else>
+            <If condition="isAccount(WIPAccountAdjustmentAmount)">
+              <Field source="WIPAccountAdjustmentAmount" open="false" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAdjustmentAmount" />
+            </Else>
+          </Group>
+          <Group title="Standard Budget">
+            <Reference foreignKey="StandardJobNumber_JobHeader" />
+          </Group>
+          <Group title="Standard Values">
+            <Field source="EmployeeControl" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+          </Else>
+        </Column>
+      </Form>
+      <Form name="DimensionOrigin" open="false">
+        <Actions>
+          <Update />
+          <Print />
+          <PrintThis />
+        </Actions>
+        <Column>
+          <Group title="Job Group">
+            <Field source="Name" />
+          </Group>
+          <Group title="Capitalize">
+            <Field source="Capitalization" />
+            <If condition="isAccount(WIPAccountTime)">
+              <Field source="WIPAccountTime" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountTime" />
+            </Else>
+            <If condition="isAccount(WIPAccountAmount)">
+              <Field source="WIPAccountAmount" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAmount" />
+            </Else>
+            <If condition="isAccount(WIPAccountAdjustmentTime)">
+              <Field source="WIPAccountAdjustmentTime" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAdjustmentTime" />
+            </Else>
+            <If condition="isAccount(WIPAccountAdjustmentAmount)">
+              <Field source="WIPAccountAdjustmentAmount" open="true" style="highlightRow" />
+            </If>
+            <Else>
+              <Field source="WIPAccountAdjustmentAmount" />
+            </Else>
+          </Group>
+          <Group title="Standard Budget">
+            <Reference foreignKey="StandardJobNumber_JobHeader" />
+          </Group>
+          <Group title="Standard Values">
+            <Field source="EmployeeControl" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+  </Layout>
+</MDML>
+

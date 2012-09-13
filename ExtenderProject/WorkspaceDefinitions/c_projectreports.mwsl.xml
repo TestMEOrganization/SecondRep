@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 10/08/11: New Manager Reporting workspace (39838).-->
+<!-- CSK, 01/09/11: Rename Analytix Prompts dialog to Report Criteria (39911).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_ProjectReports" title="Reports">
+		<Card source="Jobs" view="TimeReport_ProjectManager_Report" />
+		<Card source="Jobs" view="ProjectFollowUp_ProjectManager_Report" />
+		<Workspace source="c_draftinvoices" />
+	    <!-- <Filter source="InvoiceEditing" name="InvoiceEditing_Filter" view="Custom" title="Draft Invoices">
+	      <With>
+			<Card view="Full" >
+	          <Expansions parentSize="small">
+	            <With>
+	              <Table title="Specification" />
+	            </With>
+	            <Restrict reversedForeignKey="InvoiceEditingHeader">
+	              <Filter source="API_DraftInvoiceEntry" view="Demo" title="Foundation" />
+	            </Restrict>
+	          </Expansions>
+	        </Card>
+	      </With>
+	    </Filter> -->
+	    <Filter source="JobInvoiceHistory" view="Standard" title="Invoice History">
+	    <With>
+	    <Table name="InvoiceHistory_Table" view="Demo(true)" title="Invoice History">
+	      <Expansions>
+	        <Bind foreignKey="InvoiceNumber_Invoice">
+	          <Card source="ShowJobInvoice" view="Demo" hidden="hasNoSeed()">
+	            <Expansions>
+	              <With>
+	                <Table title="Specification" />
+	              </With>
+	              <Bind foreignKey="primary">
+	                <Table source="JobInvoiceOverview" view="Demo" title="Foundation" hidden="hasNoRecords()" />
+	              </Bind>
+	              <Bind foreignKey="primary">
+	                <Table source="ShowJobInvoiceReconciliations" view="Full" title="On Account Reconciliation" hidden="hasNoRecords()" />
+	              </Bind>
+	            </Expansions>
+	          </Card>
+	          <Card source="ShowJobCreditMemo" view="Demo" hidden="hasNoSeed()">
+	            <Expansions>
+	              <With>
+	                <Table title="Specification" />
+	              </With>
+	              <Bind foreignKey="primary">
+	                <Table source="JobInvoiceOverview" view="Demo" title="Foundation" hidden="hasNoRecords()" />
+	              </Bind>
+	              <Bind foreignKey="primary">
+	                <Table source="ShowJobInvoiceReconciliations" view="Full" title="On Account Reconciliation" hidden="hasNoRecords()" />
+	              </Bind>
+	            </Expansions>
+	          </Card>
+	        </Bind>
+	      </Expansions>
+	    </Table>
+	    </With>
+	    </Filter>
+		<Card source="Jobs" view="OutstandingInvoices_ProjectManager_Report" />
+	    <Filter source="FinancialJobCard" view="Standard" title="Financial Job Card" >
+	    <With>
+		    <Card title="Financial Job Card" view="Standard">
+		      <With>
+		        <Table title="Entries" view="Full" />
+		      </With>
+		    </Card>
+		</With>
+	    </Filter>
+		<Card source="Jobs" view="TimeSheetStatus_ProjectManager_Report" />
+  </Workspace>
+</MWSL>

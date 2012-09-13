@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AMC, 03/04/09: First draft of Customer Home (37635).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- RMA, 23/07/09: Redesign (37635).-->
+<!-- PSZ, 11/07/11: Add name to Filter for referencing in links (39759).-->
+<!-- CSK, 12/07/11: Lookup section added (39763).-->
+<!-- CSK, 14/07/11: Show invoices in Customers and Company Customers workspaces (39767).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="Customers" title="Customers">
+    <Filter source="CustomerCard" name="Customers_Filter" view="C_CustomerHome">
+      <Formation>
+        <Section title="Home">
+          <Bind foreignKey="primary">
+            <Workspace source="CustomerHome" />
+          </Bind>
+        </Section>
+        <!-- <Section title="Lookup">
+          <Bind foreignKey="primary">
+            <Card source="GlobalPeriodicCustomerStatement" view="FromCustomerContext" title="Periodic Statements">
+              <Expansions parentSize="small">
+                <With>
+                  <Table view="Full" title="Entries">
+                    <Expansions minimized="true">
+                      <Bind foreignKey="primary">
+                        <Workspace source="CustomerEntry" />
+                      </Bind>
+                    </Expansions>
+                  </Table>
+                </With>
+              </Expansions>
+            </Card>
+          </Bind>
+          <Restrict reversedForeignKey="CustomerNumber_Customer">
+            <Filter source="ShowCustomerReconciliations" view="FullAnalysis" title="Entries">
+              <Expansions minimized="true">
+                <Bind foreignKey="primary">
+                  <Workspace source="CustomerEntry" />
+                </Bind>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="CustomerNumber_Customer">
+            <Filter source="ShowAllInvoices" view="Customer" title="Invoices">
+              <Expansions minimized="true">
+                <Bind foreignKey="primary">
+                  <Workspace source="InvoiceOrigin" />
+                </Bind>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="CustomerNumber_Customer">
+            <Filter source="ShowCustomerPaymentJournals" view="CustomerPayments(false,true,false)" title="Payments">
+              <Expansions minimized="true">
+                <With>
+                  <Card view="Full">
+                    <Expansions parentSize="huge">
+                      <With>
+                        <Table view="Full" hidden="hasNoRecords()" />
+                      </With>
+                    </Expansions>
+                  </Card>
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="CustomerNumber_Customer">
+            <Filter source="ShowInterestChargeNotices" view="Interest(false,true)" title="Interest Charge Notices">
+              <Expansions minimized="true">
+                <With>
+                  <Card title="Interest Charge Notice" view="ReadOnly">
+                    <Expansions parentSize="large">
+                      <With>
+                        <Table title="Interest Charge Notice Lines" view="Full" />
+                      </With>
+                    </Expansions>
+                  </Card>
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+          <Restrict reversedForeignKey="CustomerNumber_Customer">
+            <Filter source="ShowReminders" view="Reminder(false,true)" title="Reminder Letters">
+              <Expansions minimized="true">
+                <With>
+                  <Card title="Reminder Letter" view="ReadOnly">
+                    <Expansions minimized="false" parentSize="large">
+                      <With>
+                        <Table view="Full" title="Reminder Letter Lines" />
+                      </With>
+                    </Expansions>
+                  </Card>
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+        </Section> -->
+      </Formation>
+    </Filter>
+  </Workspace>
+</MWSL>
+

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 29/04/09: New Global Dimensions workspace (37673).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- CSK, 07/07/09: Use Original view instead of Standard view (37673).-->
+<!-- CSK, 11/05/10: Missing views added (38485).-->
+<!-- CSK, 17/03/11: New Dimensions workspace (39492).-->
+<!-- CSK, 10/10/11: Revision layout updated (39492).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="GlobalDimensions" title="Global Dimensions">
+    <Filter source="Locations" view="Custom_RoleRestricted_Standard" title="Locations">
+      <With>
+        <Card view="Custom_RoleRestricted_Full" title="Location">
+          <Expansions minimized="true" parentSize="huge">
+            <Bind foreignKey="DimCombVersionNumberVar_DimCombVersionHeader">
+              <Hidden source="DerivedDimensions">
+                <Expansions minimized="true">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Dimensions" title="Revisions" />
+                  </With>
+                </Expansions>
+              </Hidden>
+            </Bind>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="LocationStructure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Location')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Location')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+    </Filter>
+    <Filter source="Entities" view="Custom_RoleRestricted_Standard" title="Entities">
+      <With>
+        <Card view="Custom_RoleRestricted_Full" title="Entity">
+          <Expansions minimized="true" parentSize="huge">
+            <Bind foreignKey="DimCombVersionNumberVar_DimCombVersionHeader">
+              <Hidden source="DerivedDimensions">
+                <Expansions minimized="true">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Dimensions" title="Revisions" />
+                  </With>
+                </Expansions>
+              </Hidden>
+            </Bind>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="EntityStructure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Entity')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Entity')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+    </Filter>
+    <Filter source="Projects" view="Custom_RoleRestricted_Standard" title="Projects">
+      <With>
+        <Card view="Custom_RoleRestricted_Full" title="Project">
+          <Expansions minimized="true" parentSize="huge">
+            <Bind foreignKey="DimCombVersionNumberVar_DimCombVersionHeader">
+              <Hidden source="DerivedDimensions">
+                <Expansions minimized="true">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Dimensions" title="Revisions" />
+                  </With>
+                </Expansions>
+              </Hidden>
+            </Bind>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="ProjectStructure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Project')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Project')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+    </Filter>
+    <Filter source="Purpose" view="Custom_RoleRestricted_Standard" title="Purpose">
+      <With>
+        <Card view="Custom_RoleRestricted_Full">
+          <Expansions minimized="true" parentSize="huge">
+            <Bind foreignKey="DimCombVersionNumberVar_DimCombVersionHeader">
+              <Hidden source="DerivedDimensions">
+                <Expansions minimized="true">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Dimensions" title="Revisions" />
+                  </With>
+                </Expansions>
+              </Hidden>
+            </Bind>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="PurposeStructure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Purpose')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Purpose')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+    </Filter>
+    <Filter source="Specification1" view="Custom_RoleRestricted_Standard" title="Specification 1">
+      <With>
+        <Card view="Custom_RoleRestricted_Full">
+          <Expansions minimized="true" parentSize="huge">
+            <Bind foreignKey="DimCombVersionNumberVar_DimCombVersionHeader">
+              <Hidden source="DerivedDimensions">
+                <Expansions minimized="true">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Dimensions" title="Revisions" />
+                  </With>
+                </Expansions>
+              </Hidden>
+            </Bind>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="Specification1Structure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Specification1')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Specification1')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+    </Filter>
+    <Filter source="Specification2" view="Custom_RoleRestricted_Standard" title="Specification 2">
+      <With>
+        <Card view="Custom_RoleRestricted_Full">
+          <Expansions minimized="true" parentSize="huge">
+            <Bind foreignKey="DimCombVersionNumberVar_DimCombVersionHeader">
+              <Hidden source="DerivedDimensions">
+                <Expansions minimized="true">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Dimensions" title="Revisions" />
+                  </With>
+                </Expansions>
+              </Hidden>
+            </Bind>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="Specification2Structure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Specification2')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Specification2')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+    </Filter>
+    <Filter source="Specification3" view="Custom_RoleRestricted_Standard" title="Specification 3">
+      <With>
+        <Card view="Custom_RoleRestricted_Full">
+          <Expansions minimized="true" parentSize="huge">
+            <Bind foreignKey="DimCombVersionNumberVar_DimCombVersionHeader">
+              <Hidden source="DerivedDimensions">
+                <Expansions minimized="true">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Dimensions" title="Revisions" />
+                  </With>
+                </Expansions>
+              </Hidden>
+            </Bind>
+          </Expansions>
+          <Assistants parentSize="huge">
+            <Mount>
+              <Card source="Specification3Structure" view="Custom_RoleRestricted_Full" title="Structure">
+                <Expansions parentSize="small">
+                  <With>
+                    <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                  </With>
+                </Expansions>
+              </Card>
+              <Filter source="DimensionGroupings" view="Dimension('Specification3')" title="Dimension Groupings">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Dimension Grouping">
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Specification" />
+                      </With>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+              <Filter source="ReportingHierarchies" view="Dimension('Specification3')" title="Reporting Hierarchies">
+                <Expansions minimized="true">
+                  <With>
+                    <Card view="Custom_RoleRestricted_Full" title="Reporting Hierarchy">
+                      <Expansions parentSize="medium">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Nodes" />
+                        </With>
+                      </Expansions>
+                    </Card>
+                  </With>
+                </Expansions>
+              </Filter>
+            </Mount>
+          </Assistants>
+        </Card>
+      </With>
+    </Filter>
+  </Workspace>
+</MWSL>
+

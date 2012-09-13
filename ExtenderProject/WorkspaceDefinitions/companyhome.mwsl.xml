@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSK, 20/04/09: New Company workspace (37654).-->
+<!-- MJA, 27/05/09: Company Parameters added (37738).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- MJA, 04/06/09: Foreign key changed (37738).-->
+<!-- MJA, 26/06/09: Rename "Original" views to "Standard" (37797).-->
+<!-- CSK, 06/07/09: Workspace renamed from Company to CompanyHome and use Original view instead of Standard view (37654).-->
+<!-- MJA, 07/07/09: Remove temporary "Standard" views (37816).-->
+<!-- CSK, 10/08/09: Company specific system parameters moved from CompanyHome to Companies (37818).-->
+<!-- CSK, 17/08/09: Home restructured while prototyping (37818).-->
+<!-- CSK, 19/10/09: Use reversedForeignKey instead of ForeignKey in Restrict (37818).-->
+<!-- CSK, 29/01/10: Structural changes based on design document (37818).-->
+<!-- CSK, 19/02/10: Allocation Combinations added, Reporting Structures removed (37818).-->
+<!-- CSK, 23/04/10: Company Overview, Opportunities and Finance Metrics added (37818).-->
+<!-- CSK, 28/05/10: Use Company Overview instead of Company (37818).-->
+<!-- CSK, 12/07/10: Overview assistants renamed to Details (38636).-->
+<!-- MJA, 30/08/10: Use original view for company parameters (37738).-->
+<!-- BPE, 08/09/10: Renaming foreign keys (38808).-->
+<!-- CSK, 17/09/10: Renaming LocalSpecLine foreign keys (38636).-->
+<!-- CSK, 26/11/10: Analytix reports added (38925).-->
+<!-- CSK, 26/11/10: Various improvements (39093).-->
+<!-- CSK, 09/12/10: Workspace title changed to Companies (39093).-->
+<!-- CSK, 16/12/10: Finance Metrics assistant restructured (37654).-->
+<!-- CSK, 17/12/10: Details assistants enlarged (37654).-->
+<!-- CSK, 07/01/11: Correction for local specifications (39282).-->
+<!-- BPE, 19/01/11: Updating foreign keys (39350).-->
+<!-- CSK, 12/07/11: CompanyHome filter renamed to RelatedJobs (39763).-->
+<!-- KUN, 09/08/11: Added name to information pane (39546).-->
+<!-- CSK, 10/08/11: Use embedded pdf reports instead of InfoView (39820).-->
+<!-- CSK, 05/09/11: Profit/Loss, Periodic Analytix report embedded (39821).-->
+<!-- CSK, 08/11/11: Improved hiding of panes (40141).-->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="CompanyHome" title="Companies">
+    <Define>
+      <Function name="hasAnalytix" value="isEnvVarDefined('analytix.server.host')" type="boolean" />
+    </Define>
+    <Filter source="CompanyInfo" view="Home" title="List of Companies">
+      <Formation>
+        <Section title="Home" >
+          <Bind foreignKey="primary">
+            <Card source="CompanyOverview" view="Custom_RoleRestricted_Extended" title="Overview" name="main">
+              <Expansions minimized="true">
+                <Bind foreignKey="EmployeeNumber1_Employee">
+                  <Hidden source="Employees" />
+                </Bind>
+                <Bind foreignKey="EmployeeNumber2_Employee">
+                  <Hidden source="Employees" />
+                </Bind>
+                <Bind foreignKey="EmployeeNumber3_Employee">
+                  <Hidden source="Employees" />
+                </Bind>
+                <Bind foreignKey="EmployeeNumber4_Employee">
+                  <Hidden source="Employees" />
+                </Bind>
+                <Bind foreignKey="EmployeeNumber5_Employee">
+                  <Hidden source="Employees" />
+                </Bind>
+                <Restrict reversedForeignKey="FromCompanyNumber_CompanyInformation">
+                  <Filter source="ShowFinanceReportOutputData" view="Minimal_Company" title="Finance" hidden="hasAnalytix()">
+                    <Expansions minimized="true">
+                      <With>
+                        <Hidden>
+                          <!-- Necessary due to the conditionals in the table below -->
+                          <With>
+                            <Table view="Summary" title="Finance Report" />
+                          </With>
+                        </Hidden>
+                      </With>
+                    </Expansions>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="SettlingCompany_CompanyInformation">
+                  <Filter source="CompanyCustomerCard" view="CustomerOverview" title="Customers" hidden="hasAnalytix()">
+                    <Assistants parentSize="large">
+                      <Bind foreignKey="primary">
+                        <Card source="CompanyCustomerPaymentInfo" view="Custom_RoleRestricted_OverviewNoCompany" title="Details" />
+                      </Bind>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="SettlingCompany_CompanyInformation">
+                  <Filter source="CompanyVendorInfoCard" view="VendorOverview" title="Vendors" hidden="hasAnalytix()">
+                    <Assistants parentSize="large">
+                      <Bind foreignKey="primary">
+                        <Card source="CompanyVendorPaymentControl" view="Custom_RoleRestricted_OverviewNoCompany" title="Details" />
+                      </Bind>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="CompanyNumber_CompanyInformation">
+                  <Filter source="Jobs" view="RelatedJobs(true,false)" title="Jobs" hidden="hasAnalytix()">
+                    <Assistants parentSize="large">
+                      <Bind foreignKey="primary">
+                        <Card source="JobOverview" view="Custom_RoleRestricted_Overview(true,false)" title="Details" />
+                      </Bind>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="EmployeeCompanyNumber_CompanyInformation">
+                  <Filter source="Employees" view="Minimal" title="Employees" hidden="hasAnalytix()">
+                    <Assistants parentSize="large">
+                      <With>
+                        <Card view="Custom_RoleRestricted_Overview" title="Details" />
+                      </With>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="CompanyNumber_CompanyInformation">
+                  <Filter source="Assets" view="Minimal" title="Fixed Assets">
+                    <Assistants parentSize="large">
+                      <With>
+                        <Card view="Custom_RoleRestricted_Overview" title="Details" />
+                      </With>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="ExecutingCompanyNumber_CompanyInformation">
+                  <Filter source="PersonnelRequisitions" view="Minimal" title="Vacancies">
+                    <Assistants parentSize="large">
+                      <With>
+                        <Card view="Custom_RoleRestricted_Overview" title="Details" />
+                      </With>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="CompanyNumber_CompanyInformation">
+                  <Filter source="Opportunities" view="Minimal" title="Leads">
+                    <Assistants>
+                      <With>
+                        <Card view="Custom_RoleRestricted_Overview" title="Details" />
+                      </With>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="CompanyNumber_CompanyInformation">
+                  <Filter source="Campaigns" view="Minimal" title="Campaigns">
+                    <Assistants parentSize="huge">
+                      <With>
+                        <Card view="Custom_RoleRestricted_Overview" title="Details" />
+                      </With>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+                <Restrict reversedForeignKey="ParentCompany_CompanyInformation">
+                  <Filter source="CompanyInfo" view="Home_NoPredefinedFilters" title="Subsidiaries">
+                    <Assistants parentSize="medium">
+                      <Bind foreignKey="primary">
+                        <Card source="CompanyOverview" view="Custom_RoleRestricted_Extended" title="Details" name="sub">
+                          <Bind foreignKey="EmployeeNumber1_Employee">
+                            <Hidden source="Employees" />
+                          </Bind>
+                          <Bind foreignKey="EmployeeNumber2_Employee">
+                            <Hidden source="Employees" />
+                          </Bind>
+                          <Bind foreignKey="EmployeeNumber3_Employee">
+                            <Hidden source="Employees" />
+                          </Bind>
+                          <Bind foreignKey="EmployeeNumber4_Employee">
+                            <Hidden source="Employees" />
+                          </Bind>
+                          <Bind foreignKey="EmployeeNumber5_Employee">
+                            <Hidden source="Employees" />
+                          </Bind>
+                        </Card>
+                      </Bind>
+                    </Assistants>
+                  </Filter>
+                </Restrict>
+              </Expansions>
+              <Assistants parentSize="huge">
+                <Mount>
+                  <Filter source="FinanceMetrics" view="Minimal" title="Finance Metrics" hidden="Parent.Metric1NameVar=''">
+                    <Expansions minimized="true">
+                      <With>
+                        <Card view="Custom_RoleRestricted_Assistant" title="Finance Metric" />
+                      </With>
+                    </Expansions>
+                  </Filter>
+                </Mount>
+              </Assistants>
+            </Card>
+          </Bind>
+          <With>
+            <Card title="Information" view="Custom_RoleRestricted_Full" name="Information">
+              <Expansions minimized="true">
+                <Bind foreignKey="primary">
+                  <Table source="CompanyLocations" view="Custom_RoleRestricted_Full" />
+                </Bind>
+              </Expansions>
+              <Assistants parentSize="huge">
+                <Bind foreignKey="IntercompanySettleCustomer_Customer">
+                  <Card source="CustomerCard" view="Custom_RoleRestricted_IntercompanyCustomer" title="Intercompany Customer" />
+                </Bind>
+                <Bind foreignKey="IntercompanySettleVendor_Vendor">
+                  <Card source="VendorCard" view="Custom_RoleRestricted_IntercompanyVendor" title="Intercompany Vendor" />
+                </Bind>
+              </Assistants>
+            </Card>
+          </With>
+        </Section>
+        <Section title="Setup">
+          <With>
+            <Card view="Custom_RoleRestricted_Prefix" title="Numbers">
+              <Assistants minimized="false">
+                <Bind foreignKey="primary">
+                  <Table source="TransactionNumberSeries" view="Custom_RoleRestricted_Full" title="Transaction Number Series" />
+                  <Table source="SystemNumbers" view="Custom_RoleRestricted_Full" />
+                  <Table source="NumberSeries" view="Custom_RoleRestricted_Full" />
+                </Bind>
+              </Assistants>
+            </Card>
+            <Card view="Custom_RoleRestricted_Transactions" title="Transactions">
+              <Assistants minimized="false">
+                <Bind foreignKey="JournalSetupNumber_JournalSetupHeader">
+                  <Card source="JournalSetup" view="Custom_RoleRestricted_CompanySpecific" title="Journal Setup">
+                    <Expansions>
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Journal Types">
+                          <Assistants parentSize="large">
+                            <Bind foreignKey="TransactionTypeGroupNumber_TransactionTypeGroupHeader">
+                              <Table source="TransactionTypeGroups" view="ReadOnly" title="Transaction Types">
+                                <Assistants>
+                                  <Bind foreignKey="TransactionType_TransactionType">
+                                    <Card source="TransactionTypes" view="ReadOnly" title="Transaction Type" />
+                                  </Bind>
+                                </Assistants>
+                              </Table>
+                            </Bind>
+                          </Assistants>
+                        </Table>
+                      </With>
+                    </Expansions>
+                    <Assistants parentSize="large">
+                      <Restrict reversedForeignKey="JournalSetupNumber_JournalSetupHeader">
+                        <Filter source="CompanyInfo" view="Minimal" title="Used By" />
+                      </Restrict>
+                    </Assistants>
+                  </Card>
+                </Bind>
+                <Bind foreignKey="PostingPeriodSetupNumber_PostingPeriodSetupHeader">
+                  <Card source="PostingPeriodSetup" view="Custom_RoleRestricted_CompanySpecific" title="Posting Period Setup">
+                    <Expansions>
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Posting Periods">
+                          <Assistants parentSize="large">
+                            <Bind foreignKey="TransactionTypeGroupNumber_TransactionTypeGroupHeader">
+                              <Table source="TransactionTypeGroups" view="ReadOnly_PostingPeriods" title="Transaction Types" />
+                            </Bind>
+                          </Assistants>
+                        </Table>
+                      </With>
+                    </Expansions>
+                    <Assistants parentSize="large">
+                      <Restrict reversedForeignKey="PostingPeriodSetupNumber_PostingPeriodSetupHeader">
+                        <Filter source="CompanyInfo" view="Minimal" title="Used By" />
+                      </Restrict>
+                    </Assistants>
+                  </Card>
+                </Bind>
+              </Assistants>
+            </Card>
+            <Card view="FiscalYear" title="Fiscal Years">
+              <Assistants minimized="false">
+                <Bind foreignKey="FiscalYearTemplateNumber_FiscalYearTemplate">
+                  <Card source="FiscalYearTemplates" view="Custom_RoleRestricted_CompanySpecific" title="Fiscal Year Template">
+                    <Expansions>
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full">
+                          <Assistants parentSize="large">
+                            <Bind foreignKey="primary">
+                              <Table source="FiscalYear" view="Custom_RoleRestricted_Full" title="Fiscal Year Periods" />
+                            </Bind>
+                          </Assistants>
+                        </Table>
+                      </With>
+                    </Expansions>
+                    <Assistants parentSize="large">
+                      <Restrict reversedForeignKey="FiscalYearTemplateNumber_FiscalYearTemplate">
+                        <Filter source="CompanyInfo" view="Minimal" title="Used By" />
+                      </Restrict>
+                    </Assistants>
+                  </Card>
+                </Bind>
+                <Bind foreignKey="FiscalYear_1">
+                  <Card source="FiscalYear" view="Custom_RoleRestricted_CompanySpecific" title="Fiscal Year">
+                    <Expansions>
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Fiscal Year Periods" />
+                      </With>
+                    </Expansions>
+                    <Assistants parentSize="large">
+                      <Restrict reversedForeignKey="FiscalYear_1">
+                        <Filter source="CompanyInfo" view="Minimal" title="Used By" />
+                      </Restrict>
+                    </Assistants>
+                  </Card>
+                </Bind>
+              </Assistants>
+            </Card>
+            <Card view="Custom_RoleRestricted_LocalDimensions" title="Local Dimensions">
+              <Assistants minimized="false">
+                <Bind foreignKey="LocalSpec1List_LocalSpec1Header">
+                  <Card source="LocalSpec1" view="Custom_RoleRestricted_CompanySpecific" title="Local Specification 1">
+                    <Expansions>
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Values" />
+                      </With>
+                    </Expansions>
+                    <Assistants parentSize="large">
+                      <Restrict reversedForeignKey="LocalSpec1List_LocalSpec1Header">
+                        <Filter source="CompanyInfo" view="Minimal" title="Used By" />
+                      </Restrict>
+                    </Assistants>
+                  </Card>
+                </Bind>
+                <Bind foreignKey="LocalSpec2List_LocalSpec2Header">
+                  <Card source="LocalSpec2" view="Custom_RoleRestricted_CompanySpecific" title="Local Specification 2">
+                    <Expansions>
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Values" />
+                      </With>
+                    </Expansions>
+                    <Assistants parentSize="large">
+                      <Restrict reversedForeignKey="LocalSpec2List_LocalSpec2Header">
+                        <Filter source="CompanyInfo" view="Minimal" title="Used By" />
+                      </Restrict>
+                    </Assistants>
+                  </Card>
+                </Bind>
+                <Bind foreignKey="LocalSpec3List_LocalSpec3Header">
+                  <Card source="LocalSpec3" view="Custom_RoleRestricted_CompanySpecific" title="Local Specification 3">
+                    <Expansions>
+                      <With>
+                        <Table view="Custom_RoleRestricted_Full" title="Values" />
+                      </With>
+                    </Expansions>
+                    <Assistants parentSize="large">
+                      <Restrict reversedForeignKey="LocalSpec3List_LocalSpec3Header">
+                        <Filter source="CompanyInfo" view="Minimal" title="Used By" />
+                      </Restrict>
+                    </Assistants>
+                  </Card>
+                </Bind>
+              </Assistants>
+            </Card>
+            <Hidden>
+              <Restrict reversedForeignKey="CompanyNumber_CompanyInformation">
+                <Filter source="CompanyAllocationCombinations" view="CompanySpecific" title="Allocation Combinations">
+                  <Expansions horizontal="true">
+                    <With>
+                      <Card view="Custom_RoleRestricted_CompanyHome" title="Allocation">
+                        <With>
+                          <Table view="Custom_RoleRestricted_Full" title="Allocation Lines" />
+                        </With>
+                      </Card>
+                    </With>
+                  </Expansions>
+                </Filter>
+              </Restrict>
+            </Hidden>
+          </With>
+          <Restrict reversedForeignKey="CompanyNumber_CompanyInformation">
+            <Filter source="CompanyParameters" view="ShowAll" title="Parameters">
+              <Expansions horizontal="true">
+                <With>
+                  <Card view="Custom_RoleRestricted_Full" title="Parameter" />
+                </With>
+              </Expansions>
+            </Filter>
+          </Restrict>
+        </Section>
+      </Formation>
+    </Filter>
+  </Workspace>
+</MWSL>
+

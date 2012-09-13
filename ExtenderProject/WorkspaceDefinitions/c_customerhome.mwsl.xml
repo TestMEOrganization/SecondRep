@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--e895143cd22b2223c202e8efff7160ca5b96bffe-->
+<!--
+  Revision=191a890063347ac5105d387c300b16c33e205212
+  RevisionTag=v2012.04.19_12.05.13_MartinKjeldsen
+  Layer=Custom
+  Deployer=admin
+  Time=19-04-12 12:05
+  StampVersion=1
+-->
+<!-- AMC, 03/04/09: First draft of Customer Home (37635).-->
+<!-- KRN, 02/06/09: New xml tags (37750).-->
+<!-- RMA, 23/07/09: Redesign of CustomerHome workspace (37635).-->
+<!-- RMA, 28/10/09: Fix order of view/title attributes (37635).-->
+<!-- RMA, 13/11/09: Layout improvements for demo purposes (37635).-->
+<!-- JSV, 01/09/10: Use view AttachDocument_From_Parent on table with documents (38778).-->
+<!-- JSV, 02/12/10: Place DocumentRevisions in extension instead of assistant (39187).-->
+<!-- BPE, 18/01/11: Embedding the CustomerEntry workspace (39289).-->
+<!-- SJK, 07/06/11: Aligning CRM views (39703).-->
+<!-- CSK, 11/07/11: Entries filter aligned to Financial Analysis (39269).-->
+<!-- CSK, 11/07/11: Filters should be compacted (39279).-->
+<!-- CSK, 11/07/11: Entry drilling added to Periodic Statements (39281).-->
+<!-- CSK, 12/07/11: Customers workspace improvements (39763).-->
+<!-- CSK, 22/07/11: Customer Company link should be more visible (39763).-->
+<!-- CSK, 22/07/11: Contact persons are read-only (39763).-->
+<!-- CSK, 12/09/11: Opportunities tab aligned to Contact Companies (39763).-->
+<!-- KUN, 14/11/11: Performance improvements (40161). -->
+<!-- KUN, 22/11/11: Performance improvements (40161). -->
+<MWSL xmlns="http://www.deltek.com/ns/mwsl" version="0.23">
+  <Workspace name="C_CustomerHome" title="Customer Home">
+    <Card source="CustomerCard" name="CustomerCard_Overview" view="Custom_CustomerHomeKPI" title="Overview">
+      <Expansions>
+        <!-- <Mount>
+          <Card source="CompanyCustomerCard" view="Full" />
+        </Mount> -->
+        <Restrict reversedForeignKey="CustomerNumber_Customer">
+          <Filter source="Jobs" view="RelatedJobs(false,true)" title="Jobs">
+            <Assistants parentSize="large">
+              <Bind foreignKey="primary">
+                <Card source="JobOverview" view="Overview(false,true)" title="Details" />
+              </Bind>
+            </Assistants>
+          </Filter>
+        </Restrict>
+      </Expansions>
+    </Card>
+    	<Card source="CustomerCard" view="Request_for_Customer" title="Request for Customer" />
+  </Workspace>
+</MWSL>
+
