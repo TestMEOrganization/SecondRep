@@ -10,8 +10,10 @@
   <Layout source="AccessLevels">
     <FilterPane>
       <Filter name="Standard">
+      <Filter name="Standard">
+      
         <Compact>
-          <Description template="^1 (^2)" arguments="Description;AccessLevelName" />
+          <Description template="^1 (^2)" arguments="sad" />
         </Compact>
         <Columns>
           <Field source="AccessLevelName" />

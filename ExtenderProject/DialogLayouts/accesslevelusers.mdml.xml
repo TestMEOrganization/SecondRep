@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PSZ, 04/03/11: New dialog for user management workspace (39462).-->
+<MDML xmlns="http://www.deltek.com/ns/mdml" version="0.59">
+  <Layout source="AccessLevelUsers">
+    <FilterPane>
+      <Filter name="Standard">
+        <Compact>
+          <Description template="^1 (^2)" arguments="Description;AccessLevelName" />
+        </Compact>
+        <Columns>
+          <Field source="AccessLevelName" />
+          <Field source="AccessLevelType" />
+          <Field source="Description" />
+          <Columns ref="UserUpdateColumns" />
+        </Columns>
+      </Filter>
+    </FilterPane>
+    <UpperPane>
+      <Form name="Full">
+        <Actions all="true" />
+        <Column>
+          <Group title="Level">
+            <Field source="AccessLevelName" />
+            <Field source="Description" />
+            <Field source="AccessLevelType" />
+          </Group>
+          <Group ref="UserUpdateGroup" />
+        </Column>
+      </Form>
+    </UpperPane>
+    <LowerPane>
+      <Table name="Full">
+        <Actions all="true" />
+        <Columns>
+          <Field source="NameOfUser" size="huge" />
+        </Columns>
+      </Table>
+    </LowerPane>
+  </Layout>
+</MDML>
+
