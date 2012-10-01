@@ -11,7 +11,7 @@
     <FilterPane>
       <Filter name="Standard">
       
-        <Columns>
+        <Columns  >
           <Field source="EmployeeNumber" />
           <Field source="FirstDayOfAbsence" />
           <Field source="Duration" />
